@@ -90,6 +90,9 @@
     variable Supports2019AssertApi           "true"
     variable Supports2019Integer64Bits       "true"
   }
+  if {[expr [string compare $ToolVersion "1.20"] >= 0]} {
+    variable Supports2019Generics            "true"
+  }
 
   # Default memory to use for NVC
   variable SimulatorMemory         "-H 128m"  
