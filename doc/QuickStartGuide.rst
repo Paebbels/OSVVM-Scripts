@@ -106,23 +106,36 @@ OSVVM command.
 * The environment variable ``OSVVM_TOOL`` overrides the detection: it names the vendor script to load, like ``NVC``
   for :file:`VendorScripts_NVC.tcl`.
 
-.. grid:: 2
+.. tab-set::
 
-   .. grid-item::
-      :columns: 6
+   .. tab-item:: Riviera-PRO
+      :sync: RivieraPRO
 
-      .. tab-set::
+      .. grid:: 2
 
-         .. tab-item:: Riviera-PRO
-            :sync: RivieraPRO
+         .. grid-item::
+            :columns: 6
 
             In Riviera-PRO's console, change to the simulation directory and source :file:`StartUp.tcl`.
 
             To load OSVVM automatically at every start, set the environment variable ``ALDEC_STARTUPTCL`` to the full
             path of :file:`StartUp.tcl`.
 
-         .. tab-item:: Active-HDL
-            :sync: ActiveHDL
+         .. grid-item::
+            :columns: 6
+
+            .. code-block:: tcl
+
+               cd <work>/sim
+               source ../OsvvmLibraries/Scripts/StartUp.tcl
+
+   .. tab-item:: Active-HDL
+      :sync: ActiveHDL
+
+      .. grid:: 2
+
+         .. grid-item::
+            :columns: 6
 
             Active-HDL's console runs macros by default: switch it to Tcl with ``scripterconf -tcl``, then run
             :file:`StartUp.tcl` with ``do -tcl``.
@@ -130,8 +143,22 @@ OSVVM command.
             To load OSVVM automatically, add both lines to :file:`<Active-HDL>/script/startup.do`. For VSimSA, the
             command line simulator of Active-HDL, add them to :file:`<Active-HDL>/BIN/startup.do`.
 
-         .. tab-item:: Questa
-            :sync: QuestaSim
+         .. grid-item::
+            :columns: 6
+
+            .. code-block:: tcl
+
+               scripterconf -tcl
+               cd <work>/sim
+               do -tcl ../OsvvmLibraries/Scripts/StartUp.tcl
+
+   .. tab-item:: Questa
+      :sync: QuestaSim
+
+      .. grid:: 2
+
+         .. grid-item::
+            :columns: 6
 
             In Questa's console, change to the simulation directory and source :file:`StartUp.tcl`. If the command
             ``qsim`` exists, OSVVM uses :file:`VendorScripts_Questa.tcl`, else :file:`VendorScripts_Siemens.tcl`.
@@ -139,16 +166,42 @@ OSVVM command.
             To load OSVVM automatically, set the environment variable ``MODELSIM_TCL`` to the full path of
             :file:`StartUp.tcl`.
 
-         .. tab-item:: ModelSim
-            :sync: ModelSim
+         .. grid-item::
+            :columns: 6
+
+            .. code-block:: tcl
+
+               cd <work>/sim
+               source ../OsvvmLibraries/Scripts/StartUp.tcl
+
+   .. tab-item:: ModelSim
+      :sync: ModelSim
+
+      .. grid:: 2
+
+         .. grid-item::
+            :columns: 6
 
             In ModelSim's console, change to the simulation directory and source :file:`StartUp.tcl`.
 
             To load OSVVM automatically, set the environment variable ``MODELSIM_TCL`` to the full path of
             :file:`StartUp.tcl`.
 
-         .. tab-item:: Visualizer
-            :sync: Visualizer
+         .. grid-item::
+            :columns: 6
+
+            .. code-block:: tcl
+
+               cd <work>/sim
+               source ../OsvvmLibraries/Scripts/StartUp.tcl
+
+   .. tab-item:: Visualizer
+      :sync: Visualizer
+
+      .. grid:: 2
+
+         .. grid-item::
+            :columns: 6
 
             In Visualizer's console, change to the simulation directory and source :file:`StartUp.tcl`. OSVVM uses
             :file:`VendorScripts_Questa.tcl` for Visualizer.
@@ -156,8 +209,21 @@ OSVVM command.
             To load OSVVM automatically, set the environment variable ``VISUALIZER_TCL`` to the full path of
             :file:`StartUp.tcl`.
 
-         .. tab-item:: GHDL
-            :sync: GHDL
+         .. grid-item::
+            :columns: 6
+
+            .. code-block:: tcl
+
+               cd <work>/sim
+               source ../OsvvmLibraries/Scripts/StartUp.tcl
+
+   .. tab-item:: GHDL
+      :sync: GHDL
+
+      .. grid:: 2
+
+         .. grid-item::
+            :columns: 6
 
             GHDL has no Tcl shell: run OSVVM in :program:`tclsh` and source :file:`StartGHDL.tcl`.
 
@@ -168,8 +234,25 @@ OSVVM command.
             ``alias gsim='rlwrap tclsh'`` to :file:`~/.bashrc`. On Windows, a shortcut can run
             ``C:\tools\msys64\mingw64.exe winpty tclsh``.
 
-         .. tab-item:: NVC
-            :sync: NVC
+         .. grid-item::
+            :columns: 6
+
+            .. code-block:: bash
+
+               cd <work>/sim
+               rlwrap tclsh        # Windows (MSYS2): winpty tclsh
+
+            .. code-block:: tcl
+
+               source ../OsvvmLibraries/Scripts/StartGHDL.tcl
+
+   .. tab-item:: NVC
+      :sync: NVC
+
+      .. grid:: 2
+
+         .. grid-item::
+            :columns: 6
 
             NVC can run OSVVM in two ways:
 
@@ -181,99 +264,8 @@ OSVVM command.
             To load OSVVM automatically in :program:`tclsh`, put the ``source`` line into :file:`~/.tclshrc` and add
             an alias like ``alias nsim='rlwrap tclsh'`` to :file:`~/.bashrc`.
 
-         .. tab-item:: VCS
-            :sync: VCS
-
-            Run OSVVM in :program:`tclsh` and source :file:`StartVCS.tcl`. OSVVM calls VCS' command line tools for
-            each step.
-
-            To load OSVVM automatically, put the ``source`` line into :file:`~/.tclshrc` and add an alias like
-            ``alias ssim='rlwrap tclsh'`` to :file:`~/.bashrc`.
-
-         .. tab-item:: Xcelium
-            :sync: Xcelium
-
-            Run OSVVM in :program:`tclsh` and source :file:`StartXcelium.tcl`. OSVVM calls Xcelium's command line
-            tools for each step.
-
-            To load OSVVM automatically, put the ``source`` line into :file:`~/.tclshrc`.
-
-         .. tab-item:: XSIM
-            :sync: XSIM
-
-            Start Vivado and source :file:`StartXSIM.tcl` in its Tcl console.
-
-            .. note::
-
-               XSIM support is under development: it analyzes the OSVVM utility library, but OSVVM's own test cases
-               don't pass yet.
-
-         .. tab-item:: DSim
-            :sync: DSim
-
-            Run OSVVM in :program:`tclsh` and source :file:`StartDSim.tcl`. OSVVM calls DSim's command line tools
-            for each step.
-
-   .. grid-item::
-      :columns: 6
-
-      .. tab-set::
-
-         .. tab-item:: Riviera-PRO
-            :sync: RivieraPRO
-
-            .. code-block:: tcl
-
-               cd <work>/sim
-               source ../OsvvmLibraries/Scripts/StartUp.tcl
-
-         .. tab-item:: Active-HDL
-            :sync: ActiveHDL
-
-            .. code-block:: tcl
-
-               scripterconf -tcl
-               cd <work>/sim
-               do -tcl ../OsvvmLibraries/Scripts/StartUp.tcl
-
-         .. tab-item:: Questa
-            :sync: QuestaSim
-
-            .. code-block:: tcl
-
-               cd <work>/sim
-               source ../OsvvmLibraries/Scripts/StartUp.tcl
-
-         .. tab-item:: ModelSim
-            :sync: ModelSim
-
-            .. code-block:: tcl
-
-               cd <work>/sim
-               source ../OsvvmLibraries/Scripts/StartUp.tcl
-
-         .. tab-item:: Visualizer
-            :sync: Visualizer
-
-            .. code-block:: tcl
-
-               cd <work>/sim
-               source ../OsvvmLibraries/Scripts/StartUp.tcl
-
-         .. tab-item:: GHDL
-            :sync: GHDL
-
-            .. code-block:: bash
-
-               cd <work>/sim
-               rlwrap tclsh        # Windows (MSYS2): winpty tclsh
-
-            .. code-block:: tcl
-
-               source ../OsvvmLibraries/Scripts/StartGHDL.tcl
-
-         .. tab-item:: NVC
-            :sync: NVC
+         .. grid-item::
+            :columns: 6
 
             .. code-block:: bash
 
@@ -295,8 +287,22 @@ OSVVM command.
 
                source ../OsvvmLibraries/Scripts/StartNVC.tcl
 
-         .. tab-item:: VCS
-            :sync: VCS
+   .. tab-item:: VCS
+      :sync: VCS
+
+      .. grid:: 2
+
+         .. grid-item::
+            :columns: 6
+
+            Run OSVVM in :program:`tclsh` and source :file:`StartVCS.tcl`. OSVVM calls VCS' command line tools for
+            each step.
+
+            To load OSVVM automatically, put the ``source`` line into :file:`~/.tclshrc` and add an alias like
+            ``alias ssim='rlwrap tclsh'`` to :file:`~/.bashrc`.
+
+         .. grid-item::
+            :columns: 6
 
             .. code-block:: bash
 
@@ -307,8 +313,21 @@ OSVVM command.
 
                source ../OsvvmLibraries/Scripts/StartVCS.tcl
 
-         .. tab-item:: Xcelium
-            :sync: Xcelium
+   .. tab-item:: Xcelium
+      :sync: Xcelium
+
+      .. grid:: 2
+
+         .. grid-item::
+            :columns: 6
+
+            Run OSVVM in :program:`tclsh` and source :file:`StartXcelium.tcl`. OSVVM calls Xcelium's command line
+            tools for each step.
+
+            To load OSVVM automatically, put the ``source`` line into :file:`~/.tclshrc`.
+
+         .. grid-item::
+            :columns: 6
 
             .. code-block:: bash
 
@@ -319,16 +338,42 @@ OSVVM command.
 
                source ../OsvvmLibraries/Scripts/StartXcelium.tcl
 
-         .. tab-item:: XSIM
-            :sync: XSIM
+   .. tab-item:: XSIM
+      :sync: XSIM
+
+      .. grid:: 2
+
+         .. grid-item::
+            :columns: 6
+
+            Start Vivado and source :file:`StartXSIM.tcl` in its Tcl console.
+
+            .. note::
+
+               XSIM support is under development: it analyzes the OSVVM utility library, but OSVVM's own test cases
+               don't pass yet.
+
+         .. grid-item::
+            :columns: 6
 
             .. code-block:: tcl
 
                cd <work>/sim
                source ../OsvvmLibraries/Scripts/StartXSIM.tcl
 
-         .. tab-item:: DSim
-            :sync: DSim
+   .. tab-item:: DSim
+      :sync: DSim
+
+      .. grid:: 2
+
+         .. grid-item::
+            :columns: 6
+
+            Run OSVVM in :program:`tclsh` and source :file:`StartDSim.tcl`. OSVVM calls DSim's command line tools
+            for each step.
+
+         .. grid-item::
+            :columns: 6
 
             .. code-block:: bash
 
