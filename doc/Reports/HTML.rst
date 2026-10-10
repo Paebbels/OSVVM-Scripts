@@ -326,11 +326,17 @@ Code Coverage Report
       :ref:`build status <RPT/HTML/BuildSummary/Status>` links.
 
       Code coverage is enabled for analyze and for simulate separately, so the testbench can be left out:
-      :ref:`RUFF/osvvm/SetCoverageAnalyzeEnable`, :ref:`RUFF/osvvm/SetCoverageSimulateEnable`. The simulator options
-      come from :ref:`RUFF/osvvm/SetCoverageAnalyzeOptions` and :ref:`RUFF/osvvm/SetCoverageSimulateOptions`; by
-      default, statement, branch and state machine coverage is collected.
+      :ref:`RUFF/osvvm/SetCoverageAnalyzeEnable`, :ref:`RUFF/osvvm/SetCoverageSimulateEnable`. By default, statement,
+      branch and state machine coverage is collected; :ref:`RUFF/osvvm/SetCoverageKinds` selects other kinds (see
+      :ref:`UG/CodeCoverage`).
 
-      The databases and the report are in :file:`<BuildName>/CodeCoverage/`. Their format depends on the simulator.
+      The databases and the report are in :file:`<BuildName>/CodeCoverage/`. Their format depends on the simulator;
+      NVC writes :file:`<BuildName>_code_cov/index.html`.
+
+      Besides the HTML report, the code coverage can be exported into a well-known data format for CI tools:
+      Cobertura XML for NVC, the simulator's XML for the Siemens and Aldec tools. :ref:`RUFF/osvvm/ExportCodeCoverage`
+      exports the last build; :ref:`RUFF/osvvm/SetCoverageExportEnable` exports at the end of every build (see
+      :ref:`UG/CodeCoverage/Export`).
 
    .. grid-item::
       :columns: 6
@@ -346,6 +352,9 @@ Code Coverage Report
          analyze   TbDut.vhd
          simulate  TbDut
          SetCoverageSimulateEnable false
+
+         # after the build: Cobertura XML (NVC)
+         ExportCodeCoverage
 
 .. figure:: ../../images/BuildReportWithCov.png
    :name: RPT/HTML/BuildReportWithCovFig
