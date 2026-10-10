@@ -173,6 +173,7 @@ extensions = [
 # Other extensions
  	"sphinx_design",
  	"sphinx_copybutton",
+ 	"pyTooling.Sphinx",
 # User defined extensions
 ]
 
