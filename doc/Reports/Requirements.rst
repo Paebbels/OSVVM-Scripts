@@ -20,21 +20,25 @@ Requirements Reports
 
       Without requirements in a build, no requirements report is created.
 
+      A requirement is tracked once it has a goal: from ``GetReqID`` with ``PassedGoal``, or from a specification
+      (see :ref:`RPT/REQ/Specification`). A check that only names a requirement, like
+      ``AffirmIf("UART_REQ_3", ...)``, creates no goal, and the requirement isn't reported.
+
    .. grid-item::
       :columns: 6
 
       .. code-block:: vhdl
 
          TestProc : process
-           variable ReqID : AlertLogIDType ;
+           variable ReqID, ReqID2 : AlertLogIDType ;
          begin
            SetTestName("TbUart_SendGet1") ;
            -- requirement with a goal of 2 passed checks
            ReqID := GetReqID("UART_REQ_1", PassedGoal => 2) ;
            . . .
            AffirmIf(ReqID, RxData = ExpData, "Received data") ;
-           -- a requirement can also be named directly
-           AffirmIf("UART_REQ_2", Parity = '0', "Parity") ;
+           ReqID2 := GetReqID("UART_REQ_2", PassedGoal => 1) ;
+           AffirmIf(ReqID2, Parity = '0', "Parity") ;
            . . .
            EndOfTestReports ;  -- writes TbUart_SendGet1_req.yml
            std.env.stop ;

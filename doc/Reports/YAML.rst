@@ -46,7 +46,7 @@ Files
      - Written by
      - Content
    * - :file:`<BuildName>/<BuildName>.yml`
-     - Scripts
+     - Scripts; VHDL (``EndOfTestReports``) adds each test case's results
      - The build: its test suites and test cases with their results, settings and timing. Source of the build summary
        reports (:ref:`RUFF/osvvm/CreateBuildReports`).
    * - :file:`reports/<TestSuite>/<TestCaseFileName>_run.yml`
