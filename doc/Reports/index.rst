@@ -229,8 +229,8 @@ Where the Files Go
 
       Each build gets a directory named after the build, in the directory where the simulator runs. The build name is
       the script's name, prefixed with its directory's name, if they differ:
-      ``build ../OsvvmLibraries/RunDemoTests.pro`` creates ``OsvvmLibraries_RunDemoTests``.
-      :ref:`RUFF/osvvm/BuildName` sets another name.
+      ``build ../OsvvmLibraries/RunAllTests.pro`` creates ``OsvvmLibraries_RunAllTests``.
+      :ref:`RUFF/osvvm/BuildName` sets another name: :file:`RunDemoTests.pro` names its build ``OsvvmRunDemoTests``.
 
       :file:`<BuildName>.html`, :file:`.xml`, :file:`.yml`
          Build summary reports and the build's YAML file.
@@ -260,10 +260,10 @@ Where the Files Go
          sim/
          ├── index.html
          ├── index.yml
-         └── OsvvmLibraries_RunDemoTests/
-             ├── OsvvmLibraries_RunDemoTests.html
-             ├── OsvvmLibraries_RunDemoTests.xml
-             ├── OsvvmLibraries_RunDemoTests.yml
+         └── OsvvmRunDemoTests/
+             ├── OsvvmRunDemoTests.html
+             ├── OsvvmRunDemoTests.xml
+             ├── OsvvmRunDemoTests.yml
              ├── reports/
              │   ├── CssOsvvmStyle.css
              │   ├── OsvvmLogo.png
@@ -278,8 +278,8 @@ Where the Files Go
              │       ├── TbUart_SendGet1.html
              │       └── TbUart_SendGet1.log
              ├── logs/
-             │   ├── OsvvmLibraries_RunDemoTests.log
-             │   └── OsvvmLibraries_RunDemoTests_log.html
+             │   ├── OsvvmRunDemoTests.log
+             │   └── OsvvmRunDemoTests_log.html
              └── CodeCoverage/
                  └── ...
 
@@ -305,7 +305,7 @@ Opening the Reports
       .. code-block:: tcl
 
          OpenBuildHtml
-         OpenBuildHtml OsvvmLibraries_RunDemoTests
+         OpenBuildHtml OsvvmRunDemoTests
          OpenIndex
 
 
@@ -335,7 +335,7 @@ Reports After a Simulation or Build Ended in Error
 
       .. code-block:: tcl
 
-         set Build OsvvmLibraries_RunDemoTests
+         set Build OsvvmRunDemoTests
 
          Simulate2Html $Build/reports/UART/TbUart_SendGet1_run.yml $Build
          CreateBuildReports $Build/$Build.yml

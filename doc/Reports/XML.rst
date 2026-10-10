@@ -25,10 +25,10 @@ JUnit XML Report
 
          build ../OsvvmLibraries/RunDemoTests.pro
          # creates
-         #   OsvvmLibraries_RunDemoTests/OsvvmLibraries_RunDemoTests.xml
+         #   OsvvmRunDemoTests/OsvvmRunDemoTests.xml
 
          # again from the build's YAML file
-         set Build OsvvmLibraries_RunDemoTests
+         set Build OsvvmRunDemoTests
          Report2Junit $Build/$Build.yml
 
 

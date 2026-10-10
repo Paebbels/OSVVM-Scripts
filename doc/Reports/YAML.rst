@@ -19,8 +19,8 @@ YAML Files
 
       .. code-block:: text
 
-         OsvvmLibraries_RunDemoTests/
-         ├── OsvvmLibraries_RunDemoTests.yml
+         OsvvmRunDemoTests/
+         ├── OsvvmRunDemoTests.yml
          └── reports/
              └── UART/
                  ├── TbUart_SendGet1_run.yml

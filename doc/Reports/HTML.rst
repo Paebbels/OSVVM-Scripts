@@ -38,7 +38,7 @@ Build Summary Report
       .. code-block:: tcl
 
          build ../OsvvmLibraries/RunDemoTests.pro
-         # creates OsvvmLibraries_RunDemoTests/OsvvmLibraries_RunDemoTests.html
+         # creates OsvvmRunDemoTests/OsvvmRunDemoTests.html
          OpenBuildHtml
 
 .. figure:: ../../images/DemoBuildSummaryReport.png
@@ -378,8 +378,8 @@ Build Index
 
          Version:    "0.1"
          Builds:
-           - Name:     "OsvvmLibraries_RunDemoTests"
-             Directory:           "OsvvmLibraries_RunDemoTests"
+           - Name:     "OsvvmRunDemoTests"
+             Directory:           "OsvvmRunDemoTests"
              Status:              "PASSED"
              Passed:              11
              Failed:              0
