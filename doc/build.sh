@@ -220,7 +220,7 @@ EOF
 			sed -i -E 's/^========//g' ${rstFile}
 
 		test $VERBOSE -eq 1 && printf -- "    ${ANSI_LIGHT_CYAN}Correct index entry${ANSI_NOCOLOR}\n"
-			sed -i -E 's/   single: ::osvvm::/   single: ::osvvm; /g' ${rstFile}
+			sed -i -E 's/^   single: (\w+) namespace;/   single: ::\1; /g' ${rstFile}
 
 		test $VERBOSE -eq 1 && printf -- "    ${ANSI_LIGHT_CYAN}Remove links from headings${ANSI_NOCOLOR}\n"
 			sed -i -E 's/^``(\w+)``.*$/\1/g' ${rstFile}
