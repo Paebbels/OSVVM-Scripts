@@ -285,10 +285,11 @@ proc GetExtendedRunOptions {} {
 #
 proc SetSaveWaves {{Options "true"}} {
   # Enable or disable saving waveforms during [simulate].
-  #  Options - `true` saves waveforms, `false` doesn't.
+  #  Options - A Tcl boolean: true (`true`, `yes`, `on`, `1`, any case) saves waveforms, false doesn't.
   #
-  # Sets `SaveWaves`. Used by simulators run from the command line, GHDL and NVC, which write a waveform file. The
-  # Siemens vendor scripts also use it. Initialized to `false` in `OsvvmSettingsDefault.tcl`.
+  # Sets `SaveWaves` to `true` or `false`; a value that isn't a Tcl boolean is an error. Used by simulators run from the
+  # command line, GHDL and NVC, which write a waveform file. The Siemens vendor scripts also use it. Initialized to
+  # `false` in `OsvvmSettingsDefault.tcl`.
   #
   # See also: [GetSaveWaves]
   variable SaveWaves
@@ -313,9 +314,9 @@ proc GetSaveWaves {} {
 #
 proc SetInteractiveMode {{Options "true"}} {
   # Enable or disable the interactive mode.
-  #  Options - `true` enables, `false` disables the interactive mode.
+  #  Options - A Tcl boolean: true (`true`, `yes`, `on`, `1`, any case) enables, false disables the interactive mode.
   #
-  # Sets `SimulateInteractive`.
+  # Sets `SimulateInteractive` to `true` or `false`; a value that isn't a Tcl boolean is an error.
   #
   # - Enabled: the analyze and simulate error stop counts (`AnalyzeErrorStopCount`, `SimulateErrorStopCount`) become
   #   `1`, so a build stops at the first error. Their previous values are saved when the mode changes from disabled to
@@ -363,7 +364,7 @@ proc SetInteractiveMode {{Options "true"}} {
 # SetInteractive is deprecated.
 proc SetInteractive {{Options "true"}} {
   # Enable or disable the interactive mode; deprecated.
-  #  Options - `true` enables, `false` disables the interactive mode.
+  #  Options - A Tcl boolean: true (`true`, `yes`, `on`, `1`, any case) enables, false disables the interactive mode.
   #
   # Prints a deprecation message and calls [SetInteractiveMode].
   puts "SetInteractive is deprecated.  Use SetInteractiveMode instead"
@@ -382,11 +383,11 @@ proc GetInteractiveMode {} {
 
 proc SetDebugMode {{Options "true"}} {
   # Enable or disable the debug mode.
-  #  Options - `true` enables, `false` disables the debug mode.
+  #  Options - A Tcl boolean: true (`true`, `yes`, `on`, `1`, any case) enables, false disables the debug mode.
   #
-  # Sets `Debug` and marks it as set explicitly, so [SetInteractiveMode] no longer changes it. In debug mode, the vendor
-  # scripts add the simulator's debugging options to analyze and simulate. Initialized to `false` in
-  # `OsvvmSettingsDefault.tcl`.
+  # Sets `Debug` to `true` or `false` and marks it as set explicitly, so [SetInteractiveMode] no longer changes it; a
+  # value that isn't a Tcl boolean is an error. In debug mode, the vendor scripts add the simulator's debugging options
+  # to analyze and simulate. Initialized to `false` in `OsvvmSettingsDefault.tcl`.
   #
   # See also: [GetDebugMode]
   if {$Options} {
@@ -407,10 +408,11 @@ proc GetDebugMode {} {
 
 proc SetLogSignals {{Options "true"}} {
   # Enable or disable logging of signal values during [simulate].
-  #  Options - `true` logs signals, `false` doesn't.
+  #  Options - A Tcl boolean: true (`true`, `yes`, `on`, `1`, any case) logs signals, false doesn't.
   #
-  # Sets `LogSignals` and marks it as set explicitly, so [SetInteractiveMode] no longer changes it. Logged signals can
-  # be displayed later in the simulator's waveform viewer. Initialized to `false` in `OsvvmSettingsDefault.tcl`.
+  # Sets `LogSignals` to `true` or `false` and marks it as set explicitly, so [SetInteractiveMode] no longer changes it;
+  # a value that isn't a Tcl boolean is an error. Logged signals can be displayed later in the simulator's waveform
+  # viewer. Initialized to `false` in `OsvvmSettingsDefault.tcl`.
   #
   # See also: [GetLogSignals]
   if {$Options} {
@@ -460,11 +462,11 @@ proc GetSecondSimulationTopLevel {} {
 #
 proc SetCoverageEnable {{Enable "true"}} {
   # Enable or disable code coverage.
-  #  Enable - `true` enables code coverage; any other value disables it. Case-insensitive.
+  #  Enable - A Tcl boolean: true (`true`, `yes`, `on`, `1`, any case) enables code coverage, false disables it.
   #
-  # Sets `CoverageEnable` to `true` or `false` and prints the new value. Code coverage is collected for a design unit
-  # only if it's also enabled for analyze ([SetCoverageAnalyzeEnable]) and simulate ([SetCoverageSimulateEnable]).
-  # Initialized to `true`.
+  # Sets `CoverageEnable` to `true` or `false` and prints the new value; a value that isn't a Tcl boolean is an error.
+  # Code coverage is collected for a design unit only if it's also enabled for analyze ([SetCoverageAnalyzeEnable]) and
+  # simulate ([SetCoverageSimulateEnable]). Initialized to `true`.
   #
   # See also: [GetCoverageEnable]
   variable CoverageEnable
@@ -490,15 +492,29 @@ proc GetCoverageEnable {} {
 #
 proc SetCoverageKinds {{Kinds "default"}} {
   # Set the kinds of code coverage to collect, independent of the simulator.
-  #
   #  Kinds - A list of kinds: `statement`, `branch`, `condition`, `expression`, `toggle`, `fsm`, `functional`;
   #          `all` stands for all of them, `default` for the kinds in `DefaultCoverageKinds`.
   #
-  # Stores the kinds in `CoverageKinds`, then sets the code coverage options of analysis, elaboration and simulation
-  # to the vendor's defaults for these kinds (vendor_SetCoverageAnalyzeDefaults, vendor_SetCoverageElaborateDefaults,
-  # vendor_SetCoverageSimulateDefaults). This replaces options set before with [SetCoverageAnalyzeOptions],
+  # Stores the kinds in `CoverageKinds` and prints them. Then it sets the code coverage options of analysis, elaboration
+  # and simulation (`CoverageAnalyzeOptions`, `CoverageElaborateOptions`, `CoverageSimulateOptions`) to the vendor's
+  # defaults for these kinds. This replaces options set before with [SetCoverageAnalyzeOptions],
   # [SetCoverageElaborateOptions] and [SetCoverageSimulateOptions]; call them afterwards to change the options. A kind
   # the simulator doesn't support is left out. An unknown kind is an error.
+  #
+  # `DefaultCoverageKinds` and the initial `CoverageKinds` are `statement branch fsm`, set in
+  # `OsvvmSettingsDefault.tcl`.
+  #
+  # |Kind|NVC (elaborate)|Siemens tools (analyze)|Aldec tools (analyze, simulate)|
+  # |---|---|---|---|
+  # |`statement`|`statement`|`s`|`s`|
+  # |`branch`|`branch`|`b`|`b`|
+  # |`condition`|`expression`|`c`|`c`|
+  # |`expression`|`expression`|`e`|`e`|
+  # |`toggle`|`toggle`|`t`|-|
+  # |`fsm`|`fsm-state`|`f`|`m`|
+  # |`functional`|`functional`|-|-|
+  #
+  # See also: [GetCoverageKinds]
   set KnownKinds {statement branch condition expression toggle fsm functional}
   set CoverageKinds {}
   foreach Kind [string tolower $Kinds] {
@@ -524,9 +540,11 @@ proc SetCoverageKinds {{Kinds "default"}} {
   puts "SetCoverageKinds $::osvvm::CoverageKinds"
 }
 proc GetCoverageKinds {} {
-  # Get the kinds of code coverage to collect.
+  # Return the kinds of code coverage to collect.
   #
-  # Returns: The kinds, set by [SetCoverageKinds].
+  # Returns the kinds set by [SetCoverageKinds], with `all` and `default` expanded.
+  #
+  # See also: [SetCoverageKinds]
   return $::osvvm::CoverageKinds
 }
 
@@ -538,9 +556,9 @@ proc SetCoverageAnalyzeOptions {{Options ""}} {
   #  Options - Simulator-specific code coverage options. Empty: no options.
   #
   # Sets `CoverageAnalyzeOptions`, which replaces the vendor script's default. Used while code coverage is enabled for
-  # analyze ([SetCoverageAnalyzeEnable]).
+  # analyze ([SetCoverageAnalyzeEnable]). [SetCoverageKinds] sets it to the vendor's default for the kinds.
   #
-  # See also: [GetCoverageAnalyzeOptions]
+  # See also: [GetCoverageAnalyzeOptions] [SetCoverageKinds]
   set ::osvvm::CoverageAnalyzeOptions $Options
 }
 proc GetCoverageAnalyzeOptions {} {
@@ -554,10 +572,11 @@ proc GetCoverageAnalyzeOptions {} {
 
 proc SetCoverageAnalyzeEnable {{Enable "true"}} {
   # Enable or disable code coverage for the next [analyze] commands.
-  #  Enable - `true` enables code coverage; any other value disables it. Case-insensitive.
+  #  Enable - A Tcl boolean: true (`true`, `yes`, `on`, `1`, any case) enables code coverage, false disables it.
   #
-  # Sets `CoverageAnalyzeEnable` to `true` or `false` and prints the new value. A design unit collects code coverage
-  # only if it was analyzed with code coverage enabled. Initialized to `false`, so simulations run faster.
+  # Sets `CoverageAnalyzeEnable` to `true` or `false` and prints the new value; a value that isn't a Tcl boolean is an
+  # error. A design unit collects code coverage only if it was analyzed with code coverage enabled. Initialized to
+  # `false`, so simulations run faster.
   #
   # See also: [GetCoverageAnalyzeEnable] [SetCoverageAnalyzeOptions] [SetCoverageEnable]
   variable CoverageAnalyzeEnable
@@ -582,19 +601,22 @@ proc GetCoverageAnalyzeEnable {} {
 # SetCoverageElaborateOptions, GetCoverageElaborateOptions
 #
 proc SetCoverageElaborateOptions {{Options ""}} {
-  # Set the code coverage options for elaboration.
+  # Set the code coverage options passed to the simulator's elaboration by [simulate].
+  #  Options - Simulator-specific code coverage options. Empty: no options.
   #
-  #  Options - The options, passed to the simulator's elaboration.
+  # Sets `CoverageElaborateOptions`, which replaces the vendor script's default. Used while code coverage is enabled for
+  # simulate ([SetCoverageEnable], [SetCoverageSimulateEnable]); OSVVM elaborates only as part of [simulate].
+  # [SetCoverageKinds] sets it to the vendor's default for the kinds.
   #
-  # They are used while code coverage is enabled for simulation: [SetCoverageEnable] and
-  # [SetCoverageSimulateEnable]. The defaults come from vendor_SetCoverageElaborateDefaults; [SetCoverageKinds] sets
-  # them to the vendor's defaults for the kinds.
+  # See also: [GetCoverageElaborateOptions] [SetCoverageKinds]
   set ::osvvm::CoverageElaborateOptions $Options
 }
 proc GetCoverageElaborateOptions {} {
-  # Get the code coverage options for elaboration.
+  # Return the code coverage options passed to the simulator's elaboration by [simulate].
   #
-  # Returns: The options, set by [SetCoverageElaborateOptions].
+  # Returns the options set by [SetCoverageElaborateOptions] or [SetCoverageKinds], or the vendor script's default.
+  #
+  # See also: [SetCoverageElaborateOptions]
   return $::osvvm::CoverageElaborateOptions
 }
 
@@ -606,9 +628,9 @@ proc SetCoverageSimulateOptions {{Options ""}} {
   #  Options - Simulator-specific code coverage options. Empty: no options.
   #
   # Sets `CoverageSimulateOptions`, which replaces the vendor script's default. Used while code coverage is enabled for
-  # simulate ([SetCoverageSimulateEnable]).
+  # simulate ([SetCoverageSimulateEnable]). [SetCoverageKinds] sets it to the vendor's default for the kinds.
   #
-  # See also: [GetCoverageSimulateOptions]
+  # See also: [GetCoverageSimulateOptions] [SetCoverageElaborateOptions] [SetCoverageKinds]
   set ::osvvm::CoverageSimulateOptions $Options
 }
 proc GetCoverageSimulateOptions {} {
@@ -622,12 +644,13 @@ proc GetCoverageSimulateOptions {} {
 
 proc SetCoverageSimulateEnable {{Enable "true"}} {
   # Enable or disable code coverage for the next [simulate] commands.
-  #  Enable - `true` enables code coverage; any other value disables it. Case-insensitive.
+  #  Enable - A Tcl boolean: true (`true`, `yes`, `on`, `1`, any case) enables code coverage, false disables it.
   #
-  # Sets `CoverageSimulateEnable` to `true` or `false` and prints the new value. While enabled, each simulation writes a
-  # code coverage database, merged per test suite and per build. Initialized to `false`, so simulations run faster.
+  # Sets `CoverageSimulateEnable` to `true` or `false` and prints the new value; a value that isn't a Tcl boolean is an
+  # error. While enabled, the code coverage elaborate and simulate options are used and each simulation writes a code
+  # coverage database, merged per test suite and per build. Initialized to `false`, so simulations run faster.
   #
-  # See also: [GetCoverageSimulateEnable] [SetCoverageSimulateOptions] [SetCoverageEnable]
+  # See also: [GetCoverageSimulateEnable] [SetCoverageSimulateOptions] [SetCoverageElaborateOptions] [SetCoverageEnable]
   variable CoverageSimulateEnable
   if {$Enable} {
     set CoverageSimulateEnable "true" ;
@@ -650,12 +673,14 @@ proc GetCoverageSimulateEnable {} {
 #
 proc SetCoverageExportEnable {{Enable "true"}} {
   # Enable or disable exporting the code coverage of every build into a well-known data format.
+  #  Enable - A Tcl boolean: true (`true`, `yes`, `on`, `1`, any case) exports at the end of every build that collected
+  #           code coverage, false doesn't.
   #
-  #  Enable - A Tcl boolean: true (`true`, `yes`, `on`, `1`, any case) to export at the end of every build that
-  #           collected code coverage.
+  # Sets `CoverageExportEnable` to `true` or `false` and prints the new value; a value that isn't a Tcl boolean is an
+  # error. The export is the one of [ExportCodeCoverage]: Cobertura XML for NVC. Initialized to `false` in
+  # `OsvvmSettingsDefault.tcl`.
   #
-  # Stores `true` or `false`; a value that isn't a Tcl boolean is an error. The export is the one of
-  # [ExportCodeCoverage], e.g. Cobertura XML for NVC. Default: `false`.
+  # See also: [GetCoverageExportEnable] [SetCoverageExportOptions]
   variable CoverageExportEnable
   if {$Enable} {
     set CoverageExportEnable "true"
@@ -665,24 +690,31 @@ proc SetCoverageExportEnable {{Enable "true"}} {
   puts "SetCoverageExportEnable $CoverageExportEnable"
 }
 proc GetCoverageExportEnable {} {
-  # Get whether the code coverage of every build is exported.
+  # Return whether the code coverage of every build is exported.
   #
-  # Returns: `true` or `false`, set by [SetCoverageExportEnable].
+  # Returns the value set by [SetCoverageExportEnable]: `true` or `false`.
+  #
+  # See also: [SetCoverageExportEnable]
   return $::osvvm::CoverageExportEnable
 }
 
 proc SetCoverageExportOptions {{Options ""}} {
   # Set the options of every code coverage export.
+  #  Options - Options of the simulator's export command, `--relative=.` for NVC. Empty: no options.
   #
-  #  Options - The options, in the simulator's syntax, e.g. `--relative=.` for NVC.
+  # Sets `CoverageExportOptions`, used by every [ExportCodeCoverage], also the automatic export at the end of a build
+  # ([SetCoverageExportEnable]). [ExportOptions] adds options for a single [ExportCodeCoverage]. Initialized to empty
+  # in `OsvvmSettingsDefault.tcl`.
   #
-  # [ExportOptions] adds options for a single [ExportCodeCoverage].
+  # See also: [GetCoverageExportOptions]
   set ::osvvm::CoverageExportOptions $Options
 }
 proc GetCoverageExportOptions {} {
-  # Get the options of every code coverage export.
+  # Return the options of every code coverage export.
   #
-  # Returns: The options, set by [SetCoverageExportOptions].
+  # Returns the options set by [SetCoverageExportOptions].
+  #
+  # See also: [SetCoverageExportOptions]
   return $::osvvm::CoverageExportOptions
 }
 
@@ -715,11 +747,11 @@ proc GetSimulatorResolution {} {
 #
 proc SetRequirementUseSumOfGoals {{Status "true"}} {
   # Select how requirement goals of several test cases are combined.
-  #  Status - `true` sums up the goals, `false` uses the maximum goal.
+  #  Status - A Tcl boolean: true (`true`, `yes`, `on`, `1`, any case) sums up the goals, false uses the maximum goal.
   #
-  # Sets `USE_SUM_OF_GOALS`, used by the requirements reports. The maximum fits a merged specification, which states the
-  # total goal divided across the test cases; the sum fits requirements without a specification. Initialized to `false`
-  # in `OsvvmSettingsDefault.tcl`.
+  # Sets `USE_SUM_OF_GOALS` to `true` or `false`, used by the requirements reports; a value that isn't a Tcl boolean is
+  # an error. The maximum fits a merged specification, which states the total goal divided across the test cases; the
+  # sum fits requirements without a specification. Initialized to `false` in `OsvvmSettingsDefault.tcl`.
   #
   # See also: [SetRequirementDoesNotExceedGoal] [Requirements2Html]
   if {$Status} {
@@ -731,10 +763,10 @@ proc SetRequirementUseSumOfGoals {{Status "true"}} {
 
 proc SetRequirementCsvPrintStatus {{Status "true"}} {
   # Enable or disable the status column in the requirements CSV file.
-  #  Status - `true` writes the status, `false` doesn't.
+  #  Status - A Tcl boolean: true (`true`, `yes`, `on`, `1`, any case) writes the status, false doesn't.
   #
-  # Sets `REQUIREMENT_CSV_PRINT_STATUS`, used by [Requirements2Csv]. Initialized to `false` in
-  # `OsvvmSettingsDefault.tcl`.
+  # Sets `REQUIREMENT_CSV_PRINT_STATUS` to `true` or `false`, used by [Requirements2Csv]; a value that isn't a Tcl
+  # boolean is an error. Initialized to `false` in `OsvvmSettingsDefault.tcl`.
   #
   # See also: [Requirements2Csv]
   if {$Status} {
@@ -746,11 +778,11 @@ proc SetRequirementCsvPrintStatus {{Status "true"}} {
 
 proc SetRequirementTestCaseFailsIfLessThanGoal {{Status "true"}} {
   # Select whether a test case fails when a requirement doesn't reach its goal.
-  #  Status - `true` fails the test case, `false` keeps its status.
+  #  Status - A Tcl boolean: true (`true`, `yes`, `on`, `1`, any case) fails the test case, false keeps its status.
   #
-  # Sets `REQUIREMENT_TEST_CASE_FAILS_IF_LESS_THAN_GOAL`, used by the requirements reports: a test case whose passed
-  # count of a requirement is below the goal gets the status `FAILED`. Initialized to `true` in
-  # `OsvvmSettingsDefault.tcl`.
+  # Sets `REQUIREMENT_TEST_CASE_FAILS_IF_LESS_THAN_GOAL` to `true` or `false`, used by the requirements reports: a test
+  # case whose passed count of a requirement is below the goal gets the status `FAILED`. A value that isn't a Tcl
+  # boolean is an error. Initialized to `true` in `OsvvmSettingsDefault.tcl`.
   #
   # See also: [Requirements2Html]
   if {$Status} {
@@ -762,10 +794,11 @@ proc SetRequirementTestCaseFailsIfLessThanGoal {{Status "true"}} {
 
 proc SetRequirementDoesNotExceedGoal {{Status "true"}} {
   # Select whether a requirement's passed count is limited to its goal.
-  #  Status - `true` limits the passed count to the goal, `false` sums up the passed counts.
+  #  Status - A Tcl boolean: true (`true`, `yes`, `on`, `1`, any case) limits the passed count to the goal, false sums
+  #           up the passed counts.
   #
-  # Sets `REQUIREMENT_DOES_NOT_EXCEED_GOAL`, used by the requirements reports. Initialized to `true` in
-  # `OsvvmSettingsDefault.tcl`.
+  # Sets `REQUIREMENT_DOES_NOT_EXCEED_GOAL` to `true` or `false`, used by the requirements reports; a value that isn't a
+  # Tcl boolean is an error. Initialized to `true` in `OsvvmSettingsDefault.tcl`.
   #
   # See also: [SetRequirementUseSumOfGoals] [Requirements2Html]
   if {$Status} {

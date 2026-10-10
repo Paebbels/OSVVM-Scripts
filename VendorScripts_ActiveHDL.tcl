@@ -169,28 +169,36 @@ proc vendor_SetCoverageAnalyzeDefaults {} {
 }
 
 proc vendor_SetCoverageElaborateDefaults {} {
-  # Set the default code coverage options for elaboration.
+  # Return the simulator's default code coverage options for elaboration.
   #
-  # The options for the kinds of code coverage in `CoverageKinds` (see [SetCoverageKinds]), translated by
-  # `vendor_GetCoverageKindOptions`.
+  # Called at start-up by `OsvvmSettingsDefault.tcl`, which stores the result in `CoverageElaborateOptions`, and by
+  # [SetCoverageKinds]. The value is passed to the elaboration by [simulate] (`ElaborateOptions`) while code coverage is
+  # enabled for simulate, see [SetCoverageSimulateEnable]. A user setting from [SetCoverageElaborateOptions] or
+  # `OsvvmSettingsLocal.tcl` replaces it.
   #
-  # Returns: The default code coverage elaboration options; also stored in `CoverageElaborateOptions`.
+  # Active-HDL: sets `CoverageElaborateOptions` to the options for the kinds in `CoverageKinds`, translated by
+  # `vendor_GetCoverageKindOptions`, and returns it: empty, the kinds add no elaborate options for this simulator.
+  #
+  # Returns the default options, or an empty string if the simulator has none.
   variable CoverageElaborateOptions
   variable CoverageKinds
   set CoverageElaborateOptions [vendor_GetCoverageKindOptions elaborate $CoverageKinds]
 }
 
 proc vendor_GetCoverageKindOptions {Step Kinds} {
-  # Translate the kinds of code coverage into Active-HDL's options for a step.
-  #
+  # Translate the kinds of code coverage into the simulator's options for one step.
   #  Step  - `analyze`, `elaborate` or `simulate`.
   #  Kinds - The kinds of code coverage, see [SetCoverageKinds].
   #
-  # Active-HDL instruments code coverage at analysis (`-coverage`) and collects it at simulation (`-acdb_cov`), both
-  # with `s` (statement), `b` (branch), `c` (condition), `e` (expression) and `m` (fsm). Toggle coverage isn't
-  # chosen by a letter; functional coverage is collected without an option.
+  # Called by `vendor_SetCoverageAnalyzeDefaults`, `vendor_SetCoverageElaborateDefaults` and
+  # `vendor_SetCoverageSimulateDefaults` with the kinds in `CoverageKinds`. A kind the simulator doesn't support is left
+  # out.
   #
-  # Returns: The options for the step; none for elaboration.
+  # Active-HDL instruments code coverage at analysis (`-coverage`) and collects it at simulation (`-acdb_cov`), both
+  # with `s` (statement), `b` (branch), `c` (condition), `e` (expression) and `m` (fsm). Toggle coverage isn't chosen by
+  # a letter; functional coverage is collected without an option.
+  #
+  # Returns the options for the step, or an empty string.
   set Letters ""
   foreach Kind $Kinds {
     append Letters [dict get {statement s branch b condition c expression e toggle "" fsm m functional ""} $Kind]
@@ -601,14 +609,17 @@ proc vendor_GetCoverageFileName {TestName} {
 # Export Coverage
 #
 proc vendor_ExportCodeCoverage {BuildName CodeCoverageDirectory FileName Options} {
-  # Export the code coverage of a build into Active-HDL's UCDB XML with `acdb2xml`.
+  # Export the code coverage of a build into a well-known data format.
+  #  BuildName             - Name of the build.
+  #  CodeCoverageDirectory - The build's code coverage directory.
+  #  FileName              - The file to write; empty: the simulator's default name in *CodeCoverageDirectory*.
+  #  Options               - Further options of the simulator's export command.
   #
-  #  BuildName             - The build.
-  #  CodeCoverageDirectory - The directory of the code coverage databases.
-  #  FileName              - The file to write; if empty, `<BuildName>_code_cov.ucdb.xml` in *CodeCoverageDirectory*.
-  #  Options               - Further options of `acdb2xml`.
+  # Called by [ExportCodeCoverage], and at the end of a build that collected code coverage if [SetCoverageExportEnable]
+  # is on.
   #
-  # The build's database is `<BuildName>.acdb`. Without a database, nothing is written.
+  # Active-HDL: `acdb2xml` writes UCDB XML from `<BuildName>.acdb`; the default file is `<BuildName>_code_cov.ucdb.xml`.
+  # The options are passed as given. Without a database, prints a message and writes nothing.
   set CoverageFile ${CodeCoverageDirectory}/${BuildName}.acdb
   if {$FileName eq ""} {
     set FileName ${CodeCoverageDirectory}/${BuildName}_code_cov.ucdb.xml

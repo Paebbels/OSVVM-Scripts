@@ -1576,8 +1576,10 @@ proc simulate {LibraryUnit args} {
   #
   # The test case name is $LibraryUnit, unless [TestName] set it before; generics set with [generic] are appended to the
   # name of its result files. The options are $args, the extended simulate options ([SetExtendedSimulateOptions]) and
-  # the code coverage simulate options (only if [SetCoverageEnable] and [SetCoverageSimulateEnable] are true). A
-  # simulation still running is ended first. `vendor_simulate` runs the simulation.
+  # the code coverage simulate options. The elaboration additionally gets the code coverage elaborate options
+  # ([SetCoverageElaborateOptions]); each simulator passes the options to the step that needs them. Code coverage
+  # options are used only if [SetCoverageEnable] and [SetCoverageSimulateEnable] are true. A simulation still running is
+  # ended first. `vendor_simulate` runs the simulation.
   #
   # After the simulation, the test case's reports are created (if `GenerateOsvvmReports` is true), and the test case
   # name, generics and co-simulation setting are reset.
@@ -1783,25 +1785,40 @@ proc RemoveFilePathChars {PathString} {
 
 # -------------------------------------------------
 proc ExportOptions {args} {
-  # Set options for the next [ExportCodeCoverage], like [generic] does for [simulate].
+  # Add options for the next [ExportCodeCoverage].
+  #  args - Options of the simulator's export command, `--relative=.` for NVC.
   #
-  #  args - The options, in the simulator's syntax, e.g. `--relative=.` for NVC.
+  # Appends the options to `ExportOptionsList`, which the next [ExportCodeCoverage] uses and clears. Written as an
+  # argument of [ExportCodeCoverage], like [generic] for [simulate].
   #
-  # Returns: An empty string, so it can be written as an argument: `ExportCodeCoverage [ExportOptions ...]`.
+  # Returns an empty string, so it can be written as an argument: `ExportCodeCoverage [ExportOptions ...]`.
+  #
+  # See also: [SetCoverageExportOptions]
   variable ExportOptionsList
   append ExportOptionsList " " $args
   return ""
 }
 
 proc ExportCodeCoverage {{FileName ""} args} {
-  # Export the code coverage of the last build into a well-known data format, e.g. Cobertura XML.
+  # Export the code coverage of the last build that collected code coverage into a well-known data format.
+  #  FileName - The file to write. Empty: the simulator's default name in the code coverage directory, for NVC
+  #             `<BuildName>_code_cov.cobertura.xml`.
+  #  args     - `[ExportOptions ...]`.
   #
-  #  FileName - Optional, the file to write. Default: chosen by the simulator, e.g.
-  #             `<BuildName>_code_cov.cobertura.xml` in the code coverage directory for NVC.
-  #  args     - Optional, `[ExportOptions <options>]`.
+  # The options are those of [SetCoverageExportOptions] followed by those of [ExportOptions], which are cleared
+  # afterwards. `vendor_ExportCodeCoverage` writes the file:
   #
-  # The simulator's part is vendor_ExportCodeCoverage. Further options come from [ExportOptions] and
-  # [SetCoverageExportOptions]. With [SetCoverageExportEnable], every build exports its code coverage this way.
+  # |Simulator|Format|Default file|
+  # |---|---|---|
+  # |NVC|Cobertura XML (`nvc --cover-export`)|`<BuildName>_code_cov.cobertura.xml`|
+  # |Siemens tools|coverage report XML (`vcover report -xml`)|`<BuildName>_code_cov.questa.xml`|
+  # |Aldec tools|UCDB XML (`acdb2xml`)|`<BuildName>_code_cov.ucdb.xml`|
+  #
+  # Siemens tools: Questa, Siemens, VSim, Visualizer. Aldec tools: Riviera-PRO, Active-HDL, ASim, VSimSA. Other
+  # simulators print that the export isn't supported yet. Without a build that collected code coverage, it's an
+  # error. With [SetCoverageExportEnable], every build that collected code coverage exports it this way at its end.
+  #
+  # See also: [SetCoverageExportEnable]
   variable ExportOptionsList
 
   set Options [concat {*}$::osvvm::CoverageExportOptions {*}$ExportOptionsList]

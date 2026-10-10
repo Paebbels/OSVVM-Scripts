@@ -231,24 +231,31 @@ proc vendor_SetCoverageAnalyzeDefaults {} {
 }
 
 proc vendor_SetCoverageElaborateDefaults {} {
-  # Set the default code coverage options for elaboration.
+  # Return the simulator's default code coverage options for elaboration.
   #
-  # The options for the kinds of code coverage in `CoverageKinds` (see [SetCoverageKinds]), translated by
-  # `vendor_GetCoverageKindOptions`.
+  # Called at start-up by `OsvvmSettingsDefault.tcl`, which stores the result in `CoverageElaborateOptions`, and by
+  # [SetCoverageKinds]. The value is passed to the elaboration by [simulate] (`ElaborateOptions`) while code coverage is
+  # enabled for simulate, see [SetCoverageSimulateEnable]. A user setting from [SetCoverageElaborateOptions] or
+  # `OsvvmSettingsLocal.tcl` replaces it.
   #
-  # Returns: The default code coverage elaboration options; also stored in `CoverageElaborateOptions`.
+  # Questa: sets `CoverageElaborateOptions` to the options for the kinds in `CoverageKinds`, translated by
+  # `vendor_GetCoverageKindOptions`, and returns it: empty, the kinds add no elaborate options for this simulator.
+  #
+  # Returns the default options, or an empty string if the simulator has none.
   variable CoverageElaborateOptions
   variable CoverageKinds
   set CoverageElaborateOptions [vendor_GetCoverageKindOptions elaborate $CoverageKinds]
 }
 
 proc vendor_GetCoverageKindLetters {Kinds} {
-  # Translate the kinds of code coverage into Questa's letters, used by `+cover=` and `vcover report -code`.
+  # Translate the kinds of code coverage into the letters of `+cover=` and `vcover report -code`.
   #
   #  Kinds - The kinds of code coverage, see [SetCoverageKinds].
   #
   # `s` (statement), `b` (branch), `c` (condition), `e` (expression), `t` (toggle) and `f` (fsm); functional coverage
   # has no letter.
+  #
+  # Called by `vendor_GetCoverageKindOptions` and `vendor_ExportCodeCoverage`.
   #
   # Returns: The letters, e.g. `sbf`.
   set Letters ""
@@ -259,15 +266,18 @@ proc vendor_GetCoverageKindLetters {Kinds} {
 }
 
 proc vendor_GetCoverageKindOptions {Step Kinds} {
-  # Translate the kinds of code coverage into Questa's options for a step.
-  #
+  # Translate the kinds of code coverage into the simulator's options for one step.
   #  Step  - `analyze`, `elaborate` or `simulate`.
   #  Kinds - The kinds of code coverage, see [SetCoverageKinds].
   #
-  # Questa instruments code coverage at analysis: `+cover=` with `s` (statement), `b` (branch), `c` (condition),
-  # `e` (expression), `t` (toggle) and `f` (fsm). Functional coverage is collected without an option.
+  # Called by `vendor_SetCoverageAnalyzeDefaults`, `vendor_SetCoverageElaborateDefaults` and
+  # `vendor_SetCoverageSimulateDefaults` with the kinds in `CoverageKinds`. A kind the simulator doesn't support is left
+  # out.
   #
-  # Returns: The options for the step; none for elaboration and simulation.
+  # Questa instruments code coverage at analysis: `+cover=` with `s` (statement), `b` (branch), `c` (condition), `e`
+  # (expression), `t` (toggle) and `f` (fsm). Functional coverage is collected without an option.
+  #
+  # Returns the options for the step, or an empty string.
   if {$Step ne "analyze"} {
     return ""
   }
@@ -700,16 +710,19 @@ proc vendor_GetCoverageFileName {TestName} {
 # Export Coverage
 #
 proc vendor_ExportCodeCoverage {BuildName CodeCoverageDirectory FileName Options} {
-  # Export the code coverage of a build into Questa's coverage report XML with `vcover report -xml -details`.
+  # Export the code coverage of a build into a well-known data format.
+  #  BuildName             - Name of the build.
+  #  CodeCoverageDirectory - The build's code coverage directory.
+  #  FileName              - The file to write; empty: the simulator's default name in *CodeCoverageDirectory*.
+  #  Options               - Further options of the simulator's export command.
   #
-  #  BuildName             - The build.
-  #  CodeCoverageDirectory - The directory of the code coverage databases.
-  #  FileName              - The file to write; if empty, `<BuildName>_code_cov.questa.xml` in *CodeCoverageDirectory*.
-  #  Options               - Further options of `vcover report`.
+  # Called by [ExportCodeCoverage], and at the end of a build that collected code coverage if [SetCoverageExportEnable]
+  # is on.
   #
-  # The build's database is `<BuildName>.ucdb`. `-details` writes per instance the source files, statements and
-  # branches with their counts; `-code` chooses the kinds of [SetCoverageKinds] (see
-  # [vendor_GetCoverageKindLetters]). Without a database, nothing is written.
+  # Questa: `vcover report -xml -details -code <letters>` writes the coverage report XML from `<BuildName>.ucdb`; the
+  # default file is `<BuildName>_code_cov.questa.xml`. `-details` writes per instance the source files, statements and
+  # branches with their counts; `-code` chooses the kinds in `CoverageKinds` (see `vendor_GetCoverageKindLetters`).
+  # Without a database, prints a message and writes nothing.
   set CoverageFile ${CodeCoverageDirectory}/${BuildName}.ucdb
   if {$FileName eq ""} {
     set FileName ${CodeCoverageDirectory}/${BuildName}_code_cov.questa.xml

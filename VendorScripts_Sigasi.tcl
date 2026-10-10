@@ -213,9 +213,9 @@ proc vendor_generic {Name Value} {
 proc vendor_SetCoverageAnalyzeDefaults {} {
   # Return the simulator's default code coverage options for analyze.
   #
-  # Called once at start-up by `OsvvmSettingsDefault.tcl`, which stores the result in `CoverageAnalyzeOptions`. The
-  # value is used by [analyze] while code coverage is enabled for analyze, see [SetCoverageAnalyzeEnable]. A user
-  # setting from [SetCoverageAnalyzeOptions] or `OsvvmSettingsLocal.tcl` replaces it.
+  # Called at start-up by `OsvvmSettingsDefault.tcl`, which stores the result in `CoverageAnalyzeOptions`, and by
+  # [SetCoverageKinds]. The value is used by [analyze] while code coverage is enabled for analyze, see
+  # [SetCoverageAnalyzeEnable]. A user setting from [SetCoverageAnalyzeOptions] or `OsvvmSettingsLocal.tcl` replaces it.
   #
   # Does nothing: Sigasi doesn't collect code coverage.
   #
@@ -223,32 +223,42 @@ proc vendor_SetCoverageAnalyzeDefaults {} {
 }
 
 proc vendor_SetCoverageElaborateDefaults {} {
-  # Set the default code coverage options for elaboration.
+  # Return the simulator's default code coverage options for elaboration.
   #
-  # Sigasi doesn't handle coverage, so there are none.
+  # Called at start-up by `OsvvmSettingsDefault.tcl`, which stores the result in `CoverageElaborateOptions`, and by
+  # [SetCoverageKinds]. The value is passed to the elaboration by [simulate] (`ElaborateOptions`) while code coverage is
+  # enabled for simulate, see [SetCoverageSimulateEnable]. A user setting from [SetCoverageElaborateOptions] or
+  # `OsvvmSettingsLocal.tcl` replaces it.
   #
-  # Returns: The default code coverage elaboration options.
+  # Sigasi: none; Sigasi doesn't handle code coverage.
+  #
+  # Returns the default options, or an empty string if the simulator has none.
   variable CoverageElaborateOptions
   set CoverageElaborateOptions ""
 }
 
 proc vendor_GetCoverageKindOptions {Step Kinds} {
-  # Translate the kinds of code coverage into the simulator's options for a step.
-  #
+  # Translate the kinds of code coverage into the simulator's options for one step.
   #  Step  - `analyze`, `elaborate` or `simulate`.
   #  Kinds - The kinds of code coverage, see [SetCoverageKinds].
   #
-  # Returns: The options for the step; none, there's no translation for this simulator yet.
+  # Called by `vendor_SetCoverageAnalyzeDefaults`, `vendor_SetCoverageElaborateDefaults` and
+  # `vendor_SetCoverageSimulateDefaults` with the kinds in `CoverageKinds`. A kind the simulator doesn't support is left
+  # out.
+  #
+  # Sigasi: no translation yet; always empty.
+  #
+  # Returns the options for the step, or an empty string.
   return ""
 }
 
 proc vendor_SetCoverageSimulateDefaults {} {
   # Return the simulator's default code coverage options for simulate.
   #
-  # Called once at start-up by `OsvvmSettingsDefault.tcl`, which stores the result in `CoverageSimulateOptions`. The
-  # value is added to the simulator options by [simulate] while code coverage is enabled for simulate, see
-  # [SetCoverageSimulateEnable]. A user setting from [SetCoverageSimulateOptions] or `OsvvmSettingsLocal.tcl` replaces
-  # it.
+  # Called at start-up by `OsvvmSettingsDefault.tcl`, which stores the result in `CoverageSimulateOptions`, and by
+  # [SetCoverageKinds]. The value is added to the simulator options by [simulate] while code coverage is enabled for
+  # simulate, see [SetCoverageSimulateEnable]. A user setting from [SetCoverageSimulateOptions] or
+  # `OsvvmSettingsLocal.tcl` replaces it.
   #
   # Does nothing: Sigasi doesn't collect code coverage.
   #
@@ -301,12 +311,14 @@ proc vendor_GetCoverageFileName {TestName} {
 #
 proc vendor_ExportCodeCoverage {BuildName CodeCoverageDirectory FileName Options} {
   # Export the code coverage of a build into a well-known data format.
+  #  BuildName             - Name of the build.
+  #  CodeCoverageDirectory - The build's code coverage directory.
+  #  FileName              - The file to write; empty: the simulator's default name in *CodeCoverageDirectory*.
+  #  Options               - Further options of the simulator's export command.
   #
-  #  BuildName             - The build.
-  #  CodeCoverageDirectory - The directory of the code coverage databases.
-  #  FileName              - The file to write; if empty, chosen by the simulator.
-  #  Options               - Further options of the simulator's export.
+  # Called by [ExportCodeCoverage], and at the end of a build that collected code coverage if [SetCoverageExportEnable]
+  # is on.
   #
-  # There's no export for this simulator yet; it says so.
+  # Sigasi: no export yet; prints `ExportCodeCoverage: Not supported for <ToolName> yet.` and writes nothing.
   puts "ExportCodeCoverage: Not supported for ${::osvvm::ToolName} yet."
 }

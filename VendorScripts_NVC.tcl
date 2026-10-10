@@ -137,29 +137,38 @@ proc vendor_SetCoverageAnalyzeDefaults {} {
 }
 
 proc vendor_SetCoverageElaborateDefaults {} {
-  # Set the default code coverage options for elaboration.
+  # Return the simulator's default code coverage options for elaboration.
   #
-  # The options for the kinds of code coverage in `CoverageKinds` (see [SetCoverageKinds]), translated by
-  # `vendor_GetCoverageKindOptions`, including NVC's further code coverage options in `NvcExtendedCoverageOptions`.
+  # Called at start-up by `OsvvmSettingsDefault.tcl`, which stores the result in `CoverageElaborateOptions`, and by
+  # [SetCoverageKinds]. The value is passed to the elaboration by [simulate] (`ElaborateOptions`) while code coverage is
+  # enabled for simulate, see [SetCoverageSimulateEnable]. A user setting from [SetCoverageElaborateOptions] or
+  # `OsvvmSettingsLocal.tcl` replaces it.
   #
-  # Returns: The default code coverage elaboration options; also stored in `CoverageElaborateOptions`.
+  # NVC: sets `CoverageElaborateOptions` to the options for the kinds in `CoverageKinds`, translated by
+  # `vendor_GetCoverageKindOptions`, and returns it: `--cover=statement,branch,fsm-state` for the default kinds,
+  # followed by NVC's further code coverage options in `NvcExtendedCoverageOptions`.
+  #
+  # Returns the default options, or an empty string if the simulator has none.
   variable CoverageElaborateOptions
   variable CoverageKinds
   set CoverageElaborateOptions [vendor_GetCoverageKindOptions elaborate $CoverageKinds]
 }
 
 proc vendor_GetCoverageKindOptions {Step Kinds} {
-  # Translate the kinds of code coverage into NVC's options for a step.
-  #
+  # Translate the kinds of code coverage into the simulator's options for one step.
   #  Step  - `analyze`, `elaborate` or `simulate`.
   #  Kinds - The kinds of code coverage, see [SetCoverageKinds].
   #
+  # Called by `vendor_SetCoverageAnalyzeDefaults`, `vendor_SetCoverageElaborateDefaults` and
+  # `vendor_SetCoverageSimulateDefaults` with the kinds in `CoverageKinds`. A kind the simulator doesn't support is left
+  # out.
+  #
   # NVC collects code coverage at elaboration: `--cover=...` with `statement`, `branch`, `expression` (for both
-  # `condition` and `expression`), `toggle`, `fsm-state` (for `fsm`) and `functional`, followed by NVC's further
-  # code coverage options in `NvcExtendedCoverageOptions`, e.g. `fsm-no-default-enums`:
+  # `condition` and `expression`), `toggle`, `fsm-state` (for `fsm`) and `functional`, followed by NVC's further code
+  # coverage options in `NvcExtendedCoverageOptions`, e.g. `fsm-no-default-enums`:
   # `--cover=statement,branch,fsm-state,fsm-no-default-enums`.
   #
-  # Returns: The options for the step; none for analysis and simulation.
+  # Returns the options for the step, or an empty string.
   variable NvcExtendedCoverageOptions
 
   if {$Step ne "elaborate"} {
