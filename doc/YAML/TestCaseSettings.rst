@@ -60,9 +60,9 @@ Structure
          - ``BuildName`` | build name
          - ``Generics`` | mapping name → value (:ref:`RUFF/osvvm/generic`), or ``null``
          - ``ReportsTestSuiteDirectory`` | the test suite's reports directory
-         - ``RequirementsYamlFile`` | :ref:`requirements <YAML>` of the test case, or ``""``
+         - ``RequirementsYamlFile`` | :ref:`requirements <YAML/Requirements>` of the test case, or ``""``
          - ``AlertYamlFile`` | :ref:`alerts <YAML/AlertLog>` of the test case, or ``""``
-         - ``CovYamlFile`` | :ref:`functional coverage <YAML/FuncCoverage>` of the test case, or ``""``
+         - ``CovYamlFile`` | :ref:`functional coverage <YAML/FunctionalCoverage>` of the test case, or ``""``
          - ``ScoreboardDict`` | mapping scoreboard name → :ref:`scoreboard file <YAML/ScoreBoard>`, or ``null``
          - ``TranscriptFiles`` | the test case's transcripts, see :ref:`YAML/TestCaseSettings/Transcripts`
          - ``TestCaseFileName`` | base name of the test case's files: ``TestCaseName`` plus the generics
