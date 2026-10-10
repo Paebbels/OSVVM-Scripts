@@ -17,16 +17,20 @@ YAML Files
    .. grid-item::
       :columns: 6
 
-      .. code-block:: text
+      .. tree::
+         :root-icon: 📁
+         :node-icon: 📁
+         :leaf-icon: 📄
+         :icons:     > 📁
 
-         OsvvmRunDemoTests/
-         ├── OsvvmRunDemoTests.yml
-         └── reports/
-             └── UART/
-                 ├── TbUart_SendGet1_run.yml
-                 ├── TbUart_SendGet1_alerts.yml
-                 ├── TbUart_SendGet1_sb_Uart.yml
-                 └── ...
+         - :file:`OsvvmRunDemoTests`
+           - :file:`OsvvmRunDemoTests.yml`
+           - :file:`reports`
+             - :file:`UART`
+               - :file:`TbUart_SendGet1_run.yml`
+               - :file:`TbUart_SendGet1_alerts.yml`
+               - :file:`TbUart_SendGet1_sb_Uart.yml`
+               - …
 
 
 .. _RPT/YAML/Files:

@@ -73,16 +73,20 @@ Create a Simulation Directory
          mkdir sim
          cd sim
 
-      .. code-block:: text
+      .. tree::
+         :root-icon: 📁
+         :node-icon: 📁
+         :leaf-icon: 📄
+         :icons:     > 📁
 
-         <work>/
-         ├── OsvvmLibraries/
-         │   ├── osvvm/
-         │   ├── Scripts/
-         │   ├── ...
-         │   ├── OsvvmLibraries.pro
-         │   └── RunDemoTests.pro
-         └── sim/
+         - :file:`<work>`
+           - :file:`OsvvmLibraries`
+             > :file:`osvvm`
+             > :file:`Scripts`
+             - …
+             - :file:`OsvvmLibraries.pro`
+             - :file:`RunDemoTests.pro`
+           > :file:`sim`
 
 
 .. _QSG/Start:
@@ -446,21 +450,25 @@ Look at the Reports
    .. grid-item::
       :columns: 6
 
-      .. code-block:: text
+      .. tree::
+         :root-icon: 📁
+         :node-icon: 📁
+         :leaf-icon: 📄
+         :icons:     > 📁
 
-         sim/
-         ├── index.html
-         ├── OsvvmLibraries/
-         │   └── OsvvmLibraries.html
-         ├── OsvvmRunDemoTests/
-         │   ├── OsvvmRunDemoTests.html
-         │   ├── OsvvmRunDemoTests.xml
-         │   ├── OsvvmRunDemoTests.yml
-         │   ├── logs/
-         │   ├── reports/
-         │   └── results/
-         └── VHDL_LIBS/
-             └── NVC-1.23.0/
+         - :file:`sim`
+           - :file:`index.html`
+           - :file:`OsvvmLibraries`
+             - :file:`OsvvmLibraries.html`
+           - :file:`OsvvmRunDemoTests`
+             - :file:`OsvvmRunDemoTests.html`
+             - :file:`OsvvmRunDemoTests.xml`
+             - :file:`OsvvmRunDemoTests.yml`
+             > :file:`logs`
+             > :file:`reports`
+             > :file:`results`
+           - :file:`VHDL_LIBS`
+             > :file:`NVC-1.23.0`
 
 
 .. _QSG/Next:

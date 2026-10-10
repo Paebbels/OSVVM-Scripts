@@ -28,14 +28,18 @@ Library Directory
          SetLibraryDirectory ../libs
          puts [GetLibraryDirectory]
 
-      .. code-block:: text
+      .. tree::
+         :root-icon: 📁
+         :node-icon: 📁
+         :leaf-icon: 📄
+         :icons:     > 📁
 
-         libs/
-           VHDL_LIBS/
-             NVC-1.23.0/
-               <one entry per library>
-             QuestaSim-2024.3/
-               <one entry per library>
+         - :file:`libs`
+           - :file:`VHDL_LIBS`
+             - :file:`NVC-1.23.0`
+               - *one entry per library*
+             - :file:`QuestaSim-2024.3`
+               - *one entry per library*
 
 .. _UG/Libraries/Active:
 

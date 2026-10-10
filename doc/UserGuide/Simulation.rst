@@ -31,11 +31,15 @@ Simulating with Generics
          RunTest  Tb_xMii1.vhd [generic MII_INTERFACE RGMII] [generic MII_BPS BPS_1G]
          simulate Tb_xMii1     [generic MII_INTERFACE MII]   [generic MII_BPS BPS_10M]
 
-      .. code-block:: text
+      .. tree::
+         :root-icon: 📁
+         :node-icon: 📁
+         :leaf-icon: 📄
+         :icons:     > 📁
 
-         reports/<TestSuite>/
-           Tb_xMii1_MII_INTERFACE_RGMII_MII_BPS_BPS_1G.html
-           Tb_xMii1_MII_INTERFACE_MII_MII_BPS_BPS_10M.html
+         - :file:`reports/<TestSuite>`
+           - :file:`Tb_xMii1_MII_INTERFACE_RGMII_MII_BPS_BPS_1G.html`
+           - :file:`Tb_xMii1_MII_INTERFACE_MII_MII_BPS_BPS_10M.html`
 
 .. _UG/Simulation/SecondTopLevel:
 

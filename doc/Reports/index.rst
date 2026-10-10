@@ -255,33 +255,37 @@ Where the Files Go
    .. grid-item::
       :columns: 6
 
-      .. code-block:: text
+      .. tree::
+         :root-icon: 📁
+         :node-icon: 📁
+         :leaf-icon: 📄
+         :icons:     > 📁
 
-         sim/
-         ├── index.html
-         ├── index.yml
-         └── OsvvmRunDemoTests/
-             ├── OsvvmRunDemoTests.html
-             ├── OsvvmRunDemoTests.xml
-             ├── OsvvmRunDemoTests.yml
-             ├── reports/
-             │   ├── CssOsvvmStyle.css
-             │   ├── OsvvmLogo.png
-             │   └── UART/
-             │       ├── TbUart_SendGet1.html
-             │       ├── TbUart_SendGet1_alerts.yml
-             │       ├── TbUart_SendGet1_run.yml
-             │       ├── TbUart_SendGet1_sb_Uart.yml
-             │       └── ...
-             ├── results/
-             │   └── UART/
-             │       ├── TbUart_SendGet1.html
-             │       └── TbUart_SendGet1.log
-             ├── logs/
-             │   ├── OsvvmRunDemoTests.log
-             │   └── OsvvmRunDemoTests_log.html
-             └── CodeCoverage/
-                 └── ...
+         - :file:`sim`
+           - :file:`index.html`
+           - :file:`index.yml`
+           - :file:`OsvvmRunDemoTests`
+             - :file:`OsvvmRunDemoTests.html`
+             - :file:`OsvvmRunDemoTests.xml`
+             - :file:`OsvvmRunDemoTests.yml`
+             - :file:`reports`
+               - :file:`CssOsvvmStyle.css`
+               - :file:`OsvvmLogo.png`
+               - :file:`UART`
+                 - :file:`TbUart_SendGet1.html`
+                 - :file:`TbUart_SendGet1_alerts.yml`
+                 - :file:`TbUart_SendGet1_run.yml`
+                 - :file:`TbUart_SendGet1_sb_Uart.yml`
+                 - …
+             - :file:`results`
+               - :file:`UART`
+                 - :file:`TbUart_SendGet1.html`
+                 - :file:`TbUart_SendGet1.log`
+             - :file:`logs`
+               - :file:`OsvvmRunDemoTests.log`
+               - :file:`OsvvmRunDemoTests_log.html`
+             - :file:`CodeCoverage`
+               - …
 
 
 .. _RPT/Open:

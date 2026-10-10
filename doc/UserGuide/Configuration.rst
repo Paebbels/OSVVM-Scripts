@@ -70,16 +70,20 @@ Settings Directory
    .. grid-item::
       :columns: 6
 
-      .. code-block:: text
+      .. tree::
+         :root-icon: 📁
+         :node-icon: 📁
+         :leaf-icon: 📄
+         :icons:     > 📁
 
-         OsvvmLibraries/
-           Scripts/
-             OsvvmSettingsDefault.tcl        <- OSVVM's defaults
-             OsvvmSettingsLocal_example.tcl
-         OsvvmSettings/
-           OsvvmSettingsLocal.tcl           <- yours
-           OsvvmSettingsLocal_NVC.tcl
-           LocalCallbacks.tcl
+         - :file:`OsvvmLibraries`
+           - :file:`Scripts`
+             - :file:`OsvvmSettingsDefault.tcl` | OSVVM's defaults
+             - :file:`OsvvmSettingsLocal_example.tcl`
+         - :file:`OsvvmSettings`
+           - :file:`OsvvmSettingsLocal.tcl` | yours
+           - :file:`OsvvmSettingsLocal_NVC.tcl`
+           - :file:`LocalCallbacks.tcl`
 
 .. _UG/Config/Callbacks:
 
@@ -144,14 +148,18 @@ Scripts that Run with Each Simulation
    .. grid-item::
       :columns: 6
 
-      .. code-block:: text
+      .. tree::
+         :root-icon: 📁
+         :node-icon: 📁
+         :leaf-icon: 📄
+         :icons:     > 📁
 
-         testbench/
-           TbAxi4.pro
-           TbAxi4.vhd
-           TbAxi4.tcl              <- with every simulation of TbAxi4
-           TbAxi4_QuestaSim.tcl    <- only with QuestaSim
-           wave.do                 <- with every simulation started here
+         - :file:`testbench`
+           - :file:`TbAxi4.pro`
+           - :file:`TbAxi4.vhd`
+           - :file:`TbAxi4.tcl` | with every simulation of TbAxi4
+           - :file:`TbAxi4_QuestaSim.tcl` | only with QuestaSim
+           - :file:`wave.do` | with every simulation started here
 
       .. code-block:: tcl
 

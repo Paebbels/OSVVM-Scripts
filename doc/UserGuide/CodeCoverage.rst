@@ -233,31 +233,39 @@ Merging and Reports
          .. tab-item:: QuestaSim
             :sync: QuestaSim
 
-            .. code-block:: text
+            .. tree::
+               :root-icon: 📁
+               :node-icon: 📁
+               :leaf-icon: 📄
+               :icons:     > 📁
 
-               <BuildName>/
-                 CodeCoverage/
-                   <TestSuite>/
-                     <TestCaseFileName>.ucdb   <- per test case
-                   <BuildName>/
-                     <TestSuite>.ucdb          <- merged per test suite
-                   <BuildName>.ucdb            <- merged for the build
-                   <BuildName>_code_cov/       <- HTML report
+               - :file:`<BuildName>`
+                 - :file:`CodeCoverage`
+                   - :file:`<TestSuite>`
+                     - :file:`<TestCaseFileName>.ucdb` | per test case
+                   - :file:`<BuildName>`
+                     - :file:`<TestSuite>.ucdb` | merged per test suite
+                   - :file:`<BuildName>.ucdb` | merged for the build
+                   > :file:`<BuildName>_code_cov` | HTML report
 
          .. tab-item:: NVC
             :sync: NVC
 
-            .. code-block:: text
+            .. tree::
+               :root-icon: 📁
+               :node-icon: 📁
+               :leaf-icon: 📄
+               :icons:     > 📁
 
-               <BuildName>/
-                 CodeCoverage/
-                   <TestSuite>/
-                     <TestCaseFileName>.ncdb   <- per test case
-                   <BuildName>/
-                     <TestSuite>.ncdb          <- merged per test suite
-                   <BuildName>.ncdb            <- merged for the build
-                   <BuildName>_code_cov/
-                     index.html                <- HTML report
+               - :file:`<BuildName>`
+                 - :file:`CodeCoverage`
+                   - :file:`<TestSuite>`
+                     - :file:`<TestCaseFileName>.ncdb` | per test case
+                   - :file:`<BuildName>`
+                     - :file:`<TestSuite>.ncdb` | merged per test suite
+                   - :file:`<BuildName>.ncdb` | merged for the build
+                   - :file:`<BuildName>_code_cov`
+                     - :file:`index.html` | HTML report
 
 .. _UG/CodeCoverage/Export:
 

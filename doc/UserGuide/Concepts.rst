@@ -31,15 +31,19 @@ Simulation Directory
    .. grid-item::
       :columns: 6
 
-      .. code-block:: text
+      .. tree::
+         :root-icon: 📁
+         :node-icon: 📁
+         :leaf-icon: 📄
+         :icons:     > 📁
 
-         OsvvmLibraries/
-         sim/                       <- CurrentSimulationDirectory
-           VHDL_LIBS/
-             <ToolName>-<Version>/  <- compiled libraries
-           <BuildName>/             <- results of a build
-           index.html               <- all builds
-           index.yml
+         > :file:`OsvvmLibraries`
+         - :file:`sim` | CurrentSimulationDirectory
+           - :file:`VHDL_LIBS`
+             > :file:`<ToolName>-<Version>` | compiled libraries
+           > :file:`<BuildName>` | results of a build
+           - :file:`index.html` | all builds
+           - :file:`index.yml`
 
 .. _UG/Concepts/CurrentWorkingDirectory:
 
@@ -194,22 +198,29 @@ Build Name and Output
    .. grid-item::
       :columns: 6
 
-      .. code-block:: text
+      .. code-block:: tcl
 
-         build ../RunExample.pro       (in directory "example")
+         # in directory "example"
+         build ../RunExample.pro
 
-         example_RunExample/
-           example_RunExample.html
-           example_RunExample.xml
-           example_RunExample.yml
-           logs/
-             example_RunExample.log
-             example_RunExample_log.html
-           reports/
-             Example/
-               TbExample.html
-           results/
-             Example/
+      .. tree::
+         :root-icon: 📁
+         :node-icon: 📁
+         :leaf-icon: 📄
+         :icons:     > 📁
+
+         - :file:`example_RunExample`
+           - :file:`example_RunExample.html`
+           - :file:`example_RunExample.xml`
+           - :file:`example_RunExample.yml`
+           - :file:`logs`
+             - :file:`example_RunExample.log`
+             - :file:`example_RunExample_log.html`
+           - :file:`reports`
+             - :file:`Example`
+               - :file:`TbExample.html`
+           - :file:`results`
+             > :file:`Example`
 
 .. _UG/Concepts/Tests:
 
