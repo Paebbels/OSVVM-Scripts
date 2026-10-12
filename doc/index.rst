@@ -69,6 +69,7 @@ License
    :hidden:
 
    UserGuide/index
+   MIT/index
    Reports/index
 
 .. raw:: latex
