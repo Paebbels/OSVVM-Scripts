@@ -18,7 +18,7 @@ TranscriptPkg Use Models
 ************************
 
 All OSVVM printing uses the transcript capability. If the :vhdlcode:`TranscriptFile` is open, all OSVVM printing will go
-to it. If the :vhdlcode:`TranscriptFile` is not open all OSVVM printing will go OUTPUT (stdout). If the
+to it. If the :vhdlcode:`TranscriptFile` is not open all OSVVM printing will go to OUTPUT (stdout). If the
 :vhdlcode:`TranscriptFile` is open and transcript mirroring is enabled, printing will go to both the
 :vhdlcode:`TranscriptFile` and to OUTPUT.
 
@@ -89,9 +89,9 @@ Formally this method is in :vhdlcode:`AlertLogPkg`. It gives the test case a nam
 TranscriptOpen and TranscriptClose
 ==================================
 
-:vhdlcode:`TranscriptOpen` opens the :vhdlcode:`TranscriptFile`. There are a number of variations (overloaded version)
-of :vhdlcode:`TranscriptOpenWhen`, however, the simplest is the following. It opens a file named
-:file:`TestCaseName.log`, where :vhdlcode:`TestCaseName` is the name used in :vhdlcode:`SetTestName`.
+:vhdlcode:`TranscriptOpen` opens the :vhdlcode:`TranscriptFile`. There are a number of variations (overloaded versions)
+of :vhdlcode:`TranscriptOpen`, however, the simplest is the following. It opens a file named :file:`TestCaseName.log`,
+where :vhdlcode:`TestCaseName` is the name used in :vhdlcode:`SetTestName`.
 
 .. code-block:: VHDL
 
@@ -180,7 +180,7 @@ IsTranscriptMirrored
 WriteLine
 =========
 
-:vhdlcode:`Writeline` writes the buffer using the transcript capability.
+:vhdlcode:`WriteLine` writes the buffer using the transcript capability.
 
 .. code-block:: VHDL
 
@@ -213,17 +213,17 @@ Blank
 
    procedure Blank (count : natural := 1) ;
    . . .
-   BlankLine(5) ; -- prints 5 blank lines
+   Blank(5) ; -- prints 5 blank lines
 
 .. _UTILITY/TranscriptPkg/PrintLine:
 
 PrintLine
 =========
 
-:vhdlcode:`Print` prints the string using the transcript capability. Like :vhdlcode:`Alert` and :vhdlcode:`Log`,
+:vhdlcode:`PrintLine` prints the string using the transcript capability. Like :vhdlcode:`Alert` and :vhdlcode:`Log`,
 :vhdlcode:`PrintLine` prefixes the line with :vhdlcode:`OSVVM_PRINT_PREFIX`. In addition, like :vhdlcode:`Log`,
-:vhdlcode:`print` allows message filtering using :vhdlcode:`Level` and :vhdlcode:`AlertLogID`. Unlike :vhdlcode:`Log`,
-:vhdlcode:`PrintLine` does not print the time, "log", or the Log level.
+:vhdlcode:`PrintLine` allows message filtering using :vhdlcode:`Level` and :vhdlcode:`AlertLogID`. Unlike
+:vhdlcode:`Log`, :vhdlcode:`PrintLine` does not print the time, "log", or the Log level.
 
 .. code-block:: VHDL
 
@@ -236,7 +236,7 @@ PrintLine
 PrintHeader
 ===========
 
-:vhdlcode:`Print` prints the string plus prefix and suffix lines to frame the message and make it stand out. Each
+:vhdlcode:`PrintHeader` prints the string plus prefix and suffix lines to frame the message and make it stand out. Each
 character in the prefix and suffix indicates a line to print. Each line printed is prefixed by
 :vhdlcode:`OSVVM_PRINT_PREFIX`. If the character is a space, then print a blank line, otherwise, repeat that character
 :vhdlcode:`OSVVM_LINE_LENGTH` times. In addition, like :vhdlcode:`Log`, :vhdlcode:`PrintHeader` supports message
@@ -263,7 +263,7 @@ There is also a short form that uses :vhdlcode:`OSVVM_HEADER_PREFIX` (default " 
 HeaderLine
 ==========
 
-:vhdlcode:`HeaderLIne` prints a string of characters that indicate a line to print. Each line printed is prefixed by
+:vhdlcode:`HeaderLine` prints a string of characters that indicate a line to print. Each line printed is prefixed by
 :vhdlcode:`OSVVM_PRINT_PREFIX`. If the character is a space, then print a blank line, otherwise, repeat that character
 :vhdlcode:`OSVVM_LINE_LENGTH` times. In addition, like :vhdlcode:`Log`, :vhdlcode:`HeaderLine` supports message
 filtering using :vhdlcode:`Level` and :vhdlcode:`AlertLogID`.
