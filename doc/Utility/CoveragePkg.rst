@@ -2121,9 +2121,10 @@ A bin index is a reference to a location in the coverage data structure. These a
 
 :vhdlcode:`GetLastIndex` returns the index that was last used for either used for stimulus generation (in the case of
 :vhdlcode:`GetRandIndex`, :vhdlcode:`GetIncIndex`, :vhdlcode:`GetMinIndex`, :vhdlcode:`GetMaxIndex`, or
-:vhdlcode:`GetNextIndex`) or coverage collection (in the case of :vhdlcode:`ICover`). :vhdlcode:`GetRandIndex` randomly
-selects the next index in the fashion described for :vhdlcode:`GetRandPoint` / :vhdlcode:`GetRandBinVal` in previous
-sections.
+:vhdlcode:`GetNextIndex`) or coverage collection (in the case of :vhdlcode:`ICover`).
+
+:vhdlcode:`GetRandIndex` randomly selects the next index in the fashion described for :vhdlcode:`GetRandPoint` /
+:vhdlcode:`GetRandBinVal` in previous sections.
 
 :vhdlcode:`GetIncIndex` gets the bin immediately after the last bin generated using an incrementing pattern
 (:vhdlcode:`LastStimGenIndex` + 1).
