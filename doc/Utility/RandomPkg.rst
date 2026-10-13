@@ -23,9 +23,9 @@ These packages are updated from time to time and are freely available at https:/
 Randomization Using IEEE.math_real.uniform = Yuck!
 **************************************************
 
-A basic form of randomization can be accomplished by using the procedure uniform from the IEEE :vhdlcode:`math_real`
-package. However, this always results in randomization being a multi-step process: call uniform to randomize a value,
-scale the value, and then use the value.
+A basic form of randomization can be accomplished by using the procedure :vhdlcode:`uniform` from the IEEE
+:vhdlcode:`math_real` package. However, this always results in randomization being a multi-step process: call
+:vhdlcode:`uniform` to randomize a value, scale the value, and then use the value.
 
 .. code-block:: VHDL
    :force:
@@ -82,8 +82,9 @@ The seed needs to be initialized (with a different value) to ensure that each pr
 produce a unique sequence of values. If only one process is doing randomization, the seed does not need to be
 initialized.
 
-The :vhdlcode:`InitSeed` method supports either string, integer, time, or :vhdlcode:`integer_vector` parameters and uses
-a hash function to convert these values to the internal seed representation. Its overloading is as follows:
+The :vhdlcode:`InitSeed` method supports either :vhdlcode:`string`, :vhdlcode:`integer`, :vhdlcode:`time`, or
+:vhdlcode:`integer_vector` parameters and uses a hash function to convert these values to the internal seed
+representation. Its overloading is as follows:
 
 The overloading for the :vhdlcode:`InitSeed` is as follows.
 
@@ -160,10 +161,10 @@ The overloading for the :vhdlcode:`RandInt` functions is as follows.
    impure function RandInt ( A : integer_vector; Exclude: integer_vector)
        return integer ;
 
-These same functions are available for types :vhdlcode:`std_logic_vector(RandSlv)`, unsigned (:vhdlcode:`RandUnsigned`)
-and signed (:vhdlcode:`RandSigned`). Note that parameter values are still specified as integers and there is an
-additional value used to specify the size of the value to generate. For example, the following call to
-:vhdlcode:`RandSlv` defines the array size to be 8 bits.
+These same functions are available for types :vhdlcode:`std_logic_vector`\ (:vhdlcode:`RandSlv`), :vhdlcode:`unsigned`
+(:vhdlcode:`RandUnsigned`) and :vhdlcode:`signed` (:vhdlcode:`RandSigned`). Note that parameter values are still
+specified as integers and there is an additional value used to specify the size of the value to generate. For example,
+the following call to :vhdlcode:`RandSlv` defines the array size to be 8 bits.
 
 .. code-block:: VHDL
 
@@ -199,8 +200,8 @@ same overloading
        Exclude : integer ;
        Size    : natural)  return std_logic_vector ;
 
-The function, :vhdlcode:`RandReal` supports randomization for type real. The function with a range, like the procedure
-Uniform, never generates its end values. :vhdlcode:`RandReal` has the following overloading:
+The function, :vhdlcode:`RandReal` supports randomization for type :vhdlcode:`real`. The function with a range, like the
+procedure :vhdlcode:`Uniform`, never generates its end values. :vhdlcode:`RandReal` has the following overloading:
 
 .. code-block:: VHDL
 
@@ -209,8 +210,8 @@ Uniform, never generates its end values. :vhdlcode:`RandReal` has the following 
    impure function RandReal ( A, Exclude : real_vector ) return real ;
    impure function RandReal ( A : real_vector; Exclude : real ) return real ;
 
-The function, :vhdlcode:`RandTime` supports randomization for type time. :vhdlcode:`RandTime` supports the same
-overloading as :vhdlcode:`RandInt`. These are shown below:
+The function, :vhdlcode:`RandTime` supports randomization for type :vhdlcode:`time`. :vhdlcode:`RandTime` supports the
+same overloading as :vhdlcode:`RandInt`. These are shown below:
 
 .. code-block:: VHDL
 
@@ -223,8 +224,8 @@ overloading as :vhdlcode:`RandInt`. These are shown below:
    impure function RandTime (A, Exclude : time_vector) return time ;
    impure function RandTime (A : time_vector; Exclude : time) return time ;
 
-The functions, :vhdlcode:`RandBool`, :vhdlcode:`RandSl`, :vhdlcode:`RandBit`, support randomization for types boolean,
-:vhdlcode:`std_logic`, and bit respectively. These are shown below:
+The functions, :vhdlcode:`RandBool`, :vhdlcode:`RandSl`, :vhdlcode:`RandBit`, support randomization for types
+:vhdlcode:`boolean`, :vhdlcode:`std_logic`, and :vhdlcode:`bit` respectively. These are shown below:
 
 .. code-block:: VHDL
 
@@ -251,8 +252,9 @@ randomizations to create a value. The following overloading is available for :vh
    impure function RandUnsigned (Min, Max : unsigned ;
        Exclude : uv_vector) return unsigned ;
 
-The size parameter specifies the number of bits in the vector. The :vhdlcode:`Max` parameter allows randomization
-between 0 and :vhdlcode:`Max`. The :vhdlcode:`Min` and :vhdlcode:`Max` parameters allow randomizing a range of values.
+The :vhdlcode:`size` parameter specifies the number of bits in the vector. The :vhdlcode:`Max` parameter allows
+randomization between 0 and :vhdlcode:`Max`. The :vhdlcode:`Min` and :vhdlcode:`Max` parameters allow randomizing a
+range of values.
 
 .. _UTILITY/RandomPkg/RandomizingSetsOfValues:
 
@@ -528,7 +530,7 @@ selected.
    CpuWrite(CpuRec, DMA_CTRL, START_DMA or DmaCycle);
 
 The following code segment uses an exclude list to keep from repeating the last value. Note when passing an integer
-value to an :vhdlcode:`integer_vector` parameter, an aggregate using named association "(0=> :vhdlcode:`LastDataInt`)"
+value to an :vhdlcode:`integer_vector` parameter, an aggregate using named association ":vhdlcode:`(0=> LastDataInt)`"
 is used to denote a single element array. Note that during the first execution of this process, :vhdlcode:`LastDataInt`
 has the value :vhdlcode:`integer'left` (a very small number), which is outside the range 0 to 255, and as a result, has
 no impact on the randomization.
@@ -653,8 +655,8 @@ these are shown below.
    impure function GetSeed return RandomSeedType ;
    procedure SetSeed (RandomSeedIn : RandomSeedType ) ;
 
-The function :vhdlcode:`to_string` and procedures write and read are used to write and read values of type
-:vhdlcode:`RandomSeedType`. The declarations for these subprograms are shown below. Note these are in
+The function :vhdlcode:`to_string` and procedures :vhdlcode:`write` and :vhdlcode:`read` are used to write and read
+values of type :vhdlcode:`RandomSeedType`. The declarations for these subprograms are shown below. Note these are in
 :file:`RandomBasePkg.vhd` and are separate from the protected type.
 
 .. code-block:: VHDL
