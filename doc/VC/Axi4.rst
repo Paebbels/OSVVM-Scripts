@@ -22,10 +22,8 @@ intended to be part of a structured test environment.
 
 The AXI4 Manager verification component implements the complete AXI4 Manager interface capability. It supports both
 single word and burst transfers. For bursting it uses the :vhdlcode:`BurstFifos` in :vhdlcode:`AddressBusRecType`. The
-signals :vhdlcode:`xAddr`, :vhdlcode:`xData`, :vhdlcode:`xStrb`, :vhdlcode:`xLen`, :vhdlcode:`xLast`,
-:vhdlcode:`xValid`, and :vhdlcode:`xReady`, are set on a transaction-by-transaction basis. The signals :vhdlcode:`xID`,
-:vhdlcode:`xSize`, :vhdlcode:`xBurst`, :vhdlcode:`xLock`, :vhdlcode:`xCache`, :vhdlcode:`xProt`, :vhdlcode:`xQOS`,
-:vhdlcode:`xRegion`, :vhdlcode:`xUser`, and :vhdlcode:`xResp` are set using values inside the model.
+signals xAddr, xData, xStrb, xLen, xLast, xValid, and xReady, are set on a transaction-by-transaction basis. The signals
+xID, xSize, xBurst, xLock, xCache, xProt, xQOS, xRegion, xUser, and xResp are set using values inside the model.
 
 The :vhdlcode:`Axi4Subordinate` is a transaction-based Subordinate. The :vhdlcode:`Axi4Memory` is a memory Subordinate
 that responds to operations on the :vhdlcode:`AxiBus` inteface.
@@ -1579,8 +1577,7 @@ For examples of using this feature, see :file:`TbAxi4_Axi<VC>RandomTiming1.vhd` 
 
 .. rubric:: Static Delay: Ready Before Valid
 
-When :vhdlcode:`xREADY_BEFORE_VALID` is TRUE then the interface may assert :vhdlcode:`xREADY` before :vhdlcode:`xVALID`
-is received.
+When :vhdlcode:`xREADY_BEFORE_VALID` is TRUE then the interface may assert xREADY before xVALID is received.
 
 .. list-table::
    :header-rows: 1
@@ -1620,8 +1617,8 @@ transfer completed. :ref:`Figure 25 <VC/Axi4/Figure25>` shows :vhdlcode:`xx_READ
    Figure 25. xx_READY_DELAY_CYCLES = 2 when xx_READY_BEFORE_VALID is TRUE
 
 
-When :vhdlcode:`xx_READY_BEFORE_VALID` is FALSE, then :vhdlcode:`xx_READY_DELAY_CYCLES` is a relative to when
-:vhdlcode:`xValid` is asserted. :ref:`Figure 26 <VC/Axi4/Figure26>` shows :vhdlcode:`xx_READY_DELAY_CYCLES` = 2 when
+When :vhdlcode:`xx_READY_BEFORE_VALID` is FALSE, then :vhdlcode:`xx_READY_DELAY_CYCLES` is a relative to when xValid is
+asserted. :ref:`Figure 26 <VC/Axi4/Figure26>` shows :vhdlcode:`xx_READY_DELAY_CYCLES` = 2 when
 :vhdlcode:`xx_READY_BEFORE_VALID` is FALSE.
 
 .. figure:: images/Axi4/Figure26.png
@@ -1742,10 +1739,9 @@ For examples of using this feature, see :file:`TbAxi4_Axi<VC>RandomTiming1.vhd` 
 Timeout: No xReady in response xValid
 -------------------------------------
 
-On the AXI4 interface, it is expected that after a :vhdlcode:`xValid` is asserted, an :vhdlcode:`xReady` will be
-asserted within a reasonable amount of time. The :vhdlcode:`xx_READY_TIME_OUT` specifies the number of clocks that
-:vhdlcode:`xValid` is asserted without :vhdlcode:`xReady` before a FAILURE is generated. The
-:vhdlcode:`xx_READY_TIME_OUT` value is an integer.
+On the AXI4 interface, it is expected that after a xValid is asserted, an xReady will be asserted within a reasonable
+amount of time. The :vhdlcode:`xx_READY_TIME_OUT` specifies the number of clocks that xValid is asserted without xReady
+before a FAILURE is generated. The :vhdlcode:`xx_READY_TIME_OUT` value is an integer.
 
 .. list-table::
    :header-rows: 1
@@ -1779,8 +1775,8 @@ On the AXI4 interface, after a Write Address cycle and its corresponding Write D
 expected that the Subordinate will initiate a Write Response cycle (signaled with BVALID) within a reasonable amount of
 time. Likewise, after a Read Address cycle is completed, it is expected that the Subordinate will initiate a Read Data
 cycle (signaled with RVALID) within a reasonable amount of time. The :vhdlcode:`xx_VALID_TIME_OUT` specifies the number
-of clocks within which the Subordinate must asssert :vhdlcode:`xValid` before a FAILURE is generated.
-:vhdlcode:`xx_VALID_TIME_OUT` value is an integer.
+of clocks within which the Subordinate must asssert xValid before a FAILURE is generated. :vhdlcode:`xx_VALID_TIME_OUT`
+value is an integer.
 
 .. list-table::
    :header-rows: 1
