@@ -73,7 +73,7 @@ Using transactions simplifies creating tests and increases their readability. :r
 shows calls to the :vhdlcode:`Send` and :vhdlcode:`WaitForClock` transactions and the corresponding waveforms produced
 by the :vhdlcode:`AxiStreamTransmitter` verification component. Note this waveform implies that during the cycle in
 which data values A1, A3, A4, and A6 were sent, the AxiStream receiver was ready to receive TData and during the cycle
-in which data values A2 and A4 were sent, the AxiStream receiver was not ready to receive TData until a clock cycle
+in which data values A2 and A5 were sent, the AxiStream receiver was not ready to receive TData until a clock cycle
 later.
 
 .. figure:: images/AxiStream/Figure02.png
@@ -94,12 +94,13 @@ implements the transaction interface as a record.
 Stream Transaction Interface, :vhdlcode:`StreamRecType`, is used to connect the verification component to
 :vhdlcode:`TestCtrl`. :vhdlcode:`StreamRecType`, shown in :ref:`Figure 3 <VC/AxiStream/Figure3>`, is defined in the
 Stream Model Independent Transaction package, :file:`StreamTransactionPkg.vhd`, which is in the directory
-:file:`OsvvmLbraries/Common/Src`.
+:file:`OsvvmLibraries/Common/src`.
 
 .. code-block:: VHDL
    :caption: Figure 3. StreamRecType
    :name: VC/AxiStream/Figure3
 
+   type StreamRecType is record
      -- Handshaking controls
      Rdy             : RdyType ;
      Ack             : AckType ;
@@ -140,7 +141,7 @@ need to be sized to be (:vhdlcode:`TID'length` + :vhdlcode:`TDest'length` + :vhd
 :vhdlcode:`AxiStreamReceiver` to :vhdlcode:`TestCtrl`).
 
 .. code-block:: VHDL
-   :caption: Figure 4. StreamRecType
+   :caption: Figure 4. StreamTxRec and StreamRxRec
    :name: VC/AxiStream/Figure4
 
    constant AXI_PARAM_WIDTH : integer :=
@@ -198,7 +199,7 @@ then run the demo.
 
 OSVVM is available on GitHub at https://github.com/OSVVM as a git repository or at https://osvvm.org/downloads as a ZIP
 file. Retrieve OSVVM from GitHub using git as shown in :ref:`Figure 6 <VC/AxiStream/Figure6>`. Note that the
-"—recursive" option is required since the OSVVM repositories are submodules of OsvvmLibraries. Submodules greatly
+``--recursive`` option is required since the OSVVM repositories are submodules of OsvvmLibraries. Submodules greatly
 simplify development and deployment of the libraries.
 
 .. code-block:: shell
@@ -247,8 +248,8 @@ Interfaces.
 
 .. _VC/AxiStream/TbStreamPortBasedTransactionInterface/DemoRunningTheAXI4Testbenches:
 
-Demo: Running the AXI4 Testbenches
-==================================
+Demo: Running the AxiStream Testbenches
+=======================================
 
 The AXI4, Axi4Lite, AxiStream, and UART verification components all come with testbenches and the process to run them is
 similar to what is discussed here for AxiStream.
@@ -256,7 +257,7 @@ similar to what is discussed here for AxiStream.
 Prior to doing this step, do the steps in
 :ref:`section 3, Demo Preparation <VC/AxiStream/DemoPreparationGettingAndBuildingTheOSVVMLibraries>`.
 
-Use the steps in :ref:`Figure 8 <VC/AxiStream/Figure8>` to compile and run the tests for the Axi4 verification
+Use the steps in :ref:`Figure 8 <VC/AxiStream/Figure8>` to compile and run the tests for the AxiStream verification
 components. If you have not exited the simulator, you only need to do the ":tclcode:`build`" step.
 
 .. code-block:: tcl
@@ -264,7 +265,7 @@ components. If you have not exited the simulator, you only need to do the ":tclc
    :name: VC/AxiStream/Figure8
 
    cd sim
-   do ../OsvvmLibraries/startup.tcl
+   source ../OsvvmLibraries/Scripts/StartUp.tcl
    build ../OsvvmLibraries/AXI4/AxiStream/RunDemoTests.pro
 
 .. _VC/AxiStream/TbStreamAxiStreamTestEnvironmentPortBasedTransactionInterface:
@@ -305,9 +306,9 @@ sequencer (:vhdlcode:`TestCtrl`).
    begin
      osvvm.TbUtilPkg.CreateClock (Clk, tperiod_Clk) ;
      osvvm.TbUtilPkg.CreateReset (nReset, . . .) ;
-     Receiver_1 :    AxiStreamReceiver    ( . . .,  StreamRxRec) ;
-     Transmitter_1 : AxiStreamTransmitter ( . . .,  StreamTxRec) ;
-     TestCtrl_1 :    TestCtrl (nReset, StreamTxRec, StreamRxRec) ;
+     Receiver_1 :    AxiStreamReceiver    port map ( . . .,  StreamRxRec) ;
+     Transmitter_1 : AxiStreamTransmitter port map ( . . .,  StreamTxRec) ;
+     TestCtrl_1 :    TestCtrl             port map (nReset, StreamTxRec, StreamRxRec) ;
    end TestHarness ;
 
 By default each OSVVM verification component uses its instance label as the name it reports when an alert or log within
@@ -396,7 +397,7 @@ full set of AxiStream interface signals as well as the transaction interface (:v
        DEFAULT_DELAY  : time := 1 ns ;
        tpd_Clk_TValid : time := DEFAULT_DELAY ;
        -- . . .  see entity for remaining generics
-       tpd_Clk_TValid : time := DEFAULT_DELAY
+       tpd_Clk_TLast  : time := DEFAULT_DELAY
      ) ;
      port (
        -- Globals
@@ -524,8 +525,8 @@ Interfaces.
 
 .. _VC/AxiStream/TbStreamVirtualTransactionInterface/DemoRunningTheAXI4Testbenches:
 
-Demo: Running the AXI4 Testbenches
-==================================
+Demo: Running the AxiStream Testbenches
+=======================================
 
 The AXI4, Axi4Lite, AxiStream, and UART verification components all come with testbenches and the process to run them is
 similar to what is discussed here for AxiStream.
@@ -533,15 +534,15 @@ similar to what is discussed here for AxiStream.
 Prior to doing this step, do the steps in
 :ref:`section 3, Demo Preparation <VC/AxiStream/DemoPreparationGettingAndBuildingTheOSVVMLibraries>`.
 
-Use the steps in :ref:`Figure 14 <VC/AxiStream/Figure14>` to compile and run the tests for the Axi4 verification. If you
-have not exited the simulator, you only need to do the ":tclcode:`build`" step.
+Use the steps in :ref:`Figure 14 <VC/AxiStream/Figure14>` to compile and run the tests for the AxiStream verification
+components. If you have not exited the simulator, you only need to do the ":tclcode:`build`" step.
 
 .. code-block:: tcl
    :caption: Figure 14. Compiling and Running OSVVM
    :name: VC/AxiStream/Figure14
 
    cd sim
-   do ../OsvvmLibraries/startup.tcl
+   source ../OsvvmLibraries/Scripts/StartUp.tcl
    build ../OsvvmLibraries/AXI4/AxiStream/RunDemoTestsVti.pro
 
 .. _VC/AxiStream/TbStreamAxiStreamTestEnvironmentVirtualTransactionInterface:
@@ -565,11 +566,11 @@ than direct signal connections.
 :vhdlcode:`TbStream` is a test harness that connects components together. In an RTL design, this code is also called
 structural code or a netlist. A sketch of :file:`TbStream.vhd` is shown in :ref:`Figure 16 <VC/AxiStream/Figure16>`. For
 more details, see :file:`AxiStream/testbenchVti/TbStream.vhd`. Note that there are no transaction interface signals to
-connect between the verification components (:vhdlcode:`Axi4Master` and
-:vhdlcode:`Axi4Responder`/:vhdlcode:`Axi4Memory`) and the test sequencer (:vhdlcode:`TestCtrl`). Instead, these are now
-connected via VHDL-2008 external names. See the entity declaration for :vhdlcode:`TestCtrl` for details. Since external
-names are used, the order of instantiation is important. First instantiate the design under test, next the verification
-components, and then finally the test sequencer (:vhdlcode:`TestCtrl`).
+connect between the verification components (:vhdlcode:`AxiStreamTransmitter` and :vhdlcode:`AxiStreamReceiver`) and the
+test sequencer (:vhdlcode:`TestCtrl`). Instead, these are now connected via VHDL-2008 external names. See the entity
+declaration for :vhdlcode:`TestCtrl` for details. Since external names are used, the order of instantiation is
+important. First instantiate the design under test, next the verification components, and then finally the test
+sequencer (:vhdlcode:`TestCtrl`).
 
 .. code-block:: VHDL
    :caption: Figure 16. A sketch of TbStream.vhd for Virtual Transaction Interfaces
@@ -585,9 +586,9 @@ components, and then finally the test sequencer (:vhdlcode:`TestCtrl`).
    begin
      osvvm.TbUtilPkg.CreateClock (Clk, tperiod_Clk) ;
      osvvm.TbUtilPkg.CreateReset (nReset, . . .) ;
-     Receiver_1 :    AxiStreamReceiver    ( . . .) ;
-     Transmitter_1 : AxiStreamTransmitter ( . . .) ;
-     TestCtrl_1 :    TestCtrl (nReset) ;
+     Receiver_1 :    AxiStreamReceiverVti    port map ( . . .) ;
+     Transmitter_1 : AxiStreamTransmitterVti port map ( . . .) ;
+     TestCtrl_1 :    TestCtrl                port map (nReset) ;
    end TestHarness ;
 
 By default each OSVVM verification component uses its instance label as the name it reports when an alert or log within
@@ -657,9 +658,9 @@ Note the reference to “\ :vhdlcode:`osvvm.ScoreboardPkg_slv`\ ” is required 
 AxiStream Transmitter – Virtual Transaction Interface (External Names)
 ======================================================================
 
-The :vhdlcode:`AxiStreamTransmitter` entity interface is shown in :ref:`Figure 18 <VC/AxiStream/Figure18>`. It has the
-full set of AxiStream interface signals. The transaction interface (:vhdlcode:`TransRec`) is declared as a signal in the
-entity declarative region. It is accessed using an external name in the test sequencer (:vhdlcode:`TestCtrl`).
+The :vhdlcode:`AxiStreamTransmitterVti` entity interface is shown in :ref:`Figure 18 <VC/AxiStream/Figure18>`. It has
+the full set of AxiStream interface signals. The transaction interface (:vhdlcode:`TransRec`) is declared as a signal in
+the entity declarative region. It is accessed using an external name in the test sequencer (:vhdlcode:`TestCtrl`).
 
 .. code-block:: VHDL
    :caption: Figure 18. AxiStreamTransmitterVti
@@ -674,6 +675,7 @@ entity declarative region. It is accessed using an external name in the test seq
        tperiod_Clk    : time := 10 ns ;
        DEFAULT_DELAY  : time := 1 ns ;
        -- . . .  see entity for remaining generics
+       tpd_Clk_TLast  : time := DEFAULT_DELAY
      ) ;
      port (
        -- Globals
@@ -720,8 +722,8 @@ entity declarative region. It is accessed using an external name in the test seq
 AxiStream Receiver – Virtual Transaction Interface (External Names)
 ===================================================================
 
-The :vhdlcode:`AxiStreamReceiver` entity interface is shown in :ref:`Figure 19 <VC/AxiStream/Figure19>`. It has the full
-set of AxiStream interface signals. The transaction interface (:vhdlcode:`TransRec`) is declared as a signal in the
+The :vhdlcode:`AxiStreamReceiverVti` entity interface is shown in :ref:`Figure 19 <VC/AxiStream/Figure19>`. It has the
+full set of AxiStream interface signals. The transaction interface (:vhdlcode:`TransRec`) is declared as a signal in the
 entity declarative region. It is accessed using an external name in the test sequencer (:vhdlcode:`TestCtrl`).
 
 .. code-block:: VHDL
@@ -908,7 +910,7 @@ The parameter TRec is an abbreviation for the :vhdlcode:`TransactionRec` paramet
 an abbreviation for the :vhdlcode:`StatusMsgOn` parameter.
 
 Here the Param (input) parameter specifies the values ID & Dest & User & Last (in that order). If less than
-:vhdlcode:`ID'length` + :vhdlcode:`Dest'lengh` + :vhdlcode:`User'length` + 1 values are specified, the left-most values
+:vhdlcode:`ID'length` + :vhdlcode:`Dest'length` + :vhdlcode:`User'length` + 1 values are specified, the left-most values
 will be filled with a '-'. As an input, a value of '-' indicates the corresponding field is not specified and will use
 the default value :vhdlcode:`DEFAULT_ID`, :vhdlcode:`DEFAULT_DEST`, :vhdlcode:`DEFAULT_USER`, and
 :vhdlcode:`DEFAULT_LAST` (see :ref:`AxiStream Parameters <VC/AxiStream/ConfiguringTheAxiStreamVC>`). For
@@ -962,7 +964,7 @@ VC are shown in the following tables. For details of the transactions, types, an
 
    TryCheck(TRec, Data, [Param], Available, [MsgOn])
 
-   TryCheckBurst(TRec, NumFifoWords, [Param], Available[,MsgOn])
+   TryCheckBurst(TRec, NumFifoWords, [Param], Available, [MsgOn])
 
    TryCheckBurstVector   (TRec, VectorOfWords,           [Param], Available, [MsgOn])
    TryCheckBurstIncrement(TRec, FirstWord, NumFifoWords, [Param], Available, [MsgOn])
@@ -981,7 +983,7 @@ Here the Param parameter specifies the values ID & Dest & User & Last (in that o
 received by TID, TDest, TUser, and TLast.
 
 For :vhdlcode:`Check`, :vhdlcode:`TryCheck`, :vhdlcode:`CheckBurst` and :vhdlcode:`TryCheckBurst`, Param parameter is an
-input. If less than :vhdlcode:`ID'length` + :vhdlcode:`Dest'lengh` + :vhdlcode:`User'length` + 1 values are specified,
+input. If less than :vhdlcode:`ID'length` + :vhdlcode:`Dest'length` + :vhdlcode:`User'length` + 1 values are specified,
 the left-most values will be filled with a '-'. As an input, a value of '-' indicates the corresponding field is not
 specified and will use the default value :vhdlcode:`DEFAULT_ID`, :vhdlcode:`DEFAULT_DEST`, :vhdlcode:`DEFAULT_USER`, and
 :vhdlcode:`DEFAULT_LAST` (see :ref:`AxiStream Parameters <VC/AxiStream/ConfiguringTheAxiStreamVC>`). For
@@ -1027,10 +1029,10 @@ These are intended to be used prior to calling :vhdlcode:`SendBurst`, :vhdlcode:
    alias TxBurstFifo : ScoreboardIdType is StreamTxRec.BurstFifo ;
    . . .
    Push(TxBurstFifo, DataWord) ;
-   PushBurstVector   (TxBurstFifo, VectorOfWords, FifoWidth)
-   PushBurstIncrement(TxBurstFifo, FirstWord, Count, FifoWidth)
-   PushBurstRandom   (TxBurstFifo, FirstWord, Count, FifoWidth)
-   PushBurstRandom   (TxBurstFifo, CoverID,   Count, FifoWidth)
+   PushBurstVector   (TxBurstFifo, VectorOfWords, FifoWidth) ;
+   PushBurstIncrement(TxBurstFifo, FirstWord, Count, FifoWidth) ;
+   PushBurstRandom   (TxBurstFifo, FirstWord, Count, FifoWidth) ;
+   PushBurstRandom   (TxBurstFifo, CoverID,   Count, FifoWidth) ;
 
 .. _VC/AxiStream/CheckingTheBurstFIFO:
 
@@ -1044,10 +1046,10 @@ FIFO.
    alias RxBurstFifo : ScoreboardIdType is StreamRxRec.BurstFifo ;
    . . .
    CheckExpected(RxBurstFifo, CheckWord) ;
-   CheckBurstVector   (RxBurstFifo, VectorOfWords,    FifoWidth)
-   CheckBurstIncrement(RxBurstFifo, FirstWord, Count, FifoWidth)
-   CheckBurstRandom   (RxBurstFifo, FirstWord, Count, FifoWidth)
-   CheckBurstRandom   (RxBurstFifo, CoverID,   Count, FifoWidth)
+   CheckBurstVector   (RxBurstFifo, VectorOfWords,    FifoWidth) ;
+   CheckBurstIncrement(RxBurstFifo, FirstWord, Count, FifoWidth) ;
+   CheckBurstRandom   (RxBurstFifo, FirstWord, Count, FifoWidth) ;
+   CheckBurstRandom   (RxBurstFifo, CoverID,   Count, FifoWidth) ;
 
 .. _VC/AxiStream/ReadingTheBurstFIFO:
 
@@ -1061,7 +1063,7 @@ the FIFO.
    alias RxBurstFifo : ScoreboardIdType is StreamRxRec.BurstFifo ;
    . . .
    DataWord := Pop(RxBurstFifo) ;
-   PopBurstVector(RxBurstFifo, VectorOfWords,    FifoWidth)
+   PopBurstVector(RxBurstFifo, VectorOfWords) ;
 
 .. _VC/AxiStream/GeneralDirectives:
 
@@ -1202,8 +1204,8 @@ fixed delay) or randomized.
      - Specifies the number of cycles between each word during a burst cycle.
    * - | :vhdlcode:`TRANSMIT_READY_TIME_OUT`
        | Integer. Initialized to :vhdlcode:`integer'right`
-     - Generates FAILURE if TValid is asserted for more specified number of clocks without TReady. Disable by setting
-       to Integer’right.
+     - Generates FAILURE if TValid is asserted for more than the specified number of clocks without TReady. Disable by
+       setting to Integer’right.
 
 .. _VC/AxiStream/RandomDelayTValidDelayCyclesAxiStreamTransmitter:
 
@@ -1229,7 +1231,7 @@ The delay coverage model can be changed using :vhdlcode:`SetDelayCoverageID`.
 
 .. code-block:: VHDL
 
-   SetDelayCoverageID(StreamRxRec, NewDelayCoverageID) ;
+   SetDelayCoverageID(StreamTxRec, NewDelayCoverageID) ;
 
 :vhdlcode:`AxiStreamTransmitter` sets the default delays to the following.
 
@@ -1263,8 +1265,8 @@ The delay coverage model can be changed using :vhdlcode:`SetDelayCoverageID`.
    * - | :vhdlcode:`RECEIVE_READY_DELAY_CYCLES`
        | Integer. Initialized to 0.
      - | Number of clock cycles to delay assertion of TReady.
-       | If :vhdlcode:`READY_BEFORE_VALID` is TRUE, then number of clocks from previous cycle ending.
-       | If :vhdlcode:`READY_BEFORE_VALID` is FALSE, then the number of clocks after RValid.
+       | If :vhdlcode:`RECEIVE_READY_BEFORE_VALID` is TRUE, then number of clocks from previous cycle ending.
+       | If :vhdlcode:`RECEIVE_READY_BEFORE_VALID` is FALSE, then the number of clocks after TValid.
    * - | :vhdlcode:`DROP_UNDRIVEN`
        | Boolean. Initialized to FALSE.
      - If TRUE, then undriven values in a burst stream are not copied to a BYTE wide burst FIFO. Has no impact if the
@@ -1273,9 +1275,9 @@ The delay coverage model can be changed using :vhdlcode:`SetDelayCoverageID`.
      - If TRUE, do not drive ready until a :vhdlcode:`Get`, :vhdlcode:`GetBurst`, :vhdlcode:`TryGet`, or
        :vhdlcode:`TryGetBurst` is called.
 
-When :vhdlcode:`RECEIVE_READY_BEFORE_VALID` is TRUE, then :vhdlcode:`RECEIVE_READY_DELAY_CYCLES` is a relative to when
-the last transfer completed. :ref:`Figure 21 <VC/AxiStream/Figure21>` shows :vhdlcode:`RECEIVE_READY_DELAY_CYCLES` = 2
-when :vhdlcode:`RECEIVE_READY_BEFORE_VALID` is TRUE.
+When :vhdlcode:`RECEIVE_READY_BEFORE_VALID` is TRUE, then :vhdlcode:`RECEIVE_READY_DELAY_CYCLES` is relative to when the
+last transfer completed. :ref:`Figure 21 <VC/AxiStream/Figure21>` shows :vhdlcode:`RECEIVE_READY_DELAY_CYCLES` = 2 when
+:vhdlcode:`RECEIVE_READY_BEFORE_VALID` is TRUE.
 
 .. figure:: images/AxiStream/Figure21.png
    :width: 406px
@@ -1284,7 +1286,7 @@ when :vhdlcode:`RECEIVE_READY_BEFORE_VALID` is TRUE.
    Figure 21. RECEIVE_READY_DELAY_CYCLES = 2 when RECEIVE_READY_BEFORE_VALID is TRUE
 
 
-When :vhdlcode:`RECEIVE_READY_BEFORE_VALID` is FALSE, then :vhdlcode:`RECEIVE_READY_DELAY_CYCLES` is a relative to when
+When :vhdlcode:`RECEIVE_READY_BEFORE_VALID` is FALSE, then :vhdlcode:`RECEIVE_READY_DELAY_CYCLES` is relative to when
 TValid is asserted. :ref:`Figure 22 <VC/AxiStream/Figure22>` shows :vhdlcode:`RECEIVE_READY_DELAY_CYCLES` = 2 when
 :vhdlcode:`RECEIVE_READY_BEFORE_VALID` is FALSE.
 
