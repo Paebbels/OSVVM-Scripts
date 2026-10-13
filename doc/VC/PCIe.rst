@@ -19,17 +19,19 @@ link is the TX link from a downstream device (and an RX link of an upstream devi
 Overview
 ********
 
-The OSVVM PCIe Verification Component(VC) facilitates the interface and functionality of PCIe GEN1 and GEN2 devices [1]
-and is intended to for part of a structured test environment. It can support up to 16 lanes in a link, though
-configurable for 1, 2, 4 and 8 lane links as well.
+The OSVVM PCIe Verification Component(VC) facilitates the interface and functionality of PCIe GEN1 and GEN2 devices
+`[1] <https://drive.google.com/file/d/1CECftcznLwcKDADtjpHhW13-IBHTZVXx>`__ and is intended to for part of a structured
+test environment. It can support up to 16 lanes in a link, though configurable for 1, 2, 4 and 8 lane links as well.
 
-The PCIe VC is a co-simulation component based on the pcievhost C/C++ model [2] and is integrated with the existing
-OSVVM co-simulation environment [3]. Like some other OSVVM VCs [4] the PCIe VC is a transaction based VC and uses the
-OSVVM Address Bus Model Independent Transaction interface [5]. The PCIe VC can act as an Upstream device interface or a
-Downstream device interface, depending on configuration. The PCIe VC can instigate transactions from a test sequencer
-program and receive arbitrary transactions and has internal memory models for both main memory and a configuration
-space, but these can be disabled and the received request transactions passed to a separate test sequencer to program
-arbitrary sequences of responses. The model supports all the types of PCIe TLPs:
+The PCIe VC is a co-simulation component based on the pcievhost C/C++ model
+`[2] <https://github.com/wyvernSemi/pcievhost/blob/master/doc/pcieVHost.pdf>`__ and is integrated with the existing
+OSVVM co-simulation environment :ref:`[3] <FRAMEWORK/CoSimulation>`. Like some other OSVVM VCs :ref:`[4] <VC/Axi4>` the
+PCIe VC is a transaction based VC and uses the OSVVM Address Bus Model Independent Transaction interface
+:ref:`[5] <MIT/AddressBus>`. The PCIe VC can act as an Upstream device interface or a Downstream device interface,
+depending on configuration. The PCIe VC can instigate transactions from a test sequencer program and receive arbitrary
+transactions and has internal memory models for both main memory and a configuration space, but these can be disabled
+and the received request transactions passed to a separate test sequencer to program arbitrary sequences of responses.
+The model supports all the types of PCIe TLPs:
 
 * MRd Memory read request (32 and64 bit address)
 * MRdLk Memory read request-locked (32 and 64 bit address)
@@ -136,9 +138,9 @@ The PcieModel VC HDL component
 The :vhdlcode:`PcieModel` component is has a clock and reset signal inputs (:vhdlcode:`Clk` and :vhdlcode:`nReset`),
 where the clock frequency needs to be set to the base symbol rate. E.g. PCIe GEN1 has a 2.5Gb/s rate, so for 10 bit
 symbols, this is 250MSym/s and a clock rate of 250 MHz. The active low reset signal must be asserted for a minimum of 1
-cycle. The test control interface is via the :vhdlcode:`TransRec` port of type :vhdlcode:`AddressBusRecType` [5], and
-there are a pair of PCIe links, in output and input of type :vhdlcode:`LinkType` which carry the 10-bit encoded data or,
-if configured, the 9-bit pre-encoded PIPE data.
+cycle. The test control interface is via the :vhdlcode:`TransRec` port of type :vhdlcode:`AddressBusRecType`
+:ref:`[5] <MIT/AddressBus>`, and there are a pair of PCIe links, in output and input of type :vhdlcode:`LinkType` which
+carry the 10-bit encoded data or, if configured, the 9-bit pre-encoded PIPE data.
 
 The entity declaration for the :vhdlcode:`PcieModel` VC is defined as shown below:
 
@@ -178,9 +180,10 @@ The model has some generics to configure the model. The :vhdlcode:`MODEL_ID_NAME
 and assertions or can be left at the default, where is hierarchical instantiation name will be used.
 
 As the :vhdlcode:`PcieModel` VC is a co-simulation component it requires a node number, configured through the
-:vhdlcode:`NODE_NUM` generic. The model can exist within a test environment with other co-simulation components [3],
-including other :vhdlcode:`PcieModel` components, but each must have a unique node number in order to run the particular
-software for that node—this is the pcievhost C model in the case of :vhdlcode:`PcieModel`.
+:vhdlcode:`NODE_NUM` generic. The model can exist within a test environment with other co-simulation components
+:ref:`[3] <FRAMEWORK/CoSimulation>`, including other :vhdlcode:`PcieModel` components, but each must have a unique node
+number in order to run the particular software for that node—this is the pcievhost C model in the case of
+:vhdlcode:`PcieModel`.
 
 Unlike some other common other bus/interconnect protocols, a PCIe “subordinate”, knowns as an Endpoint, can initiate
 read and write type transactions, but not all possible transactions. It also has an associated Type 0 configurations
@@ -432,7 +435,8 @@ The type of options for the :vhdlcode:`PcieModel` available fall into two catego
 * Those that are sent to the underlying pcievhost C model
 * Those that configure the VC, e.g. for signalling
 
-For the first category details can be found in the pcievhost documentation [2], but the table below summarises the
+For the first category details can be found in the pcievhost documentation
+`[2] <https://github.com/wyvernSemi/pcievhost/blob/master/doc/pcieVHost.pdf>`__, but the table below summarises the
 available options:
 
 +------------------------------------------------------+--------+---------+--------------------------------------------+
@@ -628,8 +632,9 @@ Low Level Generation of Transactions
 
 This section describes the basic methods for generating PCIe TLP transactions for maximum flexibility and customisation
 when using the model. The :vhdlcode:`PcieInterfacePkg` package gathers these procedures up into a set of single
-procedure calls for convenience (see section 6). For burst data, data must still be extracted from the Fifo in the user
-tests in the same manner as shown in these next sections.
+procedure calls for convenience (see :ref:`section 6 <VC/PCIe/ThePCIeTransactionGenerationWrapperProcedures>`). For
+burst data, data must still be extracted from the Fifo in the user tests in the same manner as shown in these next
+sections.
 
 .. _VC/PCIe/InitialisingTheLink:
 
@@ -1034,7 +1039,7 @@ No Data Payload Completions
 ---------------------------
 
 If a completion does not require a data payload, then the :vhdlcode:`WriteAddressAsync` procedure is used in place of
-Write, though the setup is the same. E.g.
+:vhdlcode:`Write`, though the setup is the same. E.g.
 
 .. code-block:: VHDL
 
@@ -1118,12 +1123,12 @@ returned in a record as shown below:
    end record PcieStatusRecType
 
 The Packet field returns the error status (e.g. CRC failures) and the Completion field returns the completion packets
-status, as defined in section 5.3. The Tag field returns the requester tag returned by the completion packet. When the
-non-posted procedures have their :vhdlcode:`iTag` argument set to :vhdlcode:`TLP_AUTO_TAG`, then, for blocking
-procedures, the returned tag should be that used by the internal PCIe model. If a tag was set on the call to the
-blocking procedure then, in normal circumstances, the returned tag should be that supplied. For non-blocking procedures,
-where out-of-order completions are possible, the returned tag references the request that was originally sent, so
-cross-referencing can be done to match completions with the original request.
+status, as defined in :ref:`section 5.3 <VC/PCIe/CompletionAndTransactionStatus>`. The Tag field returns the requester
+tag returned by the completion packet. When the non-posted procedures have their :vhdlcode:`iTag` argument set to
+:vhdlcode:`TLP_AUTO_TAG`, then, for blocking procedures, the returned tag should be that used by the internal PCIe
+model. If a tag was set on the call to the blocking procedure then, in normal circumstances, the returned tag should be
+that supplied. For non-blocking procedures, where out-of-order completions are possible, the returned tag references the
+request that was originally sent, so cross-referencing can be done to match completions with the original request.
 
 .. _VC/PCIe/MemoryTransactions:
 
@@ -1856,7 +1861,8 @@ output disabled.
 If using the :file:`ltssm.c` code for link training, then it will display progress on state transitions. This can be
 disabled using the :vhdlcode:`CONFIG_LTSSM_DISABLE_DISP_STATE` model option.
 
-More details of the link display capabilities can be found in the pcievhost documentation [2].
+More details of the link display capabilities can be found in the pcievhost documentation
+`[2] <https://github.com/wyvernSemi/pcievhost/blob/master/doc/pcieVHost.pdf>`__.
 
 .. _VC/PCIe/TheAutomaticFeaturesOfTheModel:
 
@@ -2183,13 +2189,15 @@ Writing Tests as Co-simulation Software
 ***************************************
 
 In the previous sections, configuration and control of the model was done through standard OSVVM VHDL procedure calls.
-OSVVM’s co-simulation capabilities map these calls (and others) to the C or C++ domains [3] and so the model can be
-driven from software in this way, though this is true of all the OSVVM VCs.
+OSVVM’s co-simulation capabilities map these calls (and others) to the C or C++ domains
+:ref:`[3] <FRAMEWORK/CoSimulation>` and so the model can be driven from software in this way, though this is true of all
+the OSVVM VCs.
 
 However, the PCIe model is a true co-simulation component and can be driven directly by software using the C++ API that
-the underlying pcievhost model provides [2]. Here the :vhdlcode:`VUserMain<n>` function does not call the
-:vhdlcode:`pcieVcInterface` :vhdlcode:`run()` method but creates a :vhdlcode:`pcieModelClass` API object and makes calls
-directly to this interface. A template program might look like the following:
+the underlying pcievhost model provides `[2] <https://github.com/wyvernSemi/pcievhost/blob/master/doc/pcieVHost.pdf>`__.
+Here the :vhdlcode:`VUserMain<n>` function does not call the :vhdlcode:`pcieVcInterface` :vhdlcode:`run()` method but
+creates a :vhdlcode:`pcieModelClass` API object and makes calls directly to this interface. A template program might
+look like the following:
 
 .. code-block:: c++
 
@@ -2233,9 +2241,10 @@ a target for an upstream device, automatically responding to TLP requests. The c
 loops over the methods to generate idles to advance simulation time. The model will internally then process any received
 transactions. The code in :file:`PCIe/tests/vc/VUserMainEP.cpp` is of this type of usage.
 
-Details of the :vhdlcode:`PcieModelClass` API can be found in the pcievhost documentation [2], but there are some low
-level API calls that are useful to get access to the settings of the HDL model. To access these the :vhdlcode:`VRead`
-function is called which has a prototype:
+Details of the :vhdlcode:`PcieModelClass` API can be found in the pcievhost documentation
+`[2] <https://github.com/wyvernSemi/pcievhost/blob/master/doc/pcieVHost.pdf>`__, but there are some low level API calls
+that are useful to get access to the settings of the HDL model. To access these the :vhdlcode:`VRead` function is called
+which has a prototype:
 
 .. code-block:: c++
 
@@ -2480,7 +2489,8 @@ The C model can generate all types of OS and TS data and using the “co-simulat
 approach, all the OSs and TSs can be generated from the running program. For the other approaches, via the
 :vhdlcode:`AddressBusRecType` MIT port, there are certain other limitations:
 
-* Training Sequences can’t be directly generated, but a limited LTSSM is provided with the model (see below)
+* Training Sequences can’t be directly generated, but a limited LTSSM is provided with the model
+  (see :ref:`below <VC/PCIe/LTSSMFunctionality>`)
 * Electrical Idle OS (IDL) and fast training sequence OS (TS) can’t be directly generated.
 * Skip ordered sets (SKP) can't be directly generated
 
@@ -2534,7 +2544,8 @@ calls to the model’s C API, or to the C++ :vhdlcode:`pcieModelClass` construct
 Summary of the Model’s C API Functions
 ======================================
 
-In this section, for reference, a summary of the PCIe C model’s API is given, but more details can be found in [2].
+In this section, for reference, a summary of the PCIe C model’s API is given, but more details can be found in
+`[2] <https://github.com/wyvernSemi/pcievhost/blob/master/doc/pcieVHost.pdf>`__.
 
 .. _VC/PCIe/TLPOutputFunctions:
 
