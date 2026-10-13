@@ -77,8 +77,8 @@ The interface to the package is as follows.
 
    end package DelayCoveragePkg ;
 
-The pattern used here is slightly different from other OSVVM singleton’s in that the :vhdlcode:`DelayCoverageIDType` has
-the ID as well as the ID’s for the coverage models.
+The pattern used here is slightly different from other OSVVM singletons in that the :vhdlcode:`DelayCoverageIDType` has
+the ID as well as the IDs for the coverage models.
 
 .. _UTILITY/DelayCoveragePkg/UsageInAVerificationComponent:
 
@@ -88,7 +88,7 @@ Usage in a Verification Component
 :vhdlcode:`DelayCoveragePkg` is being used by the OSVVM :vhdlcode:`AxiStreamTransmitter` and
 :vhdlcode:`AxiStreamReceiver`.
 
-Step 1, declare an object of :vhdlcode:`DelayCoverageIDType`. The AxiStream VC need an object with global scope, so a
+Step 1, declare an object of :vhdlcode:`DelayCoverageIDType`. The AxiStream VC needs an object with global scope, so a
 signal is used.
 
 .. code-block:: VHDL
@@ -145,7 +145,7 @@ Step 4, set default values for the coverage models.
      -- BurstDelay - happens at BurstLength boundaries
      AddBins (BurstCov.BurstDelayCov,   80, GenBin(2,8,1)) ;   -- 80% Small delay
      AddBins (BurstCov.BurstDelayCov,   20, GenBin(108,156,1)) ; -- 20% Large delay
-     -- BeatDelay - happens between each transfer it not at a BurstLength boundary
+     -- BeatDelay - happens between each transfer if not at a BurstLength boundary
      -- These are all small
      AddBins (BurstCov.BeatDelayCov,    85, GenBin(0)) ;       -- 85% 0 delay
      AddBins (BurstCov.BeatDelayCov,    10, GenBin(1)) ;       -- 10% 1 delay
@@ -188,7 +188,7 @@ modes of operation.
    --   Generate transactions for AxiTransmitter
    ------------------------------------------------------------
    TransmitterProc : process
-     variable DelayCoverageID, DelayCoverageID_random : DelayCoverageIDType ;
+     variable DelayCoverageID, DelayCovID_Random : DelayCoverageIDType ;
      variable BaseWord, BurstWord : std_logic_vector(31 downto 0) := X"0000_0000" ;
    begin
 
@@ -295,19 +295,19 @@ Add bins to the :vhdlcode:`CoverageIDs` referenced in :vhdlcode:`DelayCovID_Rand
    -- BurstDelay - happens at BurstLength boundaries
    AddBins (DelayCovID_Random.BurstDelayCov,  80, GenBin(2,8,1)) ; -- 80% Small
    AddBins (DelayCovID_Random.BurstDelayCov,  20, GenBin(108,156,1)) ; -- 20% Large
-   -- BeatDelay - happens between each transfer it not at a BurstLength boundary
+   -- BeatDelay - happens between each transfer if not at a BurstLength boundary
    AddBins (DelayCovID_Random.BeatDelayCov,    85, GenBin(0)) ; -- 85% no delay
    AddBins (DelayCovID_Random.BeatDelayCov,    10, GenBin(1)) ; -- 10% 1 cycle delay
    AddBins (DelayCovID_Random.BeatDelayCov,     5, GenBin(2)) ; --  5% 2 cycle delay
 
-Copy the :vhdlcode:`CoverageIDs` in variable :vhdlcode:`DelayCovID_random` to the :vhdlcode:`DelayCoveragePkg`
+Copy the :vhdlcode:`CoverageIDs` in variable :vhdlcode:`DelayCovID_Random` to the :vhdlcode:`DelayCoveragePkg`
 singleton. Since :vhdlcode:`DelayCovID_Random.ID = DelayCoverageID.ID`, this copies over the original
 :vhdlcode:`CoverageIDs` in the singleton (and used by VC) – don’t despair we still have a reference to the original
 :vhdlcode:`CoverageIDs` in the :vhdlcode:`DelayCoverageID` variable.
 
 .. code-block:: VHDL
 
-   SetDelayCoverage(DelayCoverageID_Random) ;
+   SetDelayCoverage(DelayCovID_Random) ;
 
 Using these settings, transfer 256 words individually and 256 words in 32 bursts of 8.
 
@@ -373,7 +373,7 @@ Setting BurstLength at Start up
 
 Nominally the default :vhdlcode:`BurstLength` is 0. This means the first call to :vhdlcode:`GetRandDelay` in a VC will
 use a burst delay. If :vhdlcode:`RandomSalt` is set, then the :vhdlcode:`BurstLength` will be a random value between 0
-and 5. A VC or test case can set the first value to be a particular using :vhdlcode:`SetBurstLength`.
+and 5. A VC or test case can set the first value to be a particular value using :vhdlcode:`SetBurstLength`.
 
 .. code-block:: VHDL
 
@@ -388,7 +388,7 @@ Running TbStream_SendGetRandom1.vhd
 ***********************************
 
 Build the OsvvmLibraries per the directions in the :ref:`Script User Guide <UG>`. Change :file:`RunDemoTests.pro` that
-is in the directory :file:`OsvvmLibraries/AXI4/AxStream` so that it reads as follows:
+is in the directory :file:`OsvvmLibraries/AXI4/AxiStream` so that it reads as follows:
 
 .. code-block:: tcl
 
