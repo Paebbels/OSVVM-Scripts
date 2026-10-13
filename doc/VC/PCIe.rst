@@ -390,9 +390,9 @@ code will look like the following:
    }
 
 This example code is for a :vhdlcode:`PcieModel` instantiated with the :vhdlcode:`NODE_NUM` generic as 62, thus needs an
-entry point equivalent to “:vhdlcode:`main`” as :vhdlcode:`VUserMain62` which must have C linkage. In this code the
+entry point equivalent to “:cppcode:`main`” as :cppcode:`VUserMain62` which must have C linkage. In this code the
 :file:`pcieVcInterface.h` header file is included and a pointer to the model created in the main function. The model is
-then run using the :vhdlcode:`run()` method. For each instantiated model an equivalent :vhdlcode:`VUserMain<n>` function
+then run using the :cppcode:`run()` method. For each instantiated model an equivalent :cppcode:`VUserMain<n>` function
 must be created. These can all reside in the same source file.
 
 To compile the model, independently from other OSVVM code, a test script should look something like the following:
@@ -540,11 +540,11 @@ available options:
 | :vhdlcode:`CONFIG_LTSSM_TS_CTL`\ ††                  | yes    | integer | Five bit TS control field (default 0)      |
 +------------------------------------------------------+--------+---------+--------------------------------------------+
 | :vhdlcode:`CONFIG_LTSSM_DETECT_QUIET_TO`\ ††         | yes    | cycles  | Detect quite timeout (default 1500/6M,     |
-|                                                      |        |         | depending if :vhdlcode:`LTSSM_ABBREVIATED` |
+|                                                      |        |         | depending if :ccode:`LTSSM_ABBREVIATED`    |
 |                                                      |        |         | defined or not)                            |
 +------------------------------------------------------+--------+---------+--------------------------------------------+
 | :vhdlcode:`CONFIG_LTSSM_POLL_ACTIVE_TO_COUNT`\ ††    | yes    | cycles  | Polling active TX count (default 16/1024,  |
-|                                                      |        |         | depending if :vhdlcode:`LTSSM_ABBREVIATED` |
+|                                                      |        |         | depending if :ccode:`LTSSM_ABBREVIATED`    |
 |                                                      |        |         | defined or not)                            |
 +------------------------------------------------------+--------+---------+--------------------------------------------+
 | :vhdlcode:`CONFIG_LTSSM_DISABLE_DISP_STATE`\ ††      | yes    | integer | Disable display of link state (default 0 = |
@@ -2072,8 +2072,8 @@ prefetchable space of 4Kbytes:
 
 .. rubric:: Automatic EP Configuration Space Settings
 
-If a :vhdlcode:`PcieModel` is configured as an EP and the :vhdlcode:`runAutoEp()` method is used in its
-:vhdlcode:`VUserMain<n>` program, then a configuration space is set up as follows:
+If a :vhdlcode:`PcieModel` is configured as an EP and the :cppcode:`runAutoEp()` method is used in its
+:cppcode:`VUserMain<n>` program, then a configuration space is set up as follows:
 
 +-------------+-------------+--------------+--------------+------------+-----------+--------+
 | 31:24       | 23:16       | 15:8         | 7:0          | value      | mask      | offset |
@@ -2195,9 +2195,9 @@ the OSVVM VCs.
 
 However, the PCIe model is a true co-simulation component and can be driven directly by software using the C++ API that
 the underlying pcievhost model provides `[2] <https://github.com/wyvernSemi/pcievhost/blob/master/doc/pcieVHost.pdf>`__.
-Here the :vhdlcode:`VUserMain<n>` function does not call the :vhdlcode:`pcieVcInterface` :vhdlcode:`run()` method but
-creates a :vhdlcode:`pcieModelClass` API object and makes calls directly to this interface. A template program might
-look like the following:
+Here the :cppcode:`VUserMain<n>` function does not call the :cppcode:`pcieVcInterface` :cppcode:`run()` method but
+creates a :cppcode:`pcieModelClass` API object and makes calls directly to this interface. A template program might look
+like the following:
 
 .. code-block:: c++
 
@@ -2241,9 +2241,9 @@ a target for an upstream device, automatically responding to TLP requests. The c
 loops over the methods to generate idles to advance simulation time. The model will internally then process any received
 transactions. The code in :file:`PCIe/tests/vc/VUserMainEP.cpp` is of this type of usage.
 
-Details of the :vhdlcode:`PcieModelClass` API can be found in the pcievhost documentation
+Details of the :cppcode:`PcieModelClass` API can be found in the pcievhost documentation
 `[2] <https://github.com/wyvernSemi/pcievhost/blob/master/doc/pcieVHost.pdf>`__, but there are some low level API calls
-that are useful to get access to the settings of the HDL model. To access these the :vhdlcode:`VRead` function is called
+that are useful to get access to the settings of the HDL model. To access these the :ccode:`VRead` function is called
 which has a prototype:
 
 .. code-block:: c++
@@ -2256,20 +2256,20 @@ shown below:
 .. list-table::
    :widths: 149 446
 
-   * - :vhdlcode:`NODENUMADDR`
+   * - :ccode:`NODENUMADDR`
      - Fetch the node number generic’s value
-   * - :vhdlcode:`LANESADDR`
+   * - :ccode:`LANESADDR`
      - Fetch the number of lanes for the connected link
-   * - :vhdlcode:`EP_ADDR`
+   * - :ccode:`EP_ADDR`
      - Fetch the :vhdlcode:`ENDPOINT` generic’s setting
-   * - :vhdlcode:`CLK_COUNT`
+   * - :ccode:`CLK_COUNT`
      - Fetch the model’s current clock count
-   * - :vhdlcode:`RESET_STATE`
+   * - :ccode:`RESET_STATE`
      - Fetch the current state of the reset input port (1 = being reset)
 
-When accessing these types, the value is returned in the :vhdlcode:`value` pointer. The delta argument is to control
+When accessing these types, the value is returned in the :ccode:`value` pointer. The delta argument is to control
 whether the access takes a cycle or not of simulation time. It is usually the case for these value that they should be
-“delta” cycles, taking no simulation time, and the argument is usually set to :vhdlcode:`pcieVcInterface::DELTACYCLE`.
+“delta” cycles, taking no simulation time, and the argument is usually set to :cppcode:`pcieVcInterface::DELTACYCLE`.
 Lastly the node number is passed in to send the access to the correct instantiation.
 
 .. _VC/PCIe/SummaryOfPcieInterfacePackageProcedures:
@@ -2374,15 +2374,15 @@ that C model into the OSVVM VHDL environment. The diagram below summarises the c
 This diagram shows a fragment of a test bench, as discussed previously. Inside the :vhdlcode:`PcieModel` component in
 its main process is a loop that continually loops calling the :vhdlcode:`VTrans` low-level co-simulation foreign
 procedure with newly received model independent transaction requests and update and inspect the PCIe interface. The
-transaction requests are passed up to the C model via shared structures within the :vhdlcode:`OsvvmCoSim` software. The
-program “running” on the co-simulation node is :vhdlcode:`pcieVcInterface` program that processes the transaction
+transaction requests are passed up to the C model via shared structures within the :cppcode:`OsvvmCoSim` software. The
+program “running” on the co-simulation node is :cppcode:`pcieVcInterface` program that processes the transaction
 requests sent up over the foreign interface and makes appropriate calls the PCIe model’s API. The generated PCIe link
-input and output data to and from the C model passes through a thin :vhdlcode:`OsvvmPcieAdapter` layer to convert the C
+input and output data to and from the C model passes through a thin :cppcode:`OsvvmPcieAdapter` layer to convert the C
 model’s link read and write calls to calls for :vhdlcode:`VTrans`.
 
 The main role of the VHDL in the :vhdlcode:`PcieModel` is to memory map into :vhdlcode:`VTrans` co-simulation space all
 the ports of the component, both the model independent transaction interface and the PCIe link signalling (along with
-some other status like the values of the generics), so that the :vhdlcode:`pcieVcInterface` and PCIe C model can access
+some other status like the values of the generics), so that the :cppcode:`pcieVcInterface` and PCIe C model can access
 them as “registers” in that space. The loop in the main process simply processes memory mapped reads and writes from
 :vhdlcode:`VTrans`. All the actual processing is done in the C domain to read and write the interface signals.
 
@@ -2403,28 +2403,27 @@ required.
 
 From the left, the VHDL receives transaction requests over its :vhdlcode:`TransRec` port and sends these to the C code
 as returned data over the :vhdlcode:`VTrans` foreign procedure which regularly polls for new transactions. These are
-sent through the :vhdlcode:`OsvvmCosim` layer to the VC specific :vhdlcode:`pcieVcInterface`, which is the program
-running on the co-simulation node. The PCIe C model library is linked with the interface, and the received transactions
-are processed and the appropriate calls to the model’s API are made to generate transaction traffic and receive data
-from the input link. The main flow out is via a queue and then a :vhdlcode:`SendPacket` function, allowing several
-requests to be accumulated before sending and for retrying NAK’d packets. The :file:`codec.c` code encodes these packets
-and streams them out on the output link, a cycle at a time, by writing (in 0 simulation time) to the memory mapped link
-ports and then allowing a clock tick to advance.
+sent through the :cppcode:`OsvvmCosim` layer to the VC specific :cppcode:`pcieVcInterface`, which is the program running
+on the co-simulation node. The PCIe C model library is linked with the interface, and the received transactions are
+processed and the appropriate calls to the model’s API are made to generate transaction traffic and receive data from
+the input link. The main flow out is via a queue and then a :ccode:`SendPacket` function, allowing several requests to
+be accumulated before sending and for retrying NAK’d packets. The :file:`codec.c` code encodes these packets and streams
+them out on the output link, a cycle at a time, by writing (in 0 simulation time) to the memory mapped link ports and
+then allowing a clock tick to advance.
 
 Simultaneously, the input link is read at each cycle to look for packets being received. The :file:`codec.c` code
-decodes the received data and passes to the :vhdlcode:`ExtractPhyInput` function that assembles these into whole
-transactions or ordered sets. The whole transactions then get sent to either the :vhdlcode:`ProcessOs` function if an OS
-or Training Sequence, or the :vhdlcode:`ProcessInput` function if a TLP or DLLP. The OS or Training Sequences are then
-simply “event counted” for use by the :vhdlcode:`ReadEventCount` API function. The DLLPs are sent to the queue for
-ACKing or NAKing and for flow control updating, whilst the TLP processing depends on configuration. If auto-completions
-are enabled, the internal memory and configuration space models are enabled (in :file:`mem.c`) and memory and
-configurations space transactions are processed there and completions automatically generated as appropriate and placed
-on the output queue for transmission. All other packets are sent to any user registered callback function for handling,
-with a :vhdlcode:`WaitForCompletion` API function to allow inspection if any packet is available. This callback
-function, then, is part of the :vhdlcode:`pcieVcInterface` code so it can handle the transactions. When auto-completions
-are disabled, the received TLPs are sent back to the :vhdlcode:`PcieModel` VHDL and over the :vhdlcode:`TransRec`
-interface for processing by user test code using the :vhdlcode:`PcieInterfacePkg` procedures to wait for and then
-process these TLPs.
+decodes the received data and passes to the :ccode:`ExtractPhyInput` function that assembles these into whole
+transactions or ordered sets. The whole transactions then get sent to either the :ccode:`ProcessOs` function if an OS or
+Training Sequence, or the :ccode:`ProcessInput` function if a TLP or DLLP. The OS or Training Sequences are then simply
+“event counted” for use by the :ccode:`ReadEventCount` API function. The DLLPs are sent to the queue for ACKing or
+NAKing and for flow control updating, whilst the TLP processing depends on configuration. If auto-completions are
+enabled, the internal memory and configuration space models are enabled (in :file:`mem.c`) and memory and configurations
+space transactions are processed there and completions automatically generated as appropriate and placed on the output
+queue for transmission. All other packets are sent to any user registered callback function for handling, with a
+:ccode:`WaitForCompletion` API function to allow inspection if any packet is available. This callback function, then, is
+part of the :cppcode:`pcieVcInterface` code so it can handle the transactions. When auto-completions are disabled, the
+received TLPs are sent back to the :vhdlcode:`PcieModel` VHDL and over the :vhdlcode:`TransRec` interface for processing
+by user test code using the :vhdlcode:`PcieInterfacePkg` procedures to wait for and then process these TLPs.
 
 The model also has code to display formatted link traffic information to the output. This is coded in :file:`displink.c`
 which is passed information from both input and output functions. It reads an external :file:`ContDisp.hex` file to
@@ -2532,12 +2531,12 @@ Users can expand upon this code or substitute their own. Whatever code is in the
 compiled and linked with the other PCIE co-simulation code. If the :vhdlcode:`PcieInitLink` procedure is called, this
 makes its way to the PCIe models C code which is expecting to call a C function with the following prototype:
 
-.. code-block:: c++
+.. code-block:: c
 
    InitLink(const int linkwidth, const int node);
 
 The user LTSSM code must provide this entry point in its implementation and use the passed in node number for all its
-calls to the model’s C API, or to the C++ :vhdlcode:`pcieModelClass` constructor.
+calls to the model’s C API, or to the C++ :cppcode:`pcieModelClass` constructor.
 
 .. _VC/PCIe/SummaryOfTheModelSCAPIFunctions:
 
@@ -2552,7 +2551,7 @@ In this section, for reference, a summary of the PCIe C model’s API is given, 
 TLP Output Functions
 --------------------
 
-.. code-block:: c++
+.. code-block:: c
 
    pPktData_t MemWrite             (uint64 addr, PktData_t *data, int length, int tag, uint32 rid,
                                     bool queue, int node);
@@ -2617,7 +2616,7 @@ TLP Output Functions
 DLLP Output Functions
 ---------------------
 
-.. code-block:: c++
+.. code-block:: c
 
    void SendAck    (int seq, int node);
    void SendNak    (int seq, int node);
@@ -2630,7 +2629,7 @@ DLLP Output Functions
 Low Level Output
 ----------------
 
-.. code-block:: c++
+.. code-block:: c
 
    void SendIdle (int Ticks, int node);
    void SendOs   (int Type, int node);
@@ -2642,7 +2641,7 @@ Low Level Output
 Low Level Input
 ---------------
 
-.. code-block:: c++
+.. code-block:: c
 
    int  ResetEventCount (int type, int node);
    int  ReadEventCount  (int type, uint32 *ts_data, int node);
@@ -2653,7 +2652,7 @@ Low Level Input
 Link Training
 -------------
 
-.. code-block:: c++
+.. code-block:: c
 
    void InitLink       (int linkwidth, int node);
    void InitFc         (int node);
@@ -2663,7 +2662,7 @@ Link Training
 Miscellaneous Functions
 -----------------------
 
-.. code-block:: c++
+.. code-block:: c
 
    void     WaitForCompletion  (int node);
    void     WaitForCompletionN (unsigned int count, int node);
@@ -2679,7 +2678,7 @@ Miscellaneous Functions
 Internal Memory Access Functions
 --------------------------------
 
-.. code-block:: c++
+.. code-block:: c
 
    void     WriteRamByteBlock (uint64 addr, const PktData_t *data, int fbe, int lbe, int byte_length,
                                uint32 node);
@@ -2702,7 +2701,7 @@ C++ API Class
 -------------
 
 In addition to the C API described in the previous sections, there is a C++ API class that wraps the API functionality
-into a :vhdlcode:`pcieModelClass`. This is defined in :file:`pcieModeClass.h` in the :file:`PCIe/include/` directory,
+into a :cppcode:`pcieModelClass`. This is defined in :file:`pcieModeClass.h` in the :file:`PCIe/include/` directory,
 which can be included in user code compiled for C++. The methods of the class match one-to-one with the API C functions
 but with the first letter of the method name in lower case and with no trailing node parameter. An exception to this is
-that the :vhdlcode:`getPcieVersionString` C function maps to a :vhdlcode:`getPcieVersionStr` in the class.
+that the :ccode:`getPcieVersionString` C function maps to a :cppcode:`getPcieVersionStr` in the class.

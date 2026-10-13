@@ -69,8 +69,8 @@ independent AXI4 manager VC.
 In place of calls directly to the address bus transaction procedures, a :vhdlcode:`CoSimTrans` procedure is provided to
 replace these and drive :vhdlcode:`ManagerRec` instead. This hides details away for calls to the underlying
 co-simulation code, with calls to foreign procedures that communicate with user program. The code, at startup will call
-a function (:vhdlcode:`VUserMain0` for ‘node 0’, for example) that the user provides with all their code and sub-code
-called from there (much like :vhdlcode:`main()`). The user code now has access to the transaction API provided by the
+a function (:cppcode:`VUserMain0` for ‘node 0’, for example) that the user provides with all their code and sub-code
+called from there (much like :cppcode:`main()`). The user code now has access to the transaction API provided by the
 co-simulation code, and can generate read and write transactions in the OSVVM domain.
 
 A complementary setup for subordinate responses is also available. Here the co-simulation features replace the
@@ -87,7 +87,7 @@ interface. The diagram below shows the updated framework for address bus model i
 In place of calls directly to the address bus transaction procedures, a :vhdlcode:`CoSimTransResp` procedure is provided
 to replace these and drive :vhdlcode:`SubordinateRec` instead. This hides details away for calls to the underlying
 co-simulation code, with calls to foreign procedures that communicate with user program. The code, at startup will call
-a function (:vhdlcode:`VUserMain1` for ‘node 1’, for example) that the user provides with all their code and sub-code
+a function (:cppcode:`VUserMain1` for ‘node 1’, for example) that the user provides with all their code and sub-code
 called from there. The user code now has access to the transaction API provided by the co-simulation code, and can send
 read responses and ftech received write transactions in the OSVVM domain. The complexity of the user code to model other
 system features is now unlimited, and can direct address bus accesses towards the simulation, and components modelled
@@ -300,9 +300,9 @@ OSVVM Address Bus Transaction C++ API
 The user side C++ code has access to an API in order to generate address bus transactions, allow simulation time to
 advance and to generate status. It can also get interrupt status from the simulation if present. A simple example for a
 program is given in :ref:`Figure 7 <FRAMEWORK/CoSimulation/Figure7>`. For each node used in the OSVVM test bench, there
-is expected to be a user written function named :vhdlcode:`VUserMain`\ *n*, where *n* is the number matching the node ID
-used (e.g. :vhdlcode:`VUserMain0`). This is like the :vhdlcode:`main()` of a C/C++ program for the node, or perhaps more
-like :vhdlcode:`WinMain()` for Windows non-console programs. An example definition is shown below:
+is expected to be a user written function named :cppcode:`VUserMain`\ *n*, where *n* is the number matching the node ID
+used (e.g. :cppcode:`VUserMain0`). This is like the :cppcode:`main()` of a C/C++ program for the node, or perhaps more
+like :cppcode:`WinMain()` for Windows non-console programs. An example definition is shown below:
 
 .. code-block:: c++
 
@@ -340,7 +340,7 @@ so sub-programs can create their own API objects (with the correct node for the 
 API methods.
 
 In order to identify the different co-simulation tests, that may all uses the same underlying test bench, the software
-can set a test name when constructing an :vhdlcode:`OsvvmCosim` object using the :vhdlcode:`test_name` argument. By
+can set a test name when constructing an :cppcode:`OsvvmCosim` object using the :cppcode:`test_name` argument. By
 default, the argument is set to "" and the test name will not be set. Any other value will be used to set the test name
 in the OSVVM environment.
 
@@ -349,7 +349,7 @@ in the OSVVM environment.
 Advancing Time
 ==============
 
-Advancing time without generating transactions is done with the :vhdlcode:`tick()` method as defined below.
+Advancing time without generating transactions is done with the :cppcode:`tick()` method as defined below.
 
 .. code-block:: c++
 
@@ -361,10 +361,10 @@ Advancing time without generating transactions is done with the :vhdlcode:`tick(
      const bool error = false
    );
 
-The method is called with a :vhdlcode:`ticks` parameter to indicate how many calls to the :vhdlcode:`CoSimTrans` VHDL
+The method is called with a :cppcode:`ticks` parameter to indicate how many calls to the :vhdlcode:`CoSimTrans` VHDL
 procedure should be made without generating a transaction. If the calling process does not add any additional clock
-waits in the loop calling :vhdlcode:`CoSimTrans`, then the ticks will be clock cycles. The optional :vhdlcode:`done` and
-:vhdlcode:`error` inputs send status to the equivalent arguments on :vhdlcode:`CoSimTrans` as explained in the
+waits in the loop calling :vhdlcode:`CoSimTrans`, then the ticks will be clock cycles. The optional :cppcode:`done` and
+:cppcode:`error` inputs send status to the equivalent arguments on :vhdlcode:`CoSimTrans` as explained in the
 :ref:`previous section <FRAMEWORK/CoSimulation/OSVVMCoSimulationAddressTransactionProcedure>`.
 
 The transaction methods are the methods that are used to generate the address bus activity.
@@ -450,33 +450,33 @@ transactions.
      const int        prot = 0);
 
 These transaction methods are overloaded for various sizes of address and data , using the :file:`stdint.h` definitions,
-where :vhdlcode:`uint<nn>_t` indicates different uint sizes. For address parameters this is :vhdlcode:`uint32_t` or
-:vhdlcode:`uint64_t`. For the data parameters of :vhdlcode:`transRead` and :vhdlcode:`transWrite` this is one of
-:vhdlcode:`uint8_t`, :vhdlcode:`uint16_t`, :vhdlcode:`uint32_t` or :vhdlcode:`uint64_t` (if address type is also
-:vhdlcode:`uint64_t`). Note that using :vhdlcode:`uint64_t` can only be done if the target test bench is configured for
-a 64-bit bus architecture.
+where :cppcode:`uint<nn>_t` indicates different uint sizes. For address parameters this is :cppcode:`uint32_t` or
+:cppcode:`uint64_t`. For the data parameters of :cppcode:`transRead` and :cppcode:`transWrite` this is one of
+:cppcode:`uint8_t`, :cppcode:`uint16_t`, :cppcode:`uint32_t` or :cppcode:`uint64_t` (if address type is also
+:cppcode:`uint64_t`). Note that using :cppcode:`uint64_t` can only be done if the target test bench is configured for a
+64-bit bus architecture.
 
-The single word methods, :vhdlcode:`transRead` and :vhdlcode:`transWrite`, and its non-blocking asynchronous equivalent
-:vhdlcode:`transWriteAsync`, take an address, data and optional :vhdlcode:`prot` (protection) arguments, with the
-:vhdlcode:`transRead` having a pointer to the variable for returning the read data. The :vhdlcode:`transWrite` returns a
+The single word methods, :cppcode:`transRead` and :cppcode:`transWrite`, and its non-blocking asynchronous equivalent
+:cppcode:`transWriteAsync`, take an address, data and optional :cppcode:`prot` (protection) arguments, with the
+:cppcode:`transRead` having a pointer to the variable for returning the read data. The :cppcode:`transWrite` returns a
 value which is a future-proofing for returning read data in the same transaction as a write, but is not yet supported.
-The :vhdlcode:`transRead` method does not return a value and a pointer is used to return the data as this is how the
+The :cppcode:`transRead` method does not return a value and a pointer is used to return the data as this is how the
 method selects the size of the read transaction (byte, half-word etc.) based on the argument’s size. The
-:vhdlcode:`transWriteAndRead` method does a write to the specified address with the :vhdlcode:`wdata` value, and returns
-the old value in the :vhdlcode:`rdata` argument. The :vhdlcode:`transWriteAndReadAsync` method is simlar, but the read
+:cppcode:`transWriteAndRead` method does a write to the specified address with the :cppcode:`wdata` value, and returns
+the old value in the :cppcode:`rdata` argument. The :cppcode:`transWriteAndReadAsync` method is simlar, but the read
 data is not returned at the call. The read transaction is instigated, however, and the data can be fetched with methods
-such as :vhdlcode:`transReadData`. The :vhdlcode:`transReadPoll` method will poll a memory location specified by the
-:vhdlcode:`addr` argument, at intervals defined by the :vhdlcode:`waittime` argument, until the data read has its bit
-indexed at :vhdlcode:`idx` matching the value in :vhdlcode:`bitval`. The value read on matching is returned in
-:vhdlcode:`data`.
+such as :cppcode:`transReadData`. The :cppcode:`transReadPoll` method will poll a memory location specified by the
+:cppcode:`addr` argument, at intervals defined by the :cppcode:`waittime` argument, until the data read has its bit
+indexed at :cppcode:`idx` matching the value in :cppcode:`bitval`. The value read on matching is returned in
+:cppcode:`data`.
 
 The burst transactions use byte buffers to send and return data. The calling code provides buffer space to a maximum of
 4Kbytes preloaded with byte data for writes, or updated with byte data on reads. If no data is specified, then the burst
-write will use whatever has been pushed to the write fifo using :vhdlcode:`transBurstPushData` (see
+write will use whatever has been pushed to the write fifo using :cppcode:`transBurstPushData` (see
 :ref:`later <FRAMEWORK/CoSimulation/PushAndPopBurstData>`). The bytesize parameter indicates the transfer size. The
 co-simulation code will not go beyond 4Kbytes when reading or writing to the buffers, so it is recommended to use 4Kbyte
-buffers in all cases to avoid overrun. A non-blocking version of :vhdlcode:`transBurstWrite` is provided as
-:vhdlcode:`transBurstWriteAsync`. In addition, the burst writes can have predetermined patterns as a source of data,
+buffers in all cases to avoid overrun. A non-blocking version of :cppcode:`transBurstWrite` is provided as
+:cppcode:`transBurstWriteAsync`. In addition, the burst writes can have predetermined patterns as a source of data,
 namely incrementing or random, with a data byte provided to indicate the first word to use for the pattern. The methods
 are shown below:
 
@@ -554,9 +554,9 @@ different times. The methods to support this are listed below:
      const uint<nn>_t *data
    );
 
-The :vhdlcode:`transTryReadData` is the same as :vhdlcode:`transReadData`, but will return if no data available, rather
-than block. It will return :vhdlcode:`false` if no data available and :vhdlcode:`true` if data was availabe, which is
-then returned in the data buffer.
+The :cppcode:`transTryReadData` is the same as :cppcode:`transReadData`, but will return if no data available, rather
+than block. It will return :cppcode:`false` if no data available and :cppcode:`true` if data was availabe, which is then
+returned in the data buffer.
 
 .. _FRAMEWORK/CoSimulation/PushAndPopBurstData:
 
@@ -621,10 +621,10 @@ below:
    ------------------------------------------------------------------
      const uint<nn>_t  data);
 
-The first method does a blocking read transaction, and compares the read value with that supplied as the
-:vhdlcode:`data` argument. The second method does the same check, but with already received data from a previous read.
-The last method is the same as the second but is non-blocking, returning :vhdlcode:`false` if no word available and
-:vhdlcode:`true` if data was available and was checked.
+The first method does a blocking read transaction, and compares the read value with that supplied as the :cppcode:`data`
+argument. The second method does the same check, but with already received data from a previous read. The last method is
+the same as the second but is non-blocking, returning :cppcode:`false` if no word available and :cppcode:`true` if data
+was available and was checked.
 
 The burst transactions also have check methods, with methods that instigate a transaction and check, and methods that
 check previously received data. In addition, the data can be checked agains a supplied set of data, or against a
@@ -747,13 +747,13 @@ below:
        void
    );
 
-The :vhdlcode:`getNodeNumber` method simply returns the node number associated with the instantiation object of the
+The :cppcode:`getNodeNumber` method simply returns the node number associated with the instantiation object of the
 class. As stated before, mutiple object are allowed for access to a given node. To aid in managing which node a
 particular object has been associated with, this method gives access to that state.
 
-The :vhdlcode:`waitForSim` method is for running in GHDL when in callable simulation mode. For all other modes, this
-call does nothing. When active, a call to this method blocks until the simulation is in a suitable state to have
-transaction methods called to instigate traffic on the bus. For more details see
+The :cppcode:`waitForSim` method is for running in GHDL when in callable simulation mode. For all other modes, this call
+does nothing. When active, a call to this method blocks until the simulation is in a suitable state to have transaction
+methods called to instigate traffic on the bus. For more details see
 :ref:`section 12.6 <FRAMEWORK/CoSimulation/UsingGHDLCallableSimulation>`, which also has example code using this method.
 
 .. _FRAMEWORK/CoSimulation/OsvvmCosimIntInterruptSupportClass:
@@ -761,13 +761,13 @@ transaction methods called to instigate traffic on the bus. For more details see
 OsvvmCosimInt Interrupt Support Class
 =====================================
 
-The :vhdlcode:`OsvvmCosimInt` class, derived from the :vhdlcode:`OsvvmClass`, adds additional programming support for
+The :cppcode:`OsvvmCosimInt` class, derived from the :cppcode:`OsvvmClass`, adds additional programming support for
 handling interrupts for new test code that has no other means of processing interrupts such as when using a software
 processor model. This inherits all the methods of the parent class, as described in the sections above, including the
-:vhdlcode:`regInterruptCB()` method.
+:cppcode:`regInterruptCB()` method.
 
-The type of callback function, as defined by :vhdlcode:`pVUserInt_t`, is :vhdlcode:`int <myfunc>(int)`. When the
-callback is executed the :vhdlcode:`int` argument contatins the current state of the :vhdlcode:`IntReq` input to the
+The type of callback function, as defined by :cppcode:`pVUserInt_t`, is :cppcode:`int <myfunc>(int)`. When the callback
+is executed the :cppcode:`int` argument contatins the current state of the :vhdlcode:`IntReq` input to the
 :vhdlcode:`CoSimTrans` procedure. Example code can be found in :file:`OsvvmLibraries/CoSim/test/interruptCB`. In
 addition it provided methods for registering up to 32 interrupt service routine (ISR) functions:
 
@@ -825,8 +825,8 @@ In order to update interrupt state, a method is provided to pass in the current 
    );
 
 This method would normally be used in conjunction with a callback function registered with the
-:vhdlcode:`regInterruptCB()` method, which is called whenever the interrupt request input to :vhdlcode:`CoSimTrans`
-changes. This function would have access to the :vhdlcode:`OsvvmCosimInt` object and call its :vhdlcode:`updateIntReq()`
+:cppcode:`regInterruptCB()` method, which is called whenever the interrupt request input to :vhdlcode:`CoSimTrans`
+changes. This function would have access to the :cppcode:`OsvvmCosimInt` object and call its :cppcode:`updateIntReq()`
 method to pass in the interrupt request status.
 
 .. _FRAMEWORK/CoSimulation/OSVVMCoSimulationAddressBusResponderProcedure:
@@ -887,9 +887,9 @@ OSVVM Address Bus Responder C++ API
 
 The user side C++ code has access to an API in order to generate address bus reponses, allow simulation time to advance
 and to generate status. For each node used in the OSVVM test bench, there is expected to be a user written function
-named :vhdlcode:`VUserMain`\ *n*, where *n* is the number matching the node ID used (e.g. :vhdlcode:`VUserMain1`, with a
-node number of 1 being the default for a responder). This is like the :vhdlcode:`main()` of a C/C++ program for the
-node, or perhaps more like :vhdlcode:`WinMain()` for Windows non-console programs. An example definition is shown below:
+named :cppcode:`VUserMain`\ *n*, where *n* is the number matching the node ID used (e.g. :cppcode:`VUserMain1`, with a
+node number of 1 being the default for a responder). This is like the :cppcode:`main()` of a C/C++ program for the node,
+or perhaps more like :cppcode:`WinMain()` for Windows non-console programs. An example definition is shown below:
 
 .. code-block:: c++
 
@@ -927,7 +927,7 @@ so sub-programs can create their own API objects (with the correct node for the 
 API methods.
 
 In order to identify the different co-simulation tests, that may all uses the same underlying test bench, the software
-can set a test name when constructing an :vhdlcode:`OsvvmCosim` object using the :vhdlcode:`test_name` argument. By
+can set a test name when constructing an :cppcode:`OsvvmCosim` object using the :cppcode:`test_name` argument. By
 default, the argument is set to "" and the test name will not be set. Any other value will be used to set the test name
 in the OSVVM environment.
 
@@ -936,7 +936,7 @@ in the OSVVM environment.
 Advancing Time
 ==============
 
-Advancing time without generating transactions is done with the :vhdlcode:`tick()` method as defined below.
+Advancing time without generating transactions is done with the :cppcode:`tick()` method as defined below.
 
 .. code-block:: c++
 
@@ -948,10 +948,10 @@ Advancing time without generating transactions is done with the :vhdlcode:`tick(
      const bool error = false
    );
 
-The method is called with a :vhdlcode:`ticks` parameter to indicate how many calls to the :vhdlcode:`CoSimTrans` VHDL
+The method is called with a :cppcode:`ticks` parameter to indicate how many calls to the :vhdlcode:`CoSimTrans` VHDL
 procedure should be made without generating a transaction. If the calling process does not add any additional clock
-waits in the loop calling :vhdlcode:`CoSimTrans`, then the ticks will be clock cycles. The optional :vhdlcode:`done` and
-:vhdlcode:`error` inputs send status to the equivalent arguments on :vhdlcode:`CoSimTrans` as explained in the
+waits in the loop calling :vhdlcode:`CoSimTrans`, then the ticks will be clock cycles. The optional :cppcode:`done` and
+:cppcode:`error` inputs send status to the equivalent arguments on :vhdlcode:`CoSimTrans` as explained in the
 :ref:`previous section <FRAMEWORK/CoSimulation/OSVVMCoSimulationAddressBusResponderProcedure>`.
 
 .. _FRAMEWORK/CoSimulation/ResponseMethods:
@@ -993,20 +993,20 @@ write and read transaction methods are listed below:
    );
 
 These reponse methods are overloaded for various sizes of address and data , using the :file:`stdint.h` definitions,
-where :vhdlcode:`uint<nn>_t` indicates different uint sizes. For address parameters this is :vhdlcode:`uint32_t` or
-:vhdlcode:`uint64_t`. For the data parameters of :vhdlcode:`transRead` and :vhdlcode:`transWrite` this is one of
-:vhdlcode:`uint8_t`, :vhdlcode:`uint16_t`, :vhdlcode:`uint32_t` or :vhdlcode:`uint64_t` (if address type is also
-:vhdlcode:`uint64_t`). Note that using :vhdlcode:`uint64_t` can only be done if the target test bench is configured for
-a 64-bit bus architecture.
+where :cppcode:`uint<nn>_t` indicates different uint sizes. For address parameters this is :cppcode:`uint32_t` or
+:cppcode:`uint64_t`. For the data parameters of :cppcode:`transRead` and :cppcode:`transWrite` this is one of
+:cppcode:`uint8_t`, :cppcode:`uint16_t`, :cppcode:`uint32_t` or :cppcode:`uint64_t` (if address type is also
+:cppcode:`uint64_t`). Note that using :cppcode:`uint64_t` can only be done if the target test bench is configured for a
+64-bit bus architecture.
 
-The methods :vhdlcode:`respGetWrite` and :vhdlcode:`respSendRead`, and their non-blocking asynchronous equivalents
-:vhdlcode:`respTryGetWrite`, and :vhdlcode:`respTrySendData`, take and address pointer argument, which returns the
-address associated with the received transaction. The write methods take a data pointer argument in which the written
-data is returned. The read methods take a data input argument to send as the read response data. The
-:vhdlcode:`respGetWrite` and :vhdlcode:`respSendRead` methods are blocking, and wil not return until the transaction is
-completed. For writes, this means that a whole write transaction has been received, and for reads, that the repsonse
-data has been sent. The try methods return a boolean status. If the response can’t be processed it will return false.
-For writes, this means no write data is available. For reads, this means that no read address has been received.
+The methods :cppcode:`respGetWrite` and :cppcode:`respSendRead`, and their non-blocking asynchronous equivalents
+:cppcode:`respTryGetWrite`, and :cppcode:`respTrySendData`, take and address pointer argument, which returns the address
+associated with the received transaction. The write methods take a data pointer argument in which the written data is
+returned. The read methods take a data input argument to send as the read response data. The :cppcode:`respGetWrite` and
+:cppcode:`respSendRead` methods are blocking, and wil not return until the transaction is completed. For writes, this
+means that a whole write transaction has been received, and for reads, that the repsonse data has been sent. The try
+methods return a boolean status. If the response can’t be processed it will return false. For writes, this means no
+write data is available. For reads, this means that no read address has been received.
 
 .. _FRAMEWORK/CoSimulation/SplitResponseMethods:
 
@@ -1066,14 +1066,14 @@ address and data seperately, at different times. The methods to support this are
      uint<nn>_t data
    );
 
-There are methods for fetching both read and write received addresses, with :vhdlcode:`respGetWriteAddress` and
-:vhdlcode:`respGetReadAddress` being block, waiting until an address is available. The non-blocking versions
-(:vhdlcode:`respTryGetWriteAddress` and :vhdlcode:`respTryGetReadAddress`) return :vhdlcode:`false` if no address is
-available. Retrieving write data is done with :vhdlcode:`respGetWriteData` (blocking) and
-:vhdlcode:`respTryGetWriteData` (non-blocking, returning false if no write data available). To send the response data,
-:vhdlcode:`respSendReadData` (blocking until a read address is available) and :vhdlcode:`respSendReadData`
-(non-blocking). This last does return the status of whether a read address was availabe at the point the methods was
-called, but the data is placed in the respond fifo regardless.
+There are methods for fetching both read and write received addresses, with :cppcode:`respGetWriteAddress` and
+:cppcode:`respGetReadAddress` being block, waiting until an address is available. The non-blocking versions
+(:cppcode:`respTryGetWriteAddress` and :cppcode:`respTryGetReadAddress`) return :cppcode:`false` if no address is
+available. Retrieving write data is done with :cppcode:`respGetWriteData` (blocking) and :cppcode:`respTryGetWriteData`
+(non-blocking, returning false if no write data available). To send the response data, :cppcode:`respSendReadData`
+(blocking until a read address is available) and :cppcode:`respSendReadData` (non-blocking). This last does return the
+status of whether a read address was availabe at the point the methods was called, but the data is placed in the respond
+fifo regardless.
 
 .. _FRAMEWORK/CoSimulation/OSVVMAddressBusResponderCAPI/DirectiveMethods:
 
@@ -1142,13 +1142,13 @@ below:
        void
    );
 
-The :vhdlcode:`getNodeNumber` method simply returns the node number associated with the instantiation object of the
+The :cppcode:`getNodeNumber` method simply returns the node number associated with the instantiation object of the
 class. As stated before, mutiple object are allowed for access to a given node. To aid in managing which node a
 particular object has been associated with, this method gives access to that state.
 
-The :vhdlcode:`waitForSim` method is for running in GHDL when in callable simulation mode. For all other modes, this
-call does nothing. When active, a call to this method blocks until the simulation is in a suitable state to have
-transaction methods called to instigate traffic on the bus. For more details see
+The :cppcode:`waitForSim` method is for running in GHDL when in callable simulation mode. For all other modes, this call
+does nothing. When active, a call to this method blocks until the simulation is in a suitable state to have transaction
+methods called to instigate traffic on the bus. For more details see
 :ref:`section 12.6 <FRAMEWORK/CoSimulation/UsingGHDLCallableSimulation>`, which also has example code using this method.
 
 .. _FRAMEWORK/CoSimulation/OSVVMCoSimulationStreamTransactionProcedure:
@@ -1212,7 +1212,7 @@ OSVVM Streaming C++ API
 ***********************
 
 Like for the Address Bus Transaction, the streaming features have a C++ API in order to generate streaming transactions,
-allow simulation time to advance and to generate status. User code is also entered via a :vhdlcode:`VUserMain`\ *n*
+allow simulation time to advance and to generate status. User code is also entered via a :cppcode:`VUserMain`\ *n*
 function, with *n* being the node number (defaulting to 0).
 
 .. _FRAMEWORK/CoSimulation/OsvvmCosimStreamClassConstructor:
@@ -1220,9 +1220,9 @@ function, with *n* being the node number (defaulting to 0).
 OsvvmCosimStream Class Constructor
 ==================================
 
-The Streaming API is provided via a class, :vhdlcode:`OsvvmCosimStream`, defined in :file:`OsvvmCosimStream.h`, which
-can be found in :file:`CoSim/code`. This is a C++ wrapper class to abstract away the lower level calls to the
-co-simulation infrastructure software. A constructor defines which node the object is attached to.
+The Streaming API is provided via a class, :cppcode:`OsvvmCosimStream`, defined in :file:`OsvvmCosimStream.h`, which can
+be found in :file:`CoSim/code`. This is a C++ wrapper class to abstract away the lower level calls to the co-simulation
+infrastructure software. A constructor defines which node the object is attached to.
 
 .. code-block:: c++
 
@@ -1236,7 +1236,7 @@ co-simulation infrastructure software. A constructor defines which node the obje
 Any user file can construct the API object. This class is a wrapper and does not hold state (except the node number) and
 so sub-programs can create their own API objects (with the correct node for the top level program) to gain access to the
 API methods. In order to identify the different co-simulation tests, that may all uses the same underlying test bench,
-the software can set a test name when constructing an :vhdlcode:`OsvvmCosim` object using the :vhdlcode:`test_name`
+the software can set a test name when constructing an :cppcode:`OsvvmCosim` object using the :cppcode:`test_name`
 argument. By default, the argument is set to "" and the test name will not be set. Any other value will be used to set
 the test name in the OSVVM environment.
 
@@ -1245,7 +1245,7 @@ the test name in the OSVVM environment.
 Advancing Time
 ==============
 
-Advancing time without generating transactions is done with the :vhdlcode:`tick()` method as defined below.
+Advancing time without generating transactions is done with the :cppcode:`tick()` method as defined below.
 
 .. code-block:: c++
 
@@ -1256,10 +1256,10 @@ Advancing time without generating transactions is done with the :vhdlcode:`tick(
      const bool done  = false,
      const bool error = false );
 
-The method is called with a :vhdlcode:`ticks` parameter to indicate how many calls to the :vhdlcode:`CoSimStream` VHDL
+The method is called with a :cppcode:`ticks` parameter to indicate how many calls to the :vhdlcode:`CoSimStream` VHDL
 procedure should be made without generating a transaction. If the calling process does not add any additional clock
-waits in the loop calling :vhdlcode:`CoSimStream`, then the ticks will be clock cycles. The optional :vhdlcode:`done`
-and :vhdlcode:`error` inputs send status to the equivalent arguments on :vhdlcode:`CoSimStream` as explained in the
+waits in the loop calling :vhdlcode:`CoSimStream`, then the ticks will be clock cycles. The optional :cppcode:`done` and
+:cppcode:`error` inputs send status to the equivalent arguments on :vhdlcode:`CoSimStream` as explained in the
 :ref:`previous section <FRAMEWORK/CoSimulation/OSVVMCoSimulationStreamTransactionProcedure>`. The transaction methods
 are the methods that are used to generate the streaming activity.
 
@@ -1332,18 +1332,18 @@ The basic streaming transaction methods are shown below:
      const int         bytesize
    );
 
-The :vhdlcode:`streamSend` and :vhdlcode:`streamGet` transaction methods are overloaded for various sizes of data ,
-using the :file:`stdint.h` definitions, where :vhdlcode:`uint<nn>_t` indicates different uint sizes. For the data
-parameter, this is one of :vhdlcode:`uint8_t`, :vhdlcode:`uint16_t`, :vhdlcode:`uint32_t` or :vhdlcode:`uint64_t`. There
-are also non-bloking variants of the of the :vhdlcode:`transSend` and :vhdlcode:`transBurstSend` methods;
-:vhdlcode:`transSendAsync` and :vhdlcode:`transBurstSendAsync`. In addition the :vhdlcode:`transBurstSend` and
-:vhdlcode:`transBurstSendAsync` can have a data buffer pointer argument or not. When supplied the buffer data is pushed
-to the transaction fifo before the transaction is instigated. When no data buffer argument is given, the data already in
-the fifo is used, loaded previously via the push methods (see :ref:`below <FRAMEWORK/CoSimulation/PushAndPopMethods>`).
+The :cppcode:`streamSend` and :cppcode:`streamGet` transaction methods are overloaded for various sizes of data , using
+the :file:`stdint.h` definitions, where :cppcode:`uint<nn>_t` indicates different uint sizes. For the data parameter,
+this is one of :cppcode:`uint8_t`, :cppcode:`uint16_t`, :cppcode:`uint32_t` or :cppcode:`uint64_t`. There are also
+non-bloking variants of the of the :cppcode:`transSend` and :cppcode:`transBurstSend` methods; :cppcode:`transSendAsync`
+and :cppcode:`transBurstSendAsync`. In addition the :cppcode:`transBurstSend` and :cppcode:`transBurstSendAsync` can
+have a data buffer pointer argument or not. When supplied the buffer data is pushed to the transaction fifo before the
+transaction is instigated. When no data buffer argument is given, the data already in the fifo is used, loaded
+previously via the push methods (see :ref:`below <FRAMEWORK/CoSimulation/PushAndPopMethods>`).
 
-The :vhdlcode:`streamSend` and :vhdlcode:`streamSendAsync` optional :vhdlcode:`param` argument is used by some VCs. For
+The :cppcode:`streamSend` and :cppcode:`streamSendAsync` optional :cppcode:`param` argument is used by some VCs. For
 example, the UART VC uses this to inject parity errors and other conditions. The default value is for no errors. The
-:vhdlcode:`streamGet` also has an optoinal second argument, status, which can be used to get status returned from a
+:cppcode:`streamGet` also has an optoinal second argument, status, which can be used to get status returned from a
 streaming VC, if it supports this. For example, the UART VC can indicate receiving a a transaction with a parity error.
 
 There are also pattern generating versions of the burst send methods. These can generate patterns in the fifo as either
@@ -1569,9 +1569,8 @@ otherwise they return true and return or check the data. These are listed below.
      const int   param = 1
    ) ;
 
-The class also has :vhdlcode:`getNodeNumber` and :vhdlcode:`waitForSim` methods as for the :vhdlcode:`OsvvmClass`, with
-the same functionality (see
-:ref:`section 6.6 <FRAMEWORK/CoSimulation/OSVVMAddressBusTransactionCAPI/AdditionalMethods>`).
+The class also has :cppcode:`getNodeNumber` and :cppcode:`waitForSim` methods as for the :cppcode:`OsvvmClass`, with the
+same functionality (see :ref:`section 6.6 <FRAMEWORK/CoSimulation/OSVVMAddressBusTransactionCAPI/AdditionalMethods>`).
 
 .. _FRAMEWORK/CoSimulation/OSVVMStreamingCAPI/DirectiveMethods:
 
@@ -1668,7 +1667,7 @@ C++ test code for word and burst transactions
 =============================================
 
 At its simplest, the co-simulation features allow address bus transaction tests to be written in C++. The user code
-provides a :vhdlcode:`VUserMain0` function, instantiates an :vhdlcode:`OsvvmCosim` object and then has access to all the
+provides a :cppcode:`VUserMain0` function, instantiates an :cppcode:`OsvvmCosim` object and then has access to all the
 API features described above. The diagram in :ref:`Figure 2 <FRAMEWORK/CoSimulation/Figure2>` shows this test setup.
 
 Demo tests for both word/sub-word and burst transactions exist, with the C++ source as:
@@ -1749,11 +1748,11 @@ as a remote target over TCP/IP and thus an IDE such as Eclipse. The test environ
 
 In this test the driving of the transactions now come from within the model itself, with a pre-compiled RISC-V program
 (:file:`test.exe`, in the test directory) that is one of RISC-V International’s unit test−to test the sb (store byte)
-instruction. The :vhdlcode:`VUserMain0` function is now just a means to instantiate the model, load a program (if not
+instruction. The :cppcode:`VUserMain0` function is now just a means to instantiate the model, load a program (if not
 loaded over gdb) and run it. Binary libraries for the RISC-V ISS model are provided in :file:`CoSim/lib` and the headers
 in :file:`CoSim/include`.
 
-A simplifed :vhdlcode:`VUserMain0` program is shown below.
+A simplifed :cppcode:`VUserMain0` program is shown below.
 
 .. code-block:: c++
    :caption: Figure 9: Main Program with RISC-V ISS
@@ -1795,7 +1794,7 @@ A simplifed :vhdlcode:`VUserMain0` program is shown below.
        SLEEPFOREVER;
    }
 
-The registered call back function (:vhdlcode:`memcosim` in the example above) is called each load and store from the
+The registered call back function (:cppcode:`memcosim` in the example above) is called each load and store from the
 model and has parameters for byte address data and type. A simplified version of the callback is shown below
 
 .. code-block:: c++
@@ -1841,7 +1840,7 @@ then run from that memory, but this just stands in for simulated DUT logic, eith
 The callback might be enhanced to do some address decoding to only forward to OSVVM relevant accesses, and hand back
 those out of range for the rest of the model to handle.
 
-The method described here relies on having a model that is callable from the :vhdlcode:`VUserMain0` program. The
+The method described here relies on having a model that is callable from the :cppcode:`VUserMain0` program. The
 simulators, in general, are executables and are not callable from external programs. The OSVVM co-simulation code
 provides the means to have a ‘free running’ program that can call API methods to initiate activity in the logic
 simulation but, ultimately, this was all initiated from the simulator process. In order to have a program, separate from
@@ -1854,7 +1853,7 @@ Connecting to External Programs
 
 If the modelling system to be hooked to OSVVM is, itself, an executable and can’t be called from the co-simulation code,
 then a means is needed to communicate between the external model and the OSVVM co-simulation program. In
-:file:`CoSim/code` is some source code that defines an :vhdlcode:`OsvvmCosimSkt` class which acts as a TCP/IP socket
+:file:`CoSim/code` is some source code that defines an :cppcode:`OsvvmCosimSkt` class which acts as a TCP/IP socket
 server. It defines a protocol for sending word or sub-word read or write transactions, sending back responses to a
 connected client. The protocol is based on gdb’s remote target protocol, but the class is defined in such a way as to
 allow a parsing and response methods to be overwritten in a derived class to alter or extend that protocol, so long as
@@ -1872,7 +1871,7 @@ code. The test environment now looks like that shown in the figure below:
 
 
 The :file:`CoSim/tests/socket` test code makes use of this class to open up a TCP/IP port and listen for an external
-connection. The :vhdlcode:`VUserMain0` program is shown below:
+connection. The :cppcode:`VUserMain0` program is shown below:
 
 .. code-block:: c++
    :caption: Figure 12: Use of OsvvmCosimSkt Class
@@ -1921,7 +1920,7 @@ as a :vhdlcode:`MangerProc` process. The :vhdlcode:`InterruptHandler` arbitrates
 transactions to the :vhdlcode:`Axi4Manager` VC based on the state of the DUT’s interrupt request line. To use the
 handler with co-simulation code, the multi-node capabilities are used, where the manager process uses node 0 (the case
 in the previous examples, and the interrupt process uses node 1. Each node will call its respective top level
-functions—:vhdlcode:`VUserMain0` and :vhdlcode:`VUserMain1`—each running as separate programs. This arrangement is shown
+functions—:cppcode:`VUserMain0` and :cppcode:`VUserMain1`—each running as separate programs. This arrangement is shown
 in the diagram below.
 
 .. figure:: images/CoSimulation/Figure13.png
@@ -1933,8 +1932,8 @@ in the diagram below.
 
 A test example is given in the code in :file:`CoSim/tests/interrupt` and runs on the :file:`TbAxi4Memory.vhd` test bench
 in :file:`Common/TbInterrupt/testbench`. The VHDL test case is :file:`TbAxi4_InterruptCosim1.vhd` under
-:file:`Common/TbInterrupt/TestCases`. The two :vhdlcode:`VUserMain` programs running simply emulate the
-functionality in the :file:`TbAxi4_Interrupt1.vhd`, just using calls to the API to instigate the transactions.
+:file:`Common/TbInterrupt/TestCases`. The two :cppcode:`VUserMain` programs running simply emulate the functionality in
+the :file:`TbAxi4_Interrupt1.vhd`, just using calls to the API to instigate the transactions.
 
 .. _FRAMEWORK/CoSimulation/UsageExamples/InterruptCallback:
 
@@ -1947,9 +1946,9 @@ the :vhdlcode:`InterruptGlobalSignalPkg`. The :vhdlcode:`CoSimInterruptHandler` 
 this signal to set the interrupt input of :vhdlcode:`CoSimTrans` as required. In the case of the
 :file:`TbAxi4_InterruptCosim3.vhd` test case, the input to :vhdlcode:`CoSimTrans` is set to 1 whenever the
 :vhdlcode:`gIntReq` changes state. The test code in :file:`CoSim/tests/interruptIss` registers an interrupt callback
-function with the co-simulation software and this function toggles a local static variable, :vhdlcode:`IntReq`, each
-time it is called. The test uses the RISC-V ISS model, and another function is registered as a callback from this model
-to inspect :vhdlcode:`IntReq` and return the status to the model. The associated RISC-V test program has the exception
+function with the co-simulation software and this function toggles a local static variable, :cppcode:`IntReq`, each time
+it is called. The test uses the RISC-V ISS model, and another function is registered as a callback from this model to
+inspect :cppcode:`IntReq` and return the status to the model. The associated RISC-V test program has the exception
 vectors set up and enables interrupts before running code to write to a given address to initiate an external interrupt,
 which the test bench monitors for and sets the :vhdlcode:`IntReq` output from the :vhdlcode:`TestCtrl_e` test bench
 component in the logic simulation. The RISC-V interrupt routine clears the interrupt (writes 0 to the same address that
@@ -1974,10 +1973,10 @@ Using GHDL callable Simulation
 ==============================
 
 The default behaviour of the co-simulation code is to call one or more user programs, running in threads, with entry
-points at :vhdlcode:`VUserMain`\ *x* (one for each active node). The user test code is called from there and can be any
+points at :cppcode:`VUserMain`\ *x* (one for each active node). The user test code is called from there and can be any
 code complexity, modelling whole systems if required. The assumption here is that the user's code, modelling their
 system, is callable from external code. This is true of the example with the RISC-V ISS, which is instantiated and run
-from a :vhdlcode:`VUserMain` program. This may not always be possible for pre-existing modelling systems, where the tool
+from a :cppcode:`VUserMain` program. This may not always be possible for pre-existing modelling systems, where the tool
 being used is an executable in its own right, and custom models are added to this environment and are called from there.
 
 The supported GHDL simulator has a documented feature whereby the simulator can be called from an external program via
@@ -1995,22 +1994,22 @@ single static library, along with the relevant objects from GHDL for the normal 
 :file:`<root to GHDL libs>/std/08/*.o`) to be used in compiling with the main code.
 
 The OSVVM co-simulation code itself must be compiled slightly differently so that it does not attempt to start the
-threads containing the :vhdlcode:`VUserMain`\ *x* code. This is done by compiling with ``-DDISABLE_VUSERMAIN_THREAD`` in
+threads containing the :cppcode:`VUserMain`\ *x* code. This is done by compiling with ``-DDISABLE_VUSERMAIN_THREAD`` in
 the gcc/g++ flags. This will still create the usual :file:`VProc.so` and :file:`VUser.so` shared object files. It also
-prevents the user code from setting the :vhdlcode:`done` argument to :vhdlcode:`true` in any call to the
-:vhdlcode:`tick` method. A call to this method with :vhdlcode:`done` set to :vhdlcode:`true` will block forever as it
-will terminate the simulation. The co-simulation software expects a response for each API call from the simulator that
-is no longer forthcoming, as the simulation has terminated. When the code is run as a thread from the simulator, this is
-not an issue, as the simulator terminating is the end of the simulation and the program exits. When called from an
-external program, it must not hang on this call, and external means are required to call the :vhdlcode:`tick` method
-with :vhdlcode:`done` set to :vhdlcode:`true` (in code which hasn't been compiled with ``-DDISABLE_VUSERMAIN_THREAD``).
+prevents the user code from setting the :cppcode:`done` argument to :cppcode:`true` in any call to the :cppcode:`tick`
+method. A call to this method with :cppcode:`done` set to :cppcode:`true` will block forever as it will terminate the
+simulation. The co-simulation software expects a response for each API call from the simulator that is no longer
+forthcoming, as the simulation has terminated. When the code is run as a thread from the simulator, this is not an
+issue, as the simulator terminating is the end of the simulation and the program exits. When called from an external
+program, it must not hang on this call, and external means are required to call the :cppcode:`tick` method with
+:cppcode:`done` set to :cppcode:`true` (in code which hasn't been compiled with ``-DDISABLE_VUSERMAIN_THREAD``).
 
 The two co-simulation shared objects, along with the new static library of component object files and the elaboration
 object can now be compiled with the user's main program to replace the original executable with one that now has user
 code that can call the GHDL simulator and use the co-simulation API directly. However, the simulator must be started
-first via the call to :vhdlcode:`ghdl_main`. This is a blocking call and won't exit until the simulation has finished.
+first via the call to :ccode:`ghdl_main`. This is a blocking call and won't exit until the simulation has finished.
 Therefore this must be run in a separate thread. Once started, and the simulation has initialised the co-simulation
-code, the user code can then make calls to the co-simulation API, via an :vhdlcode:`OSvvmCosimClass`. The diagram below
+code, the user code can then make calls to the co-simulation API, via an :cppcode:`OSvvmCosimClass`. The diagram below
 summarises this environment
 
 .. figure:: images/CoSimulation/Figure15.png
@@ -2020,13 +2019,13 @@ summarises this environment
    Figure 15: Callable GHDL test environment
 
 
-The user code must take care of initialising the simulator, running :vhdlcode:`ghdl_main` in a thread, and waiting for
-it to be ready for API accesses. When the simulation finishes, the simulation must be stopped with a call to the
-:vhdlcode:`tick` method with the :vhdlcode:`done` argument set to :vhdlcode:`true`. As mentioned above, such a call to
-this method will block forever, and so this needs to be called fro a separate thread. Whan called, the
-:vhdlcode:`ghdl_main` function will return and the thread it’s running in will terminate. The main program can wait on
-this thread in order to ensure the simulation has, in fact, finished, using a :vhdlcode:`pthread_join` call. The
-abbreviated code fragment below summarises the use of these features.
+The user code must take care of initialising the simulator, running :ccode:`ghdl_main` in a thread, and waiting for it
+to be ready for API accesses. When the simulation finishes, the simulation must be stopped with a call to the
+:cppcode:`tick` method with the :cppcode:`done` argument set to :cppcode:`true`. As mentioned above, such a call to this
+method will block forever, and so this needs to be called fro a separate thread. Whan called, the :ccode:`ghdl_main`
+function will return and the thread it’s running in will terminate. The main program can wait on this thread in order to
+ensure the simulation has, in fact, finished, using a :ccode:`pthread_join` call. The abbreviated code fragment below
+summarises the use of these features.
 
 .. code-block:: c++
 
@@ -2140,8 +2139,8 @@ from an external program.
 Summary of OsvvmCosim Transaction Methods
 =========================================
 
-The table below summarises the transaction methods of the :vhdlcode:`OsvvmCosim` class. All of these methods are
-inherited (and some overloaded) by the :vhdlcode:`OsvvmCosimInt` interrupt class.
+The table below summarises the transaction methods of the :cppcode:`OsvvmCosim` class. All of these methods are
+inherited (and some overloaded) by the :cppcode:`OsvvmCosimInt` interrupt class.
 
 .. list-table::
    :header-rows: 1
@@ -2149,77 +2148,77 @@ inherited (and some overloaded) by the :vhdlcode:`OsvvmCosimInt` interrupt class
 
    * - method
      - function
-   * - :vhdlcode:`transWrite`
+   * - :cppcode:`transWrite`
      - Blocking write byte, hword, word or dword
-   * - :vhdlcode:`transWriteAsync`
+   * - :cppcode:`transWriteAsync`
      - Non-blocking write byte, hword, word or dword
-   * - :vhdlcode:`transWriteAddressAsync`
+   * - :cppcode:`transWriteAddressAsync`
      - Non-blocking write address (split transaction)
-   * - :vhdlcode:`transWriteDataAsync`
+   * - :cppcode:`transWriteDataAsync`
      - Non-blocking write byte, hword, word or byte (split transaction)
-   * - :vhdlcode:`transWriteAndRead`
+   * - :cppcode:`transWriteAndRead`
      - Blocking write and read byte, hword, word or dword
-   * - :vhdlcode:`transWriteAndReadAsync`
+   * - :cppcode:`transWriteAndReadAsync`
      - Non-blocking write and read byte, hword, word or dword
-   * - :vhdlcode:`transBurstWrite`
+   * - :cppcode:`transBurstWrite`
      - Blocking burst write
-   * - :vhdlcode:`transBurstWriteAsync`
+   * - :cppcode:`transBurstWriteAsync`
      - Non-blocking burst write
-   * - :vhdlcode:`transBurstWriteIncrement`
+   * - :cppcode:`transBurstWriteIncrement`
      - Blocking burst write of incrmenting pattern
-   * - :vhdlcode:`transBurstWriteIncrementAsync`
+   * - :cppcode:`transBurstWriteIncrementAsync`
      - Non-blocking burst write of incrmenting pattern
-   * - :vhdlcode:`transBurstWriteRandom`
+   * - :cppcode:`transBurstWriteRandom`
      - Blocking burst write of incrmenting pattern
-   * - :vhdlcode:`transBurstWriteRandomAsync`
+   * - :cppcode:`transBurstWriteRandomAsync`
      - Non-blocking burst write of incrmenting pattern
-   * - :vhdlcode:`transRead`
+   * - :cppcode:`transRead`
      - Blocking read byte, hword, word or dword
-   * - :vhdlcode:`transReadAddressAsync`
+   * - :cppcode:`transReadAddressAsync`
      - Non-blocking read address (split transaction)
-   * - :vhdlcode:`transReadData`
+   * - :cppcode:`transReadData`
      - Blocking data only read of byte, hword, word or dword (split transaction)
-   * - :vhdlcode:`transTryReadData`
+   * - :cppcode:`transTryReadData`
      - Non-blocking data only read of byte, hword, word or dword (split transaction)
-   * - :vhdlcode:`transReadCheck`
+   * - :cppcode:`transReadCheck`
      - Blocking read and check of byte, hword, word or dword
-   * - :vhdlcode:`transReadDataCheck`
+   * - :cppcode:`transReadDataCheck`
      - Blocking data only read and check of byte, hword, word or dword (split transaction)
-   * - :vhdlcode:`transTryReadDataCheck`
+   * - :cppcode:`transTryReadDataCheck`
      - Non-blocking data only read and check of byte, hword, word or dword (split transaction)
-   * - :vhdlcode:`transBurstRead`
+   * - :cppcode:`transBurstRead`
      - Blocking burst read
-   * - :vhdlcode:`transBurstReadCheckData`
+   * - :cppcode:`transBurstReadCheckData`
      - Blocking burst read and check of data (split transaction)
-   * - :vhdlcode:`transBurstReadCheckIncrement`
+   * - :cppcode:`transBurstReadCheckIncrement`
      - Blocking burst read and check data incrementing pattern(split transaction)
-   * - :vhdlcode:`transBurstReadCheckRandom`
+   * - :cppcode:`transBurstReadCheckRandom`
      - Blocking burst read and check random pattern (split transaction)
-   * - :vhdlcode:`transBurstCheckData`
+   * - :cppcode:`transBurstCheckData`
      - Blocking check of received data
-   * - :vhdlcode:`transBurstCheckIncrement`
+   * - :cppcode:`transBurstCheckIncrement`
      - Blocking check of received incrementing pattern
-   * - :vhdlcode:`transBurstCheckRandom`
+   * - :cppcode:`transBurstCheckRandom`
      - Blocking check of received random pattern
-   * - :vhdlcode:`transPushData`
+   * - :cppcode:`transPushData`
      - Blocking push of data to fifo for transmission or check
-   * - :vhdlcode:`transPushIncrement`
+   * - :cppcode:`transPushIncrement`
      - Blocking push of incrementing pattern to fifo for transmission or check
-   * - :vhdlcode:`transPushRandom`
+   * - :cppcode:`transPushRandom`
      - Blocking push of random pattern to fifo for traansmission or check
-   * - :vhdlcode:`transPopData`
+   * - :cppcode:`transPopData`
      - Blocking pop of data from receive fifo
-   * - :vhdlcode:`transGetTransactionCount`
+   * - :cppcode:`transGetTransactionCount`
      - Get the number of interactions over the interface
-   * - :vhdlcode:`transGetWriteTransactionCount`
+   * - :cppcode:`transGetWriteTransactionCount`
      - Get the number of write transactions over the interface
-   * - :vhdlcode:`transGetReadTransactionCount`
+   * - :cppcode:`transGetReadTransactionCount`
      - Get the number of read transactions over the interface
-   * - :vhdlcode:`transWaitForTransaction`
+   * - :cppcode:`transWaitForTransaction`
      - Wait for a transaction
-   * - :vhdlcode:`transWaitForWriteTransaction`
+   * - :cppcode:`transWaitForWriteTransaction`
      - Wait for a write transaction
-   * - :vhdlcode:`transWaitForReadTransaction`
+   * - :cppcode:`transWaitForReadTransaction`
      - Wait for a read transaction
 
 .. _FRAMEWORK/CoSimulation/SummaryOfOsvvmCosimRespResponseMethods:
@@ -2227,7 +2226,7 @@ inherited (and some overloaded) by the :vhdlcode:`OsvvmCosimInt` interrupt class
 Summary of OsvvmCosimResp Response Methods
 ==========================================
 
-The table below summarises the response methods of the :vhdlcode:`OsvvmCosimResp` class.
+The table below summarises the response methods of the :cppcode:`OsvvmCosimResp` class.
 
 .. list-table::
    :header-rows: 1
@@ -2235,41 +2234,41 @@ The table below summarises the response methods of the :vhdlcode:`OsvvmCosimResp
 
    * - method
      - function
-   * - :vhdlcode:`respGetWrite`
+   * - :cppcode:`respGetWrite`
      - Get write transaction address and data
-   * - :vhdlcode:`respTryGetWrite`
+   * - :cppcode:`respTryGetWrite`
      - Get write transaction address and data or return false if none
-   * - :vhdlcode:`respGetWriteAddress`
+   * - :cppcode:`respGetWriteAddress`
      - Get write address
-   * - :vhdlcode:`respTryGetWriteAddress`
+   * - :cppcode:`respTryGetWriteAddress`
      - Get write address or return false if none
-   * - :vhdlcode:`respGetWriteData`
+   * - :cppcode:`respGetWriteData`
      - Get write data
-   * - :vhdlcode:`respTryGetWriteData`
+   * - :cppcode:`respTryGetWriteData`
      - Get write data or return false if none
-   * - :vhdlcode:`respSendRead`
+   * - :cppcode:`respSendRead`
      - Send read response for received transaction
-   * - :vhdlcode:`respTrySendRead`
+   * - :cppcode:`respTrySendRead`
      - Send read response for received transaction or return false if none
-   * - :vhdlcode:`respGetReadAddress`
+   * - :cppcode:`respGetReadAddress`
      - Get read address
-   * - :vhdlcode:`respTryGetReadAddress`
+   * - :cppcode:`respTryGetReadAddress`
      - Get read address or return false if none
-   * - :vhdlcode:`respSendReadData`
+   * - :cppcode:`respSendReadData`
      - Send response data for received transaction
-   * - :vhdlcode:`respSedReadDataAsync`
+   * - :cppcode:`respSedReadDataAsync`
      - Send response data for received transaction asynchronously
-   * - :vhdlcode:`respWaitForTransaction`
+   * - :cppcode:`respWaitForTransaction`
      - Wait for a transaction
-   * - :vhdlcode:`respWaitForWriteTransaction`
+   * - :cppcode:`respWaitForWriteTransaction`
      - Wait for a write transaction
-   * - :vhdlcode:`respWaitForReadTransaction`
+   * - :cppcode:`respWaitForReadTransaction`
      - Wait for a read transaction
-   * - :vhdlcode:`respGetTransactionCount`
+   * - :cppcode:`respGetTransactionCount`
      - Get the number of interactions over the interface
-   * - :vhdlcode:`respGetWriteTransactionCount`
+   * - :cppcode:`respGetWriteTransactionCount`
      - Get the number of write transactions over the interface
-   * - :vhdlcode:`respGetReadTransactionCount`
+   * - :cppcode:`respGetReadTransactionCount`
      - Get the number of read transactions over the interface
 
 .. _FRAMEWORK/CoSimulation/SummaryOfOsvvmCosimStreamTransactionMethods:
@@ -2277,7 +2276,7 @@ The table below summarises the response methods of the :vhdlcode:`OsvvmCosimResp
 Summary of OsvvmCosimStream Transaction Methods
 ===============================================
 
-The table below summarises the transaction methods of the :vhdlcode:`OsvvmCosimStream` class.
+The table below summarises the transaction methods of the :cppcode:`OsvvmCosimStream` class.
 
 .. list-table::
    :header-rows: 1
@@ -2285,63 +2284,63 @@ The table below summarises the transaction methods of the :vhdlcode:`OsvvmCosimS
 
    * - method
      - function
-   * - :vhdlcode:`streamSend`
+   * - :cppcode:`streamSend`
      - Blocking send of byte, hword, word or dword
-   * - :vhdlcode:`streamSendAsync`
+   * - :cppcode:`streamSendAsync`
      - Non-blocking send of byte, hword, word or dword
-   * - :vhdlcode:`streamBurstSend`
+   * - :cppcode:`streamBurstSend`
      - Blocking send of burst data
-   * - :vhdlcode:`streamBurstSendAsync`
+   * - :cppcode:`streamBurstSendAsync`
      - Non-blocking send of burst data
-   * - :vhdlcode:`streamBurstSendIncrement`
+   * - :cppcode:`streamBurstSendIncrement`
      - Blocking send of burst incrementing pattern
-   * - :vhdlcode:`steramBurstSendIncrementAsync`
+   * - :cppcode:`steramBurstSendIncrementAsync`
      - Non-blocking send of burst incrementing pattern
-   * - :vhdlcode:`streamBurstSendRandom`
+   * - :cppcode:`streamBurstSendRandom`
      - Blocking send of burst random pattern
-   * - :vhdlcode:`streamBurstSendRandomAsync`
+   * - :cppcode:`streamBurstSendRandomAsync`
      - Non-blocking send of burst random pattern
-   * - :vhdlcode:`streamGet`
+   * - :cppcode:`streamGet`
      - Blocking get of byte, hword, word or dword
-   * - :vhdlcode:`streamGetBurstGet`
+   * - :cppcode:`streamGetBurstGet`
      - Blocking get of burst data
-   * - :vhdlcode:`streamCheck`
+   * - :cppcode:`streamCheck`
      - Blocking get and check of byte, hword, word or dword
-   * - :vhdlcode:`streamBurstCheck`
+   * - :cppcode:`streamBurstCheck`
      - Blocking get and check of burst data
-   * - :vhdlcode:`streamBurstCheckIncrement`
+   * - :cppcode:`streamBurstCheckIncrement`
      - Blocking get and check of burst incrementing pattern
-   * - :vhdlcode:`streamBurstCheckRandom`
+   * - :cppcode:`streamBurstCheckRandom`
      - Blocking get and check of burst random pattern
-   * - :vhdlcode:`streamTryGet`
+   * - :cppcode:`streamTryGet`
      - Non-blocking get of byte, hword, word or dword
-   * - :vhdlcode:`streamTryCheck`
+   * - :cppcode:`streamTryCheck`
      - Non-blocking get and check of byte, hword, word or dword
-   * - :vhdlcode:`streamBurstTryGet`
+   * - :cppcode:`streamBurstTryGet`
      - Non-blocking get of burst data
-   * - :vhdlcode:`streamBurstTryCheck`
+   * - :cppcode:`streamBurstTryCheck`
      - Non-blocking get and check of burst data
-   * - :vhdlcode:`streamBurstTryIncrement`
+   * - :cppcode:`streamBurstTryIncrement`
      - Non-blocking get and check of burst incrementing pattern
-   * - :vhdlcode:`streamBurstTryRandom`
+   * - :cppcode:`streamBurstTryRandom`
      - Non-blocking get and check of burst random pattern
-   * - :vhdlcode:`streamBurstPushData`
+   * - :cppcode:`streamBurstPushData`
      - Push data to fifo for transmission
-   * - :vhdlcode:`streamBurstPushCheckData`
+   * - :cppcode:`streamBurstPushCheckData`
      - Push data to fifo for checking against received data
-   * - :vhdlcode:`streamBurstPushIncrement`
+   * - :cppcode:`streamBurstPushIncrement`
      - Push incrementing pattern to fifo for transmission
-   * - :vhdlcode:`streamBurstPushCheckIncrement`
+   * - :cppcode:`streamBurstPushCheckIncrement`
      - Push incrementing pattern to fifo for checking against received data
-   * - :vhdlcode:`streamBurstPushRandom`
+   * - :cppcode:`streamBurstPushRandom`
      - Push random pattern to fifo for transmission
-   * - :vhdlcode:`streamBurstPushCheckRandom`
+   * - :cppcode:`streamBurstPushCheckRandom`
      - Push random pattern to fifo for checking against received data
-   * - :vhdlcode:`streamGetRxTransactionCount`
+   * - :cppcode:`streamGetRxTransactionCount`
      - Get number of completed transactions for transmit interface
-   * - :vhdlcode:`streamGetTxTransactionCount`
+   * - :cppcode:`streamGetTxTransactionCount`
      - Get number of completed transactions for receive interface
-   * - :vhdlcode:`streamWaitForRxTransaction`
+   * - :cppcode:`streamWaitForRxTransaction`
      - Wait for a transaction completion on transmit interface
-   * - :vhdlcode:`streamWaitForTxTransaction`
+   * - :cppcode:`streamWaitForTxTransaction`
      - Wait for a transaction completion on receive interface
