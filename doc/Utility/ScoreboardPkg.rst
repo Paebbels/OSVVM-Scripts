@@ -186,10 +186,10 @@ package is:
    ) ;
 
 To use the scoreboard for your tests, you will need to create a package instance. The following example creates a
-scoreboard for integer. Note often you will need to reference the package that defines your types and functions that
-correspond to :vhdlcode:`ExpectedType`, :vhdlcode:`ActualType`, match, :vhdlcode:`expected_to_string`, and
-:vhdlcode:`actual_to_string`, however, here for integer all types and functions are available in package std.standard
-which is implicitly visible.
+scoreboard for :vhdlcode:`integer`. Note often you will need to reference the package that defines your types and
+functions that correspond to :vhdlcode:`ExpectedType`, :vhdlcode:`ActualType`, :vhdlcode:`match`,
+:vhdlcode:`expected_to_string`, and :vhdlcode:`actual_to_string`, however, here for :vhdlcode:`integer` all types and
+functions are available in package :vhdlcode:`std.standard` which is implicitly visible.
 
 .. code-block:: VHDL
 
@@ -209,9 +209,10 @@ which is implicitly visible.
 Predefined Instances of ScoreboardGenericPkg in OSVVM Library
 *************************************************************
 
-The OSVVM library defines scoreboard instances for integer (:vhdlcode:`ScoreBoardPkg_int`), :vhdlcode:`integer_vector`
-(:vhdlcode:`ScoreboardPkg_IntV`), :vhdlcode:`std_logic_vector` (:vhdlcode:`ScoreboardPkg_slv`), unsigned
-(:vhdlcode:`ScoreboardPkg_unsigned`), and signed (:vhdlcode:`ScoreboardPkg_signed`).
+The OSVVM library defines scoreboard instances for :vhdlcode:`integer` (:vhdlcode:`ScoreBoardPkg_int`),
+:vhdlcode:`integer_vector` (:vhdlcode:`ScoreboardPkg_IntV`), :vhdlcode:`std_logic_vector`
+(:vhdlcode:`ScoreboardPkg_slv`), :vhdlcode:`unsigned` (:vhdlcode:`ScoreboardPkg_unsigned`), and :vhdlcode:`signed`
+(:vhdlcode:`ScoreboardPkg_signed`).
 
 .. _UTILITY/ScoreboardPkg/MySimulatorDoesNotSupportPackageGenerics:
 
@@ -308,7 +309,7 @@ When :vhdlcode:`DISABLED`, an :vhdlcode:`AlertLogID` does not print in :vhdlcode
 to what is essential. When :vhdlcode:`ENABLED`, an :vhdlcode:`AlertLogID` prints in :vhdlcode:`ReportAlerts` and
 :vhdlcode:`WriteAlertYaml`.
 
-None of these settings impact printing in Alert or Log.
+None of these settings impact printing in :vhdlcode:`Alert` or :vhdlcode:`Log`.
 
 :vhdlcode:`DISABLED` is intended to be used for data structures that are not used for self-checking and may produce
 errors on parameter checks. These errors are not lost as they are still accumulated in the parent ID.
@@ -322,8 +323,9 @@ AlertLogPrintParentType
 
    type AlertLogPrintParentType is (PRINT_NAME, PRINT_NAME_AND_PARENT) ;
 
-When :vhdlcode:`PRINT_NAME`, Alert and Log print the name of the :vhdlcode:`AlertLogID`. When
-:vhdlcode:`PRINT_NAME_AND_PARENT`, Alert and Log print the parent ID name, the ID separator, and then the ID name.
+When :vhdlcode:`PRINT_NAME`, :vhdlcode:`Alert` and :vhdlcode:`Log` print the name of the :vhdlcode:`AlertLogID`. When
+:vhdlcode:`PRINT_NAME_AND_PARENT`, :vhdlcode:`Alert` and :vhdlcode:`Log` print the parent ID name, the ID separator, and
+then the ID name.
 
 .. _UTILITY/ScoreboardPkg/NameSearchType:
 
@@ -336,11 +338,11 @@ NameSearchType
        PRIVATE_NAME, NAME, NAME_AND_PARENT, NAME_AND_PARENT_ELSE_PRIVATE) ;
 
 When :vhdlcode:`NewID` is called, first a search of existing IDs is done. If there is a match, that ID is returned, if
-there is not, a new one is created. Matching is determined by the ID, :vhdlcode:`ParentID`, and Search parameters. If
-the Search parameter is :vhdlcode:`PRIVATE_NAME`, no searching is done and a new ID is created. If the Search parameter
-is :vhdlcode:`NAME`, then any ID whose name matches is returned. If the Search parameter is :vhdlcode:`NAME_AND_PARENT`,
-then any ID whose name and :vhdlcode:`ParentID` match or :vhdlcode:`NAME` and stored Search parameter is
-:vhdlcode:`NAME` is returned.
+there is not, a new one is created. Matching is determined by the ID, :vhdlcode:`ParentID`, and :vhdlcode:`Search`
+parameters. If the :vhdlcode:`Search` parameter is :vhdlcode:`PRIVATE_NAME`, no searching is done and a new ID is
+created. If the :vhdlcode:`Search` parameter is :vhdlcode:`NAME`, then any ID whose name matches is returned. If the
+:vhdlcode:`Search` parameter is :vhdlcode:`NAME_AND_PARENT`, then any ID whose name and :vhdlcode:`ParentID` match or
+:vhdlcode:`NAME` and stored :vhdlcode:`Search` parameter is :vhdlcode:`NAME` is returned.
 
 .. _UTILITY/ScoreboardPkg/Push:
 
@@ -540,8 +542,8 @@ tags must also match and only remove items that have a matching tag.
 Find
 ====
 
-Return the :vhdlcode:`ItemNumber` of the oldest expected value that matches the received value. Find + :vhdlcode:`Flush`
-support systems that drop items before they are synchronized.
+Return the :vhdlcode:`ItemNumber` of the oldest expected value that matches the received value. :vhdlcode:`Find` +
+:vhdlcode:`Flush` support systems that drop items before they are synchronized.
 
 .. code-block:: VHDL
 
@@ -563,8 +565,8 @@ support systems that drop items before they are synchronized.
 Flush
 =====
 
-Quietly drop all values whose item number is less than the specified item number. Find + :vhdlcode:`Flush` support
-systems that drop items before they are synchronized.
+Quietly drop all values whose item number is less than the specified item number. :vhdlcode:`Find` + :vhdlcode:`Flush`
+support systems that drop items before they are synchronized.
 
 .. code-block:: VHDL
 
@@ -593,12 +595,12 @@ WriteScoreboardYaml
 
    work.ScoreboardPkg_Uart.WriteScoreboardYaml(FileName => "Uart") ;
 
-Using the current defaults, the above call will create a file named, <:tclcode:`TestName`>\ :file:`_sb_Uart.yml` in the
+Using the current defaults, the above call will create a file named, :file:`<TestName>_sb_Uart.yml` in the
 directory :vhdlcode:`OSVVM_RAW_OUTPUT_DIRECTORY`. All except the name "Uart" in the name are required so that OSVVM
 scripts can find the file and convert it to an HTML table in the test case report.
 
 :vhdlcode:`WriteScoreboardYaml` is called by :vhdlcode:`EndOfTestReports` for OSVVM defined scoreboard instances (see
-Predefined Instances of :vhdlcode:`ScoreboardGenericPkg` in OSVVM Library).
+Predefined Instances of ScoreboardGenericPkg in OSVVM Library).
 
 .
 
@@ -728,15 +730,15 @@ specified as the first value in the calls to push, check, and pop, such as shown
 
    if Empty(SB, "MyTag")  then   …
 
-For Check (and :vhdlcode:`Pop`), the item checked (or returned) is the oldest item with the matching tag.
+For :vhdlcode:`Check` (and :vhdlcode:`Pop`), the item checked (or returned) is the oldest item with the matching tag.
 
 .. code-block:: VHDL
 
    ItemNum := Find(SB, "ReadOp", ReceiveVal);
    Flush(SB, "ReadOp", ItemNum) ;
 
-For :vhdlcode:`Flush`, only items matching the tag are removed. In some systems, it may be appropriate to do the Find
-with the tag and the flush without the tag.
+For :vhdlcode:`Flush`, only items matching the tag are removed. In some systems, it may be appropriate to do the
+:vhdlcode:`Find` with the tag and the flush without the tag.
 
 .. _UTILITY/ScoreboardPkg/IndexedScoreboards:
 
@@ -939,7 +941,7 @@ One big benefit of this is that :vhdlcode:`NewID` is called during elaboration o
 API subprogram can run.
 
 While the tools we test with allow this, unfortunately the language does not. We plan to address this in the next
-revision of the language. See: https://gitlab.com/IEEE- P1076/VHDL-Issues/-/issues/75
+revision of the language. See: https://gitlab.com/IEEE-P1076/VHDL-Issues/-/issues/75
 
 .. _UTILITY/ScoreboardPkg/WhatAboutTheOlderRevisionsOfScoreboardGenericPkg:
 
@@ -948,7 +950,7 @@ What about the older revisions of ScoreboardGenericPkg?
 
 Versions of :vhdlcode:`ScoreboardGenericPkg` before 2021.06 were solely protected type based. That use model is still
 supported, however, it is deprecated and not talked about here. If you need the documentation for it, see the
-subdirectory :vhdlcode:`ProtectedTypes_the_old_way` in the Documentation repository.
+subdirectory :file:`ProtectedTypes_the_old_way` in the Documentation repository.
 
 .. _UTILITY/ScoreboardPkg/CompilingAndUsingOSVVMUtilityLibrary:
 
