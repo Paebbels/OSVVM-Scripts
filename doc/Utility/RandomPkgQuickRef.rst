@@ -213,14 +213,14 @@ values. Set it with :vhdlcode:`SetRandomSalt`
 Other Distributions
 *******************
 
-See RandomPkg Users Guide for details.
+See :ref:`RandomPkg Users Guide <UTILITY/RandomPkg>` for details.
 
 .. _UTILITY/RandomPkgQuickRef/RandomizeVectorsOfIntegerRealTime:
 
 Randomize vectors of Integer, Real, Time
 ****************************************
 
-See RandomPkg Users Guide for details.
+See :ref:`RandomPkg Users Guide <UTILITY/RandomPkg>` for details.
 
 .. _UTILITY/RandomPkgQuickRef/Packages:
 
