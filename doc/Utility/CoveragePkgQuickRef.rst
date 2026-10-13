@@ -425,11 +425,11 @@ Test Case Detailed Reports
 **************************
 
 Call :vhdlcode:`EndOfTestReports` (see :vhdlcode:`AlertLogPkg`) at the end of a test to get a report for each coverage
-model in the test case in Reports/<:tclcode:`TestName`>.html.
+model in the test case in :file:`Reports/<TestName>.html`.
 
 .. _UTILITY/CoveragePkgQuickRef/MoreDetailedInformation:
 
 More Detailed Information
 *************************
 
-See: :osvvmdoc:`CoveragePkg_Users_Guide.pdf <CoveragePkg_Users_Guide>`.
+See: :osvvmdoc:`CoveragePkg_Users_Guide.pdf <CoveragePkg_user_guide>`.
