@@ -166,7 +166,7 @@ Internally :vhdlcode:`WaitForToggle` abstracts a call to "wait on".
 Toggle
 ======
 
-Toggle causes a signal to change either after a delta cycle or a specified amount of time.
+:vhdlcode:`Toggle` causes a signal to change either after a delta cycle or a specified amount of time.
 
 .. code-block:: VHDL
 
@@ -175,7 +175,7 @@ Toggle causes a signal to change either after a delta cycle or a specified amoun
    procedure Toggle(signal Sig : InOut bit ; constant DelayVal : delay_length) ;
    procedure Toggle(signal Sig : InOut bit ) ;
 
-Internally Toggle abstracts an assignment to :vhdlcode:`Sig`.
+Internally :vhdlcode:`Toggle` abstracts an assignment to :vhdlcode:`Sig`.
 
 .. _UTILITY/TbUtilPkg/Increment:
 
@@ -359,8 +359,8 @@ Finding Clock Changing
 **********************
 
 :vhdlcode:`EdgeRose` checks if the signal rose during this time step. :vhdlcode:`EdgeFell` checks if the signal fell
-during this time step. :vhdlcode:`EdgeActive` checks if the signal changed to the value specified by A in this time
-step.
+during this time step. :vhdlcode:`EdgeActive` checks if the signal changed to the value specified by :vhdlcode:`A` in
+this time step.
 
 .. code-block:: VHDL
 
@@ -371,7 +371,7 @@ step.
    alias changing_edge is ChangingEdge [std_logic, std_logic return boolean] ;
 
 :vhdlcode:`EdgeRose` is similar to :vhdlcode:`rising_edge` except :vhdlcode:`EdgeRose` checks if clock changed on a time
-step (by checking C':vhdlcode:`last_event`\ =0 sec), where as, :vhdlcode:`rising_edge` checks if a clock changed during
+step (by checking :vhdlcode:`C'last_event=0 sec`), where as, :vhdlcode:`rising_edge` checks if a clock changed during
 this delta cycle (by checking :vhdlcode:`C'event`). :vhdlcode:`EdgeRose` does the following check.
 
 .. code-block:: VHDL
