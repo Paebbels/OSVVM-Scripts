@@ -12,8 +12,9 @@ The Address Bus Model Independent Transaction package (:file:`AddressBusTransact
 interface (a record for communication between the test sequencer and the verification component) and transaction
 initiation procedures that are suitable for Address Bus Interfaces.
 
-Be sure to read the OSVVM's Structured Testbench Framework Guide first. This guide provides background on the overall
-structure of OSVVM's testbench and how the pieces of the Model Independent Transactions fit within the overall approach.
+Be sure to read the :ref:`OSVVM's Structured Testbench Framework Guide <FRAMEWORK/StructuredTestbench>` first. This
+guide provides background on the overall structure of OSVVM's testbench and how the pieces of the Model Independent
+Transactions fit within the overall approach.
 
 All verification components (VCs) that use this interface, support a common set of transactions (or API). Hence, a test
 writer who understands the transactions for one verification component will also understand the transactions of another
@@ -140,12 +141,12 @@ simplify development and deployment of the libraries.
 
    git clone --recursive https://github.com/OSVVM/OsvvmLibraries.git
 
-Prior to starting the OSVVM scripting environment, create a directory named sim in which to run your simulations. Start
-your simulator and go to the sim directory. Once there, use the steps in :ref:`Figure 2 <MIT/AddressBus/Figure2>` to
-build the OSVVM Libraries (utility and verification component). These directions are supported in Mentor
-QuestaSim/ModelSim or Aldec RivieraPRO. Aldec's ActiveHDL, Synopsys' VCS, and Cadence's Xcelium are also supported but
-require a few extra steps. For these steps and additional details of the OSVVM scripting environment see
-:osvvmdoc:`Script_user_guide.pdf <Script_user_guide>` (in :file:`OsvvmLibraries/Documentation`).
+Prior to starting the OSVVM scripting environment, create a directory named :file:`sim` in which to run your
+simulations. Start your simulator and go to the :file:`sim` directory. Once there, use the steps in
+:ref:`Figure 2 <MIT/AddressBus/Figure2>` to build the OSVVM Libraries (utility and verification component). These
+directions are supported in Mentor QuestaSim/ModelSim or Aldec RivieraPRO. Aldec's ActiveHDL, Synopsys' VCS, and
+Cadence's Xcelium are also supported but require a few extra steps. For these steps and additional details of the OSVVM
+scripting environment see :ref:`Script_user_guide.pdf <UG>` (in :file:`OsvvmLibraries/Documentation`).
 
 .. code-block:: tcl
    :caption: Figure 2. Building OSVVM and running the Demo
@@ -159,7 +160,7 @@ require a few extra steps. For these steps and additional details of the OSVVM s
 The intent of the OSVVM scripting is to make compiling and running your simulations independent of the simulator you are
 using.
 
-GHDL can be run using tclsh. In windows, using MSYS2/MinGW64 start tclsh using "winpty tclsh".
+GHDL can be run using :program:`tclsh`. In windows, using MSYS2/MinGW64 start :program:`tclsh` using ``winpty tclsh``.
 
 .. _MIT/AddressBus/TypesOfTransactions:
 
@@ -172,7 +173,8 @@ Directive transactions interact with the verification component without generati
 waveforms. Examples of these are :vhdlcode:`WaitForClock` and :vhdlcode:`GetAlertLogID`.
 
 An interface transaction results in interface signaling to the DUT. An interface transaction may be either blocking
-(such as Write or Read) or non-blocking (such as :vhdlcode:`WriteAsync` and :vhdlcode:`TryReadData`).
+(such as :vhdlcode:`Write` or :vhdlcode:`Read`) or non-blocking (such as :vhdlcode:`WriteAsync` and
+:vhdlcode:`TryReadData`).
 
 A blocking transaction is an interface transaction that does not does not return (complete) until the interface
 operation requested by the transaction has completed.
@@ -320,7 +322,7 @@ DPRAM.
 Examples
 --------
 
-The following code does 16 Write operations followed by 16 Read operations.
+The following code does 16 :vhdlcode:`Write` operations followed by 16 :vhdlcode:`Read` operations.
 
 .. code-block:: VHDL
 
@@ -337,7 +339,7 @@ The following code does 16 Write operations followed by 16 Read operations.
        AffirmIfEqual(RxData, X"0000_0000" + I, "Read Data " ) ;
      end loop ;
 
-The following code does 16 Write operations followed by 16 :vhdlcode:`ReadCheck` operations.
+The following code does 16 :vhdlcode:`Write` operations followed by 16 :vhdlcode:`ReadCheck` operations.
 
 .. code-block:: VHDL
 
@@ -1127,8 +1129,8 @@ respond an address bus cycle. These verification components primarily implement 
 result, they do not support bursting.
 
 OSVVM supports bursting in memory-based verification components. These verification components allow a manager to
-interact with the memory using either single word or burst cycles. The :vhdlcode:`Axi4Memory` VC described in the AXI4
-VC User Guide is an example of this.
+interact with the memory using either single word or burst cycles. The :vhdlcode:`Axi4Memory` VC described in the
+:ref:`AXI4 VC User Guide <VC/Axi4>` is an example of this.
 
 .. _MIT/AddressBus/InterfaceIndependentTransactions:
 
