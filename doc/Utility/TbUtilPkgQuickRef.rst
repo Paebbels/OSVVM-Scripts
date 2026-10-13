@@ -75,14 +75,14 @@ Model side control to wait for client side (:vhdlcode:`TestCtrl`) to request a t
 Process to Process Synchronization
 **********************************
 
-One process toggles a signal using the toggle procedure, the other process waits until the signal changes.
+One process toggles a signal using the :vhdlcode:`toggle` procedure, the other process waits until the signal changes.
 
 .. _UTILITY/TbUtilPkgQuickRef/Toggle:
 
 Toggle
 ======
 
-Toggle a signal between 0 and 1. Signal type dcan be either bit or :vhdlcode:`std_ulogic`.
+Toggle a signal between 0 and 1. Signal type dcan be either :vhdlcode:`bit` or :vhdlcode:`std_ulogic`.
 
 .. code-block:: VHDL
 
@@ -94,7 +94,7 @@ Toggle a signal between 0 and 1. Signal type dcan be either bit or :vhdlcode:`st
 WaitForToggle
 =============
 
-Wait until a signal changes. Signal type can be either bit or :vhdlcode:`std_ulogic`.
+Wait until a signal changes. Signal type can be either :vhdlcode:`bit` or :vhdlcode:`std_ulogic`.
 
 .. code-block:: VHDL
 
