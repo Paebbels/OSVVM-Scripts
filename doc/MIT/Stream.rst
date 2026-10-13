@@ -83,7 +83,8 @@ multiple drivers on each record element. OSVVM does this giving each element a r
 :vhdlcode:`boolean_max`. These are defined in the OSVVM package :vhdlcode:`ResolutionPkg`. These types allow the record
 to support multiple drivers and use resolution functions based on function maximum (return largest value).
 
-The type :vhdlcode:`StreamOperationType` is discussed in VC section of this document.
+The type :vhdlcode:`StreamOperationType` is discussed in
+:ref:`VC section <MIT/Stream/VerificationComponentsAndStreamModelIndependentTransactions>` of this document.
 
 .. _MIT/Stream/BurstFifoIsInTheInterface:
 
@@ -1677,21 +1678,20 @@ interface to check if a burst is available when handling :vhdlcode:`TryCheckBurs
 
 .. code-block:: VHDL
 
-     ------------------------------------------------------------
-     procedure GotBurst (
-     ------------------------------------------------------------
-       signal    TransactionRec   : inout StreamRecType ;
-       constant  NumFifoWords     : in    integer ;
-       variable  Available        : out   boolean
-     ) is
-     begin
-       TransactionRec.Operation   <= GOT_BURST ;
-       -- NumFifoWords not used in all implementations - needed when interface has no
-   burst capability
-       TransactionRec.IntToModel  <= NumFifoWords ;
-       RequestTransaction(Rdy => TransactionRec.Rdy, Ack => TransactionRec.Ack) ;
-       Available := TransactionRec.BoolFromModel ;
-     end procedure GotBurst ;
+   ------------------------------------------------------------
+   procedure GotBurst (
+   ------------------------------------------------------------
+     signal    TransactionRec   : inout StreamRecType ;
+     constant  NumFifoWords     : in    integer ;
+     variable  Available        : out   boolean
+   ) is
+   begin
+     TransactionRec.Operation   <= GOT_BURST ;
+     -- NumFifoWords not used in all implementations - needed when interface has no burst capability
+     TransactionRec.IntToModel  <= NumFifoWords ;
+     RequestTransaction(Rdy => TransactionRec.Rdy, Ack => TransactionRec.Ack) ;
+     Available := TransactionRec.BoolFromModel ;
+   end procedure GotBurst ;
 
 .. _MIT/Stream/DirectiveTransactions:
 
@@ -1899,7 +1899,8 @@ StreamOperationType
 
 :vhdlcode:`StreamOperationType` is an enumerated type that indicates to the verification component type of transaction
 that is being dispatched. Being an enumerated type, it allows the determination of the operation in the simulator’s
-waveform window. Table 4 shows the correlation between :vhdlcode:`StreamOperationType` values and the transaction name.
+waveform window. :ref:`Table 4 <MIT/Stream/Figure4>` shows the correlation between :vhdlcode:`StreamOperationType`
+values and the transaction name.
 
 .. list-table:: Figure 4. Correlation between StreamOperationType and the transaction name
    :header-rows: 1
@@ -1907,8 +1908,8 @@ waveform window. Table 4 shows the correlation between :vhdlcode:`StreamOperatio
    :widths: 276 221 221
 
    * - :vhdlcode:`AddressBusOperationType` Value
-     - Transmitter Transaction Name Receiver Transaction Name
-     -
+     - Transmitter Transaction Name
+     - Receiver Transaction Name
    * - :vhdlcode:`WAIT_FOR_CLOCK`
      - :vhdlcode:`WaitForClock`
      - :vhdlcode:`WaitForClock`
