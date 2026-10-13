@@ -345,10 +345,11 @@ package :vhdlcode:`ResolutionPkg`. We call such a record an OSVVM interface. An 
      . . .
    end record AddressBusRecType ;
 
-Types in :vhdlcode:`ResolutionPkg` use "maximum" as a resolution function and add the suffix "\_max" or "\_\
-:vhdlcode:`max_c`" to the type names. Maximum resolution picks the largest value driven on each element of signal object
-that has multiple drivers. The largest value is the right most value of a type (‘‐‘ for :vhdlcode:`std_ulogic`). This
-works in conjunction with the left most value being the smallest and the default value for an object of that type.
+Types in :vhdlcode:`ResolutionPkg` use "maximum" as a resolution function and add the suffix ":vhdlcode:`_max`" or
+":vhdlcode:`_max_c`" to the type names. Maximum resolution picks the largest value driven on each element of signal
+object that has multiple drivers. The largest value is the right most value of a type (‘‐‘ for
+:vhdlcode:`std_ulogic`). This works in conjunction with the left most value being the smallest and the default value for
+an object of that type.
 
 :vhdlcode:`ResolutionPkg` provides the following (as subtypes): :vhdlcode:`std_logic_max`,
 :vhdlcode:`std_logic_vector_max`, :vhdlcode:`unsigned_max`, :vhdlcode:`signed_max`, :vhdlcode:`bit_max`,
