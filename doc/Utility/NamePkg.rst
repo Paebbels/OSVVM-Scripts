@@ -32,7 +32,7 @@ NamePType
 Set
 ***
 
-The procedure set sets a name inside of the protected type. If name already exists, first deallocate it.
+The procedure :vhdlcode:`set` sets a name inside of the protected type. If name already exists, first deallocate it.
 
 .. code-block:: VHDL
 
@@ -43,7 +43,7 @@ The procedure set sets a name inside of the protected type. If name already exis
 Get
 ***
 
-The function get returns the name that is held inside of the protected type.
+The function :vhdlcode:`get` returns the name that is held inside of the protected type.
 
 .. code-block:: VHDL
 
@@ -65,7 +65,8 @@ The function :vhdlcode:`IsSet` returns TRUE if a name is held inside of the prot
 Clear / Deallocate
 ******************
 
-The procedure Clear (and also Deallocate) deallocates the value set inside of the protected type.
+The procedure :vhdlcode:`Clear` (and also :vhdlcode:`Deallocate`) deallocates the value set inside of the protected
+type.
 
 .. code-block:: VHDL
 
@@ -76,7 +77,7 @@ The procedure Clear (and also Deallocate) deallocates the value set inside of th
 Compiling NamePkg and Friends
 *****************************
 
-See :osvvmdoc:`OSVVM_release_notes.pdf <OSVVM_release_notes>` for the current compilation directions. Rather than
+See :osvvmdoc:`OSVVM_release_notes.pdf <osvvm_release_notes>` for the current compilation directions. Rather than
 referencing individual packages, we recommend using the context declaration:
 
 .. code-block:: VHDL
