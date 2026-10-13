@@ -9,7 +9,7 @@ Overview
 ********
 
 All OSVVM printing uses the transcript capability. If the :vhdlcode:`TranscriptFile` is open, all OSVVM printing will go
-to it. If the :vhdlcode:`TranscriptFile` is not open all OSVVM printing will go OUTPUT (stdout). If the
+to it. If the :vhdlcode:`TranscriptFile` is not open all OSVVM printing will go to OUTPUT (stdout). If the
 :vhdlcode:`TranscriptFile` is open and transcript mirroring is enabled, printing will go to both the
 :vhdlcode:`TranscriptFile` and to OUTPUT.
 
@@ -28,10 +28,8 @@ Generate reports (using :vhdlcode:`EndOfTestReports`). Stop the test case (using
      ControlProc : process
      begin
        SetTestName("Tb_SendGet_1") ;
-       TranscriptOpen ;           --
-   Print to Tb_SendGet_1.log
-       SetTranscriptMirror ;      -- Also
-   print to OUTPUT
+       TranscriptOpen ;           -- Print to Tb_SendGet_1.log
+       SetTranscriptMirror ;      -- Also print to OUTPUT
        PrintLine("Print 1") ;
        swrite(buf, "Write 1") ;
        writeline(buf) ;
@@ -46,9 +44,9 @@ Generate reports (using :vhdlcode:`EndOfTestReports`). Stop the test case (using
 TranscriptOpen & TranscriptClose
 ********************************
 
-:vhdlcode:`TranscriptOpen` opens the :vhdlcode:`TranscriptFile`. There are a number of variations (overloaded version)
-of :vhdlcode:`TranscriptOpenWhen`, however, the simplest is the following. It opens a file named
-:file:`TestCaseName.log`, where :vhdlcode:`TestCaseName` is the name used in :vhdlcode:`SetTestName`.
+:vhdlcode:`TranscriptOpen` opens the :vhdlcode:`TranscriptFile`. There are a number of variations (overloaded versions)
+of :vhdlcode:`TranscriptOpen`, however, the simplest is the following. It opens a file named :file:`TestCaseName.log`,
+where :vhdlcode:`TestCaseName` is the name used in :vhdlcode:`SetTestName`.
 
 .. code-block:: VHDL
 
@@ -115,7 +113,7 @@ Blank
 
    procedure Blank(count : natural := 1);
    . . .
-   BlankLine(5) ; -- prints 5 blank lines
+   Blank(5) ; -- prints 5 blank lines
 
 .. _UTILITY/TranscriptPkgQuickRef/PrintingWithPrefix:
 
@@ -129,9 +127,9 @@ The following print operations prefix the printed lines with :vhdlcode:`OSVVM_PR
 PrintLine
 =========
 
-:vhdlcode:`Print` prints the string using the transcript capability. Like :vhdlcode:`Log`, :vhdlcode:`print` allows
-message filtering using :vhdlcode:`Level` and :vhdlcode:`AlertLogID`. Unlike :vhdlcode:`Log`, :vhdlcode:`PrintLine` does
-not print the time, "log", or the Log level.
+:vhdlcode:`PrintLine` prints the string using the transcript capability. Like :vhdlcode:`Log`, :vhdlcode:`PrintLine`
+allows message filtering using :vhdlcode:`Level` and :vhdlcode:`AlertLogID`. Unlike :vhdlcode:`Log`,
+:vhdlcode:`PrintLine` does not print the time, "log", or the Log level.
 
 .. code-block:: VHDL
 
@@ -147,7 +145,7 @@ not print the time, "log", or the Log level.
 PrintHeader
 ===========
 
-:vhdlcode:`Print` prints the string plus prefix and suffix lines to frame the message and make it stand out. Each
+:vhdlcode:`PrintHeader` prints the string plus prefix and suffix lines to frame the message and make it stand out. Each
 character in the prefix and suffix indicates a line to print. If the character is a space, then print a blank line,
 otherwise, repeat that character :vhdlcode:`OSVVM_LINE_LENGTH` times. Like :vhdlcode:`Log`, :vhdlcode:`PrintHeader`
 supports message filtering using :vhdlcode:`Level` and :vhdlcode:`AlertLogID`.
@@ -179,7 +177,7 @@ There is also a short form that uses :vhdlcode:`OSVVM_HEADER_PREFIX` (default " 
 HeaderLine
 ==========
 
-:vhdlcode:`HeaderLIne` prints a string of characters that indicate a line to print. Each line printed is prefixed by
+:vhdlcode:`HeaderLine` prints a string of characters that indicate a line to print. Each line printed is prefixed by
 :vhdlcode:`OSVVM_PRINT_PREFIX`. If the character is a space, then print a blank line, otherwise, repeat that character
 :vhdlcode:`OSVVM_LINE_LENGTH` times. In addition, like :vhdlcode:`Log`, :vhdlcode:`HeaderLine` supports message
 filtering using :vhdlcode:`Level` and :vhdlcode:`AlertLogID`.
