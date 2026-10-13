@@ -334,9 +334,10 @@ Using these settings, transfer 256 words individually and 256 words in 32 bursts
 Part 4: Swap in the Delay Model from Part 2
 ===========================================
 
-The Delay Coverage from part 2 is still in the variable :vhdlcode:`DelayCoverageID`. Copy the :vhdlcode:`CoverageIDs` in
-:vhdlcode:`DelayCoverageID` to the :vhdlcode:`DelayCoveragePkg` singleton. This will use a constant burst length of 4, a
-burst delay of 4, and a beat delay of 1.
+The Delay Coverage from :ref:`part 2 <UTILITY/DelayCoveragePkg/Part2ReplaceTheOldDelayCoverageWithNewDelayCoverage>` is
+still in the variable :vhdlcode:`DelayCoverageID`. Copy the :vhdlcode:`CoverageIDs` in :vhdlcode:`DelayCoverageID` to
+the :vhdlcode:`DelayCoveragePkg` singleton. This will use a constant burst length of 4, a burst delay of 4, and a beat
+delay of 1.
 
 .. code-block:: VHDL
 
@@ -386,8 +387,8 @@ and 5. A VC or test case can set the first value to be a particular using :vhdlc
 Running TbStream_SendGetRandom1.vhd
 ***********************************
 
-Build the OsvvmLibraries per the directions in the Script User Guide. Change :file:`RunDemoTests.pro` that is in the
-directory :file:`OsvvmLibraries/AXI4/AxStream` so that it reads as follows:
+Build the OsvvmLibraries per the directions in the :ref:`Script User Guide <UG>`. Change :file:`RunDemoTests.pro` that
+is in the directory :file:`OsvvmLibraries/AXI4/AxStream` so that it reads as follows:
 
 .. code-block:: tcl
 
@@ -417,7 +418,7 @@ Reference all packages in the OSVVM Utility library by using the context declara
    library OSVVM ;
      context osvvm.OsvvmContext ;
 
-Compilation order for OSVVM Utility Library is in :osvvmdoc:`OSVVM_release_notes.pdf <OSVVM_release_notes>`. Rather than
+Compilation order for OSVVM Utility Library is in :osvvmdoc:`OSVVM_release_notes.pdf <osvvm_release_notes>`. Rather than
 learning this, we recommend using the OSVVM compilation scripts.
 
 OSVVM Utility library is released under the Apache open source license. It is free (both to download and use - there are
