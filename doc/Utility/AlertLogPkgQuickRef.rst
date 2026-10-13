@@ -123,7 +123,7 @@ Write out text report and YAML based alert reports.
 
    EndOfTestReports ;
 
-See :osvvmdoc:`AlertLog_user_guide.pdf <AlertLogPkg_user_guide>` for additional parameters.
+See :ref:`UTILITY/AlertLogPkg` for additional parameters.
 
 .. _UTILITY/AlertLogPkgQuickRef/HierarchyMode:
 
@@ -266,8 +266,8 @@ Reset alert counts to 0. Used in an environment where a VC is erroneously signal
 Options for Reports
 *******************
 
-Options for :vhdlcode:`AlertLogPkg` are determined by deferred constants in :vhdlcode:`OsvvmSettingsPkg`. See OSVVM
-Settings User Guide for details. The defaults are intended to help you get started.
+Options for :vhdlcode:`AlertLogPkg` are determined by deferred constants in :vhdlcode:`OsvvmSettingsPkg`. See
+:ref:`OSVVM Settings User Guide <UTILITY/OsvvmSettings>` for details. The defaults are intended to help you get started.
 
 .. _UTILITY/AlertLogPkgQuickRef/ControllingIDsFromOtherLocations:
 
