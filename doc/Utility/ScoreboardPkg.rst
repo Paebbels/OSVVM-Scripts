@@ -110,7 +110,7 @@ Putting the basic pieces together
 =================================
 
 The following is a basic use model of the scoreboard. For more information on how OSVVM structures test cases and test
-processes, see the :osvvmdoc:`OSVVM_test_writers_user_guide.pdf <OSVVM_test_writers_user_guide>`.
+processes, see the :ref:`FRAMEWORK/TestWriters`.
 
 .. code-block:: VHDL
 
@@ -222,7 +222,8 @@ My Simulator Does Not Support Package Generics
 All the simulators we test with support package generics. However, we still have you covered. Copy
 :file:`ScoreboardGenericPkg.vhd` to :file:`ScoreboardPkg_integer_c.vhd`. Comment out the generics. Uncomment the subtype
 and alias declarations that correspond to the generics (they have the same name). Configure these aliases exactly as
-described in the section titled "Using Scoreboard Package Generics".
+described in the section titled
+":ref:`Using Scoreboard Package Generics <UTILITY/ScoreboardPkg/UsingScoreboardGenericPkgPackageGenerics>`".
 
 The top of your resulting package should look as follows:
 
@@ -615,11 +616,10 @@ The declaration for :vhdlcode:`WriteScoreboardYaml` is:
    ) ;
 
 The value for :vhdlcode:`SCOREBOARD_YAML_IS_BASE_FILE_NAME` is set by package :file:`OsvvmSettingsPkg_default.vhd` to
-:vhdlcode:`TRUE` for releases 2024.03 and beyond.
+TRUE for releases 2024.03 and beyond.
 
-Setting :vhdlcode:`FileNameIsBaseName` to :vhdlcode:`FALSE` supports the older methodology where the whole file name is
-required to be specified. The newer short form is recommended. The older format is only supported for backward
-compatibility.
+Setting :vhdlcode:`FileNameIsBaseName` to FALSE supports the older methodology where the whole file name is required to
+be specified. The newer short form is recommended. The older format is only supported for backward compatibility.
 
 .. _UTILITY/ScoreboardPkg/GetPushCount:
 
@@ -861,8 +861,8 @@ Deprecated NewID
 
 First, if you were not using the :vhdlcode:`DoNotReport` parameter, there is no difference in calling the deprecated
 :vhdlcode:`NewID` functions and the new functions. The deprecated functions call the new :vhdlcode:`NewID` with
-:vhdlcode:`ReportMode` set to :vhdlcode:`ENABLED` if :vhdlcode:`DoNotReport` is :vhdlcode:`FALSE` and
-:vhdlcode:`DISABLED` otherwise.
+:vhdlcode:`ReportMode` set to :vhdlcode:`ENABLED` if :vhdlcode:`DoNotReport` is FALSE and :vhdlcode:`DISABLED`
+otherwise.
 
 .. _UTILITY/ScoreboardPkg/DeprecatedNewIDForScoreboardIdType:
 
