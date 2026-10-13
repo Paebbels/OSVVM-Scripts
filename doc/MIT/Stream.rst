@@ -12,8 +12,9 @@ The Stream Model Independent Transaction package (:file:`StreamTransactionPkg.vh
 record for communication between the test sequencer and the verification component) and transaction initiation
 procedures that are suitable for Stream Interfaces.
 
-Be sure to read the OSVVM's Structured Testbench Framework Guide first. This guide provides background on the overall
-structure of OSVVM's testbench and how the pieces of the Model Independent Transactions fit within the overall approach.
+Be sure to read the :ref:`OSVVM's Structured Testbench Framework Guide <FRAMEWORK/StructuredTestbench>` first. This
+guide provides background on the overall structure of OSVVM's testbench and how the pieces of the Model Independent
+Transactions fit within the overall approach.
 
 All verification components (VCs) that use this interface, support a common set of transactions (or API). Hence, a test
 writer who understands the transactions for one verification component will also understand the transactions of another
@@ -142,12 +143,12 @@ development and deployment of the libraries.
 
    git clone --recursive https://github.com/OSVVM/OsvvmLibraries.git
 
-Prior to starting the OSVVM scripting environment, create a directory named sim in which to run your simulations. Start
-your simulator and go to the sim directory. Once there, use the steps in :ref:`Figure 3 <MIT/Stream/Figure3>` to build
-the OSVVM Libraries (utility and verification component). These directions are supported in Mentor QuestaSim/ModelSim or
-Aldec RivieraPRO. Aldec's ActiveHDL, Synopsys' VCS, and Cadence's Xcelium are also supported but require a few extra
-steps. For these steps and additional details of the OSVVM scripting environment see
-:osvvmdoc:`Script_user_guide.pdf <Script_user_guide>` (in :file:`OsvvmLibraries/Documentation`).
+Prior to starting the OSVVM scripting environment, create a directory named :file:`sim` in which to run your
+simulations. Start your simulator and go to the :file:`sim` directory. Once there, use the steps in
+:ref:`Figure 3 <MIT/Stream/Figure3>` to build the OSVVM Libraries (utility and verification component). These directions
+are supported in Mentor QuestaSim/ModelSim or Aldec RivieraPRO. Aldec's ActiveHDL, Synopsys' VCS, and Cadence's Xcelium
+are also supported but require a few extra steps. For these steps and additional details of the OSVVM scripting
+environment see :ref:`Script_user_guide.pdf <UG>` (in :file:`OsvvmLibraries/Documentation`).
 
 .. code-block:: tcl
    :caption: Figure 3. Building OSVVM and running the Demo
@@ -161,7 +162,7 @@ steps. For these steps and additional details of the OSVVM scripting environment
 The intent of the OSVVM scripting is to make compiling and running your simulations independent of the simulator you are
 using.
 
-GHDL can be run using tclsh. In windows, using MSYS2/MinGW64 start tclsh using "winpty tclsh".
+GHDL can be run using :program:`tclsh`. In windows, using MSYS2/MinGW64 start :program:`tclsh` using ``winpty tclsh``.
 
 .. _MIT/Stream/TypesOfTransactions:
 
@@ -1233,7 +1234,7 @@ as AXI4 Full where Write Address, Write Data, Write Response, Read Address, and 
 other. Nonblocking transactions are also needed when a test sequencer dispatches transactions from a single process.
 
 If you are just getting started with Stream Model Independent Transactions, this section largely parallels the blocking
-transactions, so it is recommended to skip ahead to Directive Transactions.
+transactions, so it is recommended to skip ahead to :ref:`Directive Transactions <MIT/Stream/DirectiveTransactions>`.
 
 .. _MIT/Stream/TransmitterSendAsync:
 
@@ -1805,7 +1806,8 @@ Set and Get Model Options
 *************************
 
 Model operations are directive transactions that are used to configure the verification component. They can either be
-used directly or with a model specific wrapper around them - see the AxiStream User Guide for examples.
+used directly or with a model specific wrapper around them - see the :ref:`AxiStream User Guide <VC/AxiStream>` for
+examples.
 
 .. code-block:: VHDL
 
