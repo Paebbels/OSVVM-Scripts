@@ -31,21 +31,21 @@ program and receive arbitrary transactions and has internal memory models for bo
 space, but these can be disabled and the received request transactions passed to a separate test sequencer to program
 arbitrary sequences of responses. The model supports all the types of PCIe TLPs:
 
-* :vhdlcode:`MRd` Memory read request (32 and64 bit address)
-* :vhdlcode:`MRdLk` Memory read request-locked (32 and 64 bit address)
-* :vhdlcode:`MWr` Memory write request (32 and 64 bit address)
-* :vhdlcode:`IORd` I/O read request
-* :vhdlcode:`IOWr` I/O write request
-* :vhdlcode:`CfgRd0` Configuration read type 0
-* :vhdlcode:`CfgWr0` Configuration write type 0
-* :vhdlcode:`CfgRd1` Configuration read type 1
-* :vhdlcode:`CfgWr1` Configuration write type 1
-* :vhdlcode:`Msg` Message request
-* :vhdlcode:`MsgD` Message request with data (
-* :vhdlcode:`Cpl` Completion with no data. Used for all reads with error status and for I/O and configuration writes.
-* :vhdlcode:`CplD` Completion with data. Used for all reads with good status.
-* :vhdlcode:`CplLk` Completion for locked memory read with error status
-* :vhdlcode:`CplDlk` Completion for locked memory read with good status.
+* MRd Memory read request (32 and64 bit address)
+* MRdLk Memory read request-locked (32 and 64 bit address)
+* MWr Memory write request (32 and 64 bit address)
+* IORd I/O read request
+* IOWr I/O write request
+* CfgRd0 Configuration read type 0
+* CfgWr0 Configuration write type 0
+* CfgRd1 Configuration read type 1
+* CfgWr1 Configuration write type 1
+* Msg Message request
+* MsgD Message request with data (
+* Cpl Completion with no data. Used for all reads with error status and for I/O and configuration writes.
+* CplD Completion with data. Used for all reads with good status.
+* CplLk Completion for locked memory read with error status
+* CplDlk Completion for locked memory read with good status.
 
 The PCIe VC has many automatic features. The internal memories, already mentioned, are the default targets for memory
 and configurations space transactions, though these can be disabled. In addition, by default, all DLL packets for flow
@@ -771,7 +771,7 @@ values. The table below shows the Params index values for each of these paramete
      - Description
    * - :vhdlcode:`PARAM_RDLCK`
      - Memory reads, completions, part completions
-     - Generates the :vhdlcode:`RdLck` variants of memory reads and completions (either full or part).
+     - Generates the RdLck variants of memory reads and completions (either full or part).
    * - :vhdlcode:`PARM_CMPLRID`
      - Completions, part completions
      - Sets the requester ID for a [part] completion, as sent in the request that is being responded to.
@@ -2247,7 +2247,7 @@ If a :vhdlcode:`PcieModel` is configured as an EP and the :vhdlcode:`runAutoEp()
    * - PMC
      - Power management capabilities structure next capability capabilities ID ptr
      - 00030001h ffffffffh 94h
-   * - :vhdlcode:`PMCSR_BSE` rsvd
+   * - PMCSR_BSE rsvd
      - PMCSR
      - 00000008h ffffe0fch 98h
 
@@ -2529,12 +2529,12 @@ The C model can generate all types of DLL packets and using the “co-simulation
 all the packets can be generated from the running program. For the other approaches, via the
 :vhdlcode:`AddressBusRecType` MIT port, there are certain other limitations:
 
-* :vhdlcode:`InitFC`\ [1|2]_xxx packets can’t be directly generated
+* InitFC[1|2]_xxx packets can’t be directly generated
 
    * The :vhdlcode:`PcieInitDll` procedure initiates a DLL initialisation and the sizes of the flow control buffers can
      be configured using :vhdlcode:`SetModelOption` calls
 
-* :vhdlcode:`Update_xxx` packets can’t be directly generated
+* Update_xxx packets can’t be directly generated
 
    * The internal model automatically generates these based on the configured buffer sizes
 
