@@ -24,6 +24,11 @@ Please support OSVVM by purchasing your VHDL training from SynthWorks.
    ScoreboardPkg
    ScoreboardPkgQuickRef
    DelayCoveragePkg
+   MemoryPkg
+   DynamicVectorPkg
+   TbUtilPkg
+   TbUtilPkgQuickRef
+   TextUtilPkg
    TranscriptPkg
    TranscriptPkgQuickRef
    ResolutionPkg
