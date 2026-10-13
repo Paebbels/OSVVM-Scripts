@@ -129,9 +129,9 @@ The following print operations prefix the printed lines with :vhdlcode:`OSVVM_PR
 PrintLine
 =========
 
-:vhdlcode:`Print` prints the string using the transcript capability. Like :vhdlcode:`Log`, print allows message
-filtering using :vhdlcode:`Level` and :vhdlcode:`AlertLogID`. Unlike :vhdlcode:`Log`, :vhdlcode:`PrintLine` does not
-print the time, "log", or the Log level.
+:vhdlcode:`Print` prints the string using the transcript capability. Like :vhdlcode:`Log`, :vhdlcode:`print` allows
+message filtering using :vhdlcode:`Level` and :vhdlcode:`AlertLogID`. Unlike :vhdlcode:`Log`, :vhdlcode:`PrintLine` does
+not print the time, "log", or the Log level.
 
 .. code-block:: VHDL
 
