@@ -15,11 +15,11 @@ ClockResetPkg Overview
 CreateClock
 ***********
 
-Create a clock with a specified period and specified duty cycle. :vhdlcode:`ClkActive` is the active edge value. Offset
-is the delay from time 0 at which the active edge value happens. Designed so that after the first clock transition that
-Clock always transitions on delta cycle 0. Designed so that the resulting clock period will match the Period parameter
-and that any rounding due to :vhdlcode:`DutyCycle` and simulator resolution will only impact the effective
-:vhdlcode:`DutyCycle`.
+Create a clock with a specified period and specified duty cycle. :vhdlcode:`ClkActive` is the active edge value.
+:vhdlcode:`Offset` is the delay from time 0 at which the active edge value happens. Designed so that after the first
+clock transition that Clock always transitions on delta cycle 0. Designed so that the resulting clock period will match
+the :vhdlcode:`Period` parameter and that any rounding due to :vhdlcode:`DutyCycle` and simulator resolution will only
+impact the effective :vhdlcode:`DutyCycle`.
 
 .. code-block:: VHDL
 
@@ -65,9 +65,9 @@ controlled by :vhdlcode:`CoverID` and the bins in :vhdlcode:`CoverID` can be cha
 Creating Reset
 **************
 
-Create reset that is asserted tpd after the first active edge of clock and deasserts tpd after the clock edge that is
-Period in time from the first active edge of clock. :vhdlcode:`ClkActive` is the active edge value – its default is '1'
-(rising edge).
+Create reset that is asserted :vhdlcode:`tpd` after the first active edge of clock and deasserts :vhdlcode:`tpd` after
+the clock edge that is :vhdlcode:`Period` in time from the first active edge of clock. :vhdlcode:`ClkActive` is the
+active edge value – its default is '1' (rising edge).
 
 .. code-block:: VHDL
 
@@ -85,8 +85,8 @@ Period in time from the first active edge of clock. :vhdlcode:`ClkActive` is the
 Checking the Clock Period
 *************************
 
-The procedure :vhdlcode:`CheckClockPeriod` check that the clock period matches the Period parameter. It checks the first
-:vhdlcode:`HowMany` clocks.
+The procedure :vhdlcode:`CheckClockPeriod` check that the clock period matches the :vhdlcode:`Period` parameter. It
+checks the first :vhdlcode:`HowMany` clocks.
 
 .. code-block:: VHDL
 
@@ -112,7 +112,7 @@ The procedure :vhdlcode:`CheckClockPeriod` check that the clock period matches t
 Checking the Reset
 ******************
 
-:vhdlcode:`LogReset` creates logs when the Reset signal changes.
+:vhdlcode:`LogReset` creates logs when the :vhdlcode:`Reset` signal changes.
 
 .. code-block:: VHDL
 
