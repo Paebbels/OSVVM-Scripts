@@ -69,8 +69,8 @@ Note the calls to protected type methods (subprograms) include the protected typ
 call (such as :vhdlcode:`RV.RandInt(0, 255)`).
 
 Randomization uses a regular variable rather than a shared variable. As a result, each process that does randomization
-needs to declare its own variable. For a discussion of why not to use shared variables, see the Random Stability
-section.
+needs to declare its own variable. For a discussion of why not to use shared variables, see the
+:ref:`Random Stability <UTILITY/RandomPkg/RandomStability>` section.
 
 .. _UTILITY/RandomPkg/InitializingTheSeeds:
 
@@ -110,11 +110,10 @@ name the process when using this method.
 
    RV.InitSeed (RV'instance_name, TRUE)  ;
 
-The value :vhdlcode:`RANDOM_USE_NEW_SEED_METHODS` is set to :vhdlcode:`TRUE` for all 2024 or later versions of OSVVM.
-See :osvvmdoc:`OSVVM_Configuration_Guide.pdf <OSVVM_Configuration_Guide>` for more on this setting. For new testbenches,
-set the :vhdlcode:`UseNewSeedMethods` parameter to :vhdlcode:`TRUE`. For older tests for which you need to have the same
-sequence of values they are currently generating, be sure to update calls to :vhdlcode:`InitSeed` to set
-:vhdlcode:`UseNewSeedMethods` to :vhdlcode:`FALSE`.
+The value :vhdlcode:`RANDOM_USE_NEW_SEED_METHODS` is set to TRUE for all 2024 or later versions of OSVVM. See
+:ref:`UTILITY/OsvvmSettings` for more on this setting. For new testbenches, set the :vhdlcode:`UseNewSeedMethods`
+parameter to TRUE. For older tests for which you need to have the same sequence of values they are currently generating,
+be sure to update calls to :vhdlcode:`InitSeed` to set :vhdlcode:`UseNewSeedMethods` to FALSE.
 
 Why did we do this? With the old seed methods when the seeds were close together, it was not unusual to generate the
 same first value. The rest of the sequence values were unique. The :vhdlcode:`NewSeedMethods` addresses this issue by
@@ -609,7 +608,7 @@ generate missing coverage items.
 With a FIFO, we need to see lots of write attempts while full and read attempts while empty. One thing we can do to
 improve the previous test is to increase or decrease the burst length and delay based on the number of write attempts
 while full or read attempts while empty we have seen. To explore how to generate the coverage, see the
-:vhdlcode:`CoveragePkg` documentation.
+:ref:`CoveragePkg documentation <UTILITY/CoveragePkg>`.
 
 For a design for which has numerous conditions we need to generate, we can do coverage on the input stimulus and then
 randomly select one of the uncovered conditions as the next transaction to be generated.
