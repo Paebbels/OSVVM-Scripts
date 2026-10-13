@@ -134,7 +134,7 @@ calling the appropriate functions or procedures in the subprogram bodies (as dem
 Compiling VendorCovApiPkg and Friends
 *************************************
 
-See :osvvmdoc:`OSVVM_release_notes.pdf <OSVVM_release_notes>` for the current compilation directions. Rather than
+See :osvvmdoc:`OSVVM_release_notes.pdf <osvvm_release_notes>` for the current compilation directions. Rather than
 referencing individual packages, we recommend using the context declaration:
 
 .. code-block:: VHDL
