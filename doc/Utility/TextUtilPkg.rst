@@ -192,7 +192,7 @@ For :vhdlcode:`WrapToBuf` without the :vhdlcode:`InitialPrefix` has the :vhdlcod
      WrapLength       : in integer := OSVVM_LINE_WRAP
    ) ;
 
-For :vhdlcode:`WrapOneLine` finds the wrap point using the string s.
+For :vhdlcode:`WrapOneLine` finds the wrap point using the string :vhdlcode:`s`.
 
 .. code-block:: VHDL
 
@@ -353,7 +353,7 @@ ReadBinaryToken
 Sread_C
 =======
 
-:vhdlcode:`Sread_c` is an sread procedure for Xilinx tools.
+:vhdlcode:`Sread_c` is an :vhdlcode:`sread` procedure for Xilinx tools.
 
 .. code-block:: VHDL
 
