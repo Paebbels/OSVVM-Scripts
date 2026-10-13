@@ -21,8 +21,8 @@ Maximum Resolution Functions
 Resolved_max
 ============
 
-A function named :vhdlcode:`resolved_max` is defined for the types :vhdlcode:`std_ulogic`, bit, integer, time, real,
-character, and Boolean.
+A function named :vhdlcode:`resolved_max` is defined for the types :vhdlcode:`std_ulogic`, :vhdlcode:`bit`,
+:vhdlcode:`integer`, :vhdlcode:`time`, :vhdlcode:`real`, :vhdlcode:`character`, and :vhdlcode:`Boolean`.
 
 .. code-block:: VHDL
 
@@ -121,7 +121,7 @@ also provides the following type definitions.
    type     boolean_vector_max_c is array (natural range <>) of boolean_max ;
 
 These work well, however, not as well as subtypes. With a type, the conversion between :vhdlcode:`string_max_c` is no
-longer automatic with string. In this case, a type conversion (type cast can be used).
+longer automatic with :vhdlcode:`string`. In this case, a type conversion (type cast can be used).
 
 .. code-block:: VHDL
 
@@ -146,7 +146,8 @@ Summing Resolution
 Resolved_sum
 ============
 
-A function named :vhdlcode:`resolved_sum` is defined for the types integer, time, and real.
+A function named :vhdlcode:`resolved_sum` is defined for the types :vhdlcode:`integer`, :vhdlcode:`time`, and
+:vhdlcode:`real`.
 
 .. code-block:: VHDL
 
@@ -198,10 +199,10 @@ initialization to a non-driving state, such as 'Z'.
 Resolved
 ========
 
-A function named resolved is defined for the types integer, time, real, character, and boolean. These resolution
-functions require a non-driving value of 0, 0 ns, 0.0, NUL, and FALSE respectively. If there is more than one
-non-driving value, these functions will generate an assert FAILURE. Note though that in most simulators, this will not
-cause the normal stopping action.
+A function named :vhdlcode:`resolved` is defined for the types :vhdlcode:`integer`, :vhdlcode:`time`, :vhdlcode:`real`,
+:vhdlcode:`character`, and :vhdlcode:`boolean`. These resolution functions require a non-driving value of 0, 0 ns, 0.0,
+NUL, and FALSE respectively. If there is more than one non-driving value, these functions will generate an assert
+FAILURE. Note though that in most simulators, this will not cause the normal stopping action.
 
 .. code-block:: VHDL
 
@@ -284,15 +285,16 @@ Conversion Functions
 Extend and Reduce
 =================
 
-Extend and reduce serve the same purpose as :vhdlcode:`numeric_std.resize`. Extend will either make the vector larger or
-keep it the same size. Reduce will either make a vector smaller or keep it the same size.
+:vhdlcode:`Extend` and :vhdlcode:`reduce` serve the same purpose as :vhdlcode:`numeric_std.resize`. :vhdlcode:`Extend`
+will either make the vector larger or keep it the same size. :vhdlcode:`Reduce` will either make a vector smaller or
+keep it the same size.
 
 .. code-block:: VHDL
 
    function Extend(A: std_logic_vector; Size : natural) return std_logic_vector ;
    function Reduce(A: std_logic_vector; Size : natural) return std_logic_vector ;
 
-Use Extend when putting a value into the record and Reduce when taking it out.
+Use :vhdlcode:`Extend` when putting a value into the record and :vhdlcode:`Reduce` when taking it out.
 
 .. _UTILITY/ResolutionPkg/ToTransactionAndFromTransaction:
 
@@ -317,7 +319,7 @@ from the transaction record.
 Compiling ResolutionPkg and Friends
 ***********************************
 
-See :osvvmdoc:`OSVVM_release_notes.pdf <OSVVM_release_notes>` for the current compilation directions. Rather than
+See :osvvmdoc:`OSVVM_release_notes.pdf <osvvm_release_notes>` for the current compilation directions. Rather than
 referencing individual packages, we recommend using the context declaration:
 
 .. code-block:: VHDL
