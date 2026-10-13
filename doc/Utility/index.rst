@@ -24,3 +24,8 @@ Please support OSVVM by purchasing your VHDL training from SynthWorks.
    ScoreboardPkg
    ScoreboardPkgQuickRef
    DelayCoveragePkg
+   OsvvmGlobalPkg
+   ClockResetPkg
+   VendorCovApiPkg
+   NamePkg
+   IfElsePkg
