@@ -33,7 +33,7 @@ Character Tests
 Text Case Conversions
 *********************
 
-:vhdlcode:`TextUtilPkg` provides the following text conversion test functions:
+:vhdlcode:`TextUtilPkg` provides the following text conversion functions:
 
 .. code-block:: VHDL
 
@@ -62,7 +62,7 @@ Array of Std_logic to Hex
 *************************
 
 :vhdlcode:`TextUtilPkg` provides the following functions that convert from an array of :vhdlcode:`std_logic` to hex. A
-string of 4 Meta characters, such as U, X, Z, W, and – print as that character. If there is a mixture of Meta characters
+string of 4 Meta characters, such as U, X, Z, W, and - print as that character. If there is a mixture of Meta characters
 and other characters a ? is printed.
 
 .. code-block:: VHDL
@@ -135,7 +135,8 @@ fraction digits. If time units is not specified, use the largest time units poss
      RightJustify   : natural := 0
    ) return string ;
 
-   alias to_string_max is format[integer return string] ;function to_string_max ( I :
+   alias to_string_max is format[integer return string] ;
+   function to_string_max ( I :
    integer) return string ;
 
 .. _UTILITY/TextUtilPkg/Justify:
@@ -168,7 +169,7 @@ WrapToBuf
 *********
 
 :vhdlcode:`WrapToBuf` wraps a string based message into a line variable using the :vhdlcode:`InitialPrefix` for the
-first line and :vhdlcode:`SubsequentPrefixe` for additional lines. Wrap at :vhdlcode:`WrapLength` characters.
+first line and :vhdlcode:`SubsequentPrefix` for additional lines. Wrap at :vhdlcode:`WrapLength` characters.
 
 .. code-block:: VHDL
 
@@ -192,7 +193,7 @@ For :vhdlcode:`WrapToBuf` without the :vhdlcode:`InitialPrefix` has the :vhdlcod
      WrapLength       : in integer := OSVVM_LINE_WRAP
    ) ;
 
-For :vhdlcode:`WrapOneLine` finds the wrap point using the string :vhdlcode:`s`.
+:vhdlcode:`WrapOneLine` finds the wrap point using the string :vhdlcode:`s`.
 
 .. code-block:: VHDL
 
@@ -296,7 +297,7 @@ of a multiple line comment.
 Finding a Delimiter
 ===================
 
-:vhdlcode:`ReadUntilFindDelimiterOrEOL` read a :vhdlcode:`Name` until a delimiter or EOL is found.
+:vhdlcode:`ReadUntilDelimiterOrEOL` reads a :vhdlcode:`Name` until a delimiter or EOL is found.
 
 .. code-block:: VHDL
 
@@ -307,7 +308,7 @@ Finding a Delimiter
      variable ReadValid : Out   boolean
    ) ;
 
-:vhdlcode:`FindDelimiter` read the next character. If it is the specified delimiter, return :vhdlcode:`Found` as TRUE.
+:vhdlcode:`FindDelimiter` reads the next character. If it is the specified delimiter, return :vhdlcode:`Found` as TRUE.
 If the delimiter is not SPACE, then :vhdlcode:`SkipWhiteSpace` before searching for the delimiter.
 
 .. code-block:: VHDL
@@ -323,7 +324,7 @@ If the delimiter is not SPACE, then :vhdlcode:`SkipWhiteSpace` before searching 
 ReadHexToken
 ============
 
-:vhdlcode:`ReadHexToken` reads hex values upto :vhdlcode:`Result'length`. Less is OK. Does not skip white space.
+:vhdlcode:`ReadHexToken` reads hex values up to :vhdlcode:`Result'length`. Less is OK. Does not skip white space.
 
 .. code-block:: VHDL
 
@@ -338,7 +339,7 @@ ReadHexToken
 ReadBinaryToken
 ===============
 
-:vhdlcode:`ReadBinaryToken` reads binary values upto :vhdlcode:`Result'length`. Less is OK. Does not skip white space.
+:vhdlcode:`ReadBinaryToken` reads binary values up to :vhdlcode:`Result'length`. Less is OK. Does not skip white space.
 
 .. code-block:: VHDL
 
