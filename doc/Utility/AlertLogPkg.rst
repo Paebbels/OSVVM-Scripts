@@ -208,8 +208,9 @@ seems to indicate it is illegal – but it is expected this will be allowed in t
 
    constant MODEL_ID : AlertLogIDType := NewID("UartTx_1") ;
 
-Ok. The hard part is done. On all calls to Log, :vhdlcode:`SetLogEnable`, :vhdlcode:`AlertIf`, :vhdlcode:`AffirmIf`,
-:vhdlcode:`SetAlertEnable`, … the :vhdlcode:`AlertLogID` is specified as the first parameter to the call.
+Ok. The hard part is done. On all calls to :vhdlcode:`Log`, :vhdlcode:`SetLogEnable`, :vhdlcode:`AlertIf`,
+:vhdlcode:`AffirmIf`, :vhdlcode:`SetAlertEnable`, … the :vhdlcode:`AlertLogID` is specified as the first parameter to
+the call.
 
 Log levels can be enabled for specific :vhdlcode:`AlertLogIDs` as follows.
 
@@ -224,7 +225,7 @@ The log in the :vhdlcode:`UartTx` VC is updated as follows.
 
    Log(ModelID, "Uart Sending Data: X" & to_hstring(TxData), INFO)  ;
 
-When this prints, note that it includes the source information, "In :vhdlcode:`UartTx`,".
+When this prints, note that it includes the source information, "In UartTx,".
 
 .. code-block:: text
 
@@ -360,8 +361,8 @@ Note that when a child ID finds an error, it counts it and its parent also count
 Multiple Line Printing (2026.08)
 ********************************
 
-All OSVVM printing capabilities with Alert, Log, :vhdlcode:`AffirmIf`, and :vhdlcode:`LogHeader` as well as their
-variations support multiple line printing.
+All OSVVM printing capabilities with :vhdlcode:`Alert`, :vhdlcode:`Log`, :vhdlcode:`AffirmIf`, and :vhdlcode:`LogHeader`
+as well as their variations support multiple line printing.
 
 By default, these print their message on a single line – independent of how long that line may be.
 
@@ -630,9 +631,9 @@ The interface for :vhdlcode:`FindID` is as follows.
        return AlertLogIDType ;
    impure function FindID(Name : string ) return AlertLogIDType ;
 
-:vhdlcode:`FindID` with a single parameter will return the first :vhdlcode:`AlertLogID` whose name matches the Name
-parameter, hence, only use this if that name is used once in the AlertLog data structure, such as for top-level instance
-names.
+:vhdlcode:`FindID` with a single parameter will return the first :vhdlcode:`AlertLogID` whose name matches the
+:vhdlcode:`Name` parameter, hence, only use this if that name is used once in the AlertLog data structure, such as for
+top-level instance names.
 
 .. _UTILITY/AlertLogPkg/IsInitialized:
 
@@ -692,8 +693,8 @@ Log levels can be ALWAYS, DEBUG, PASSED, or INFO.
 Log
 ===
 
-If the log level is enabled, then the log message will print. The Enable parameter indicates to print the message even
-if the log level is not enabled. This is useful to enable printing for a single transaction.
+If the log level is enabled, then the log message will print. The :vhdlcode:`Enable` parameter indicates to print the
+message even if the log level is not enabled. This is useful to enable printing for a single transaction.
 
 .. code-block:: VHDL
 
@@ -744,7 +745,7 @@ Each character in the prefix and suffix indicates a line to print. Each line pri
 :vhdlcode:`OSVVM_LINE_LENGTH` times.
 
 There is also a short form that uses :vhdlcode:`OSVVM_HEADER_PREFIX` (default " ") and :vhdlcode:`OSVVM_HEADER_SUFFIX`
-(default "\*") instead of having a Prefix and Suffix parameter.
+(default "\*") instead of having a :vhdlcode:`Prefix` and :vhdlcode:`Suffix` parameter.
 
 .. code-block:: VHDL
 
@@ -794,7 +795,7 @@ Alert levels can be FAILURE, ERROR, or WARNING.
 Alert
 =====
 
-Alert generates an alert. The following overloading is supported.
+:vhdlcode:`Alert` generates an alert. The following overloading is supported.
 
 .. code-block:: VHDL
 
@@ -820,7 +821,8 @@ Usage of alert:
 AlertIf and AlertIfNot
 ======================
 
-Alert has two conditional forms, :vhdlcode:`AlertIf` and :vhdlcode:`AlertIfNot`. The following is their overloading.
+:vhdlcode:`Alert` has two conditional forms, :vhdlcode:`AlertIf` and :vhdlcode:`AlertIfNot`. The following is their
+overloading.
 
 .. code-block:: VHDL
 
@@ -869,8 +871,9 @@ AlertIfEqual and AlertIfNotEqual
 ================================
 
 :vhdlcode:`AlertIfEqual` and :vhdlcode:`AlertIfNotEqual` checks two values and produces an Alert if the check fails. In
-the following, :vhdlcode:`AType` can be :vhdlcode:`std_logic`, :vhdlcode:`std_logic_vector`, unsigned, signed, integer,
-:vhdlcode:`integer_vector`, real, character, string, or time.
+the following, :vhdlcode:`AType` can be :vhdlcode:`std_logic`, :vhdlcode:`std_logic_vector`, :vhdlcode:`unsigned`,
+:vhdlcode:`signed`, :vhdlcode:`integer`, :vhdlcode:`integer_vector`, :vhdlcode:`real`, :vhdlcode:`character`,
+:vhdlcode:`string`, or :vhdlcode:`time`.
 
 .. code-block:: VHDL
 
@@ -973,8 +976,8 @@ affirmation fails, alert is called with the :vhdlcode:`ExpectedMessage` concaten
      Enable           : boolean := FALSE
    ) ;
 
-The second overloading of :vhdlcode:`AffirmIF` has a single Message parameter. Hence, both alert and log print the same
-message.
+The second overloading of :vhdlcode:`AffirmIF` has a single :vhdlcode:`Message` parameter. Hence, both alert and log
+print the same message.
 
 .. code-block:: VHDL
 
@@ -1002,8 +1005,8 @@ AffirmIfEqual and AffirmIfNotEqual
 
 Affirmation form :vhdlcode:`AffirmIfEqual` checks if two values are equal. It greatly simplifies the message printing
 since it differentiates between the Received and Expected values. In the following, :vhdlcode:`AType` can be
-:vhdlcode:`std_logic`, :vhdlcode:`std_logic_vector`, unsigned, signed, integer, :vhdlcode:`integer_vector`, real,
-character, string or time.
+:vhdlcode:`std_logic`, :vhdlcode:`std_logic_vector`, :vhdlcode:`unsigned`, :vhdlcode:`signed`, :vhdlcode:`integer`,
+:vhdlcode:`integer_vector`, :vhdlcode:`real`, :vhdlcode:`character`, :vhdlcode:`string` or :vhdlcode:`time`.
 
 .. code-block:: VHDL
 
@@ -1040,8 +1043,8 @@ AffirmIfInRange
 ===============
 
 :vhdlcode:`AffirmIfInRange` checks if the received value is between the specified min and max values (inclusive). In the
-following, :vhdlcode:`AType` can be :vhdlcode:`std_logic`, :vhdlcode:`std_logic_vector`, unsigned, signed, integer,
-real, character, or time.
+following, :vhdlcode:`AType` can be :vhdlcode:`std_logic`, :vhdlcode:`std_logic_vector`, :vhdlcode:`unsigned`,
+:vhdlcode:`signed`, :vhdlcode:`integer`, :vhdlcode:`real`, :vhdlcode:`character`, or :vhdlcode:`time`.
 
 .. code-block:: VHDL
 
@@ -1212,8 +1215,8 @@ The VHDL code creates the YAML files by doing:
 
 Within OSVVM scripting:
 
-* Run each test case with OSVVM script API command simulate or :tclcode:`RunTest`.
-* Run the entire test suite with OSVVM script API command build.
+* Run each test case with OSVVM script API command :tclcode:`simulate` or :tclcode:`RunTest`.
+* Run the entire test suite with OSVVM script API command :tclcode:`build`.
 
 Details of the reports are shown in the "OSVVM Test Writer's User Guide" in the Documentation repository.
 
@@ -1244,7 +1247,7 @@ Alerts and Affirmations as the test is running. :vhdlcode:`ExternalErrors` is th
 – and may be negative also to indicated expected errors. :vhdlcode:`ExpectedErrors` is the value set by
 :vhdlcode:`SetExpectedAlertCount` (this section) or :vhdlcode:`IncrementExpectedAlertCount`.
 
-If the Stop parameter is true (not recommended), std.env.stop is called.
+If the :vhdlcode:`Stop` parameter is true (not recommended), :vhdlcode:`std.env.stop` is called.
 
 If :vhdlcode:`TimeOut` is true, the test case reports TIMEOUT for status. This is treated as an error in the reports.
 
@@ -1449,8 +1452,8 @@ affirmation passes, log is called with just the Received Message. When an affirm
      Enable             : boolean := FALSE
    ) ;
 
-The second overloading of :vhdlcode:`AffirmIF` has a single Message parameter. Hence, both alert and log print the same
-message.
+The second overloading of :vhdlcode:`AffirmIF` has a single :vhdlcode:`Message` parameter. Hence, both alert and log
+print the same message.
 
 .. code-block:: VHDL
 
@@ -1491,8 +1494,7 @@ WriteRequirementsYaml (Called by EndOfTestReports)
 
 For information only. :vhdlcode:`WriteRequirementsYaml` is called by :vhdlcode:`EndOfTestReports`.
 :vhdlcode:`WriteRequirementsYaml` creates a YAML report that contains all requirements information for a test case. The
-file, ./reports/<:tclcode:`TestSuite`>/<:tclcode:`TestName`>\ :file:`_req.yml`, holds the requirements results for a
-given test case.
+file, :file:`./reports/<TestSuite>/<TestName>_req.yml`, holds the requirements results for a given test case.
 
 The call interface to :vhdlcode:`WriteRequirementsYaml` is:
 
@@ -2097,15 +2099,14 @@ At test completion call :vhdlcode:`ReportAlerts` to generate a simple text based
        ReportAll       : Boolean         := FALSE
    ) ;
 
-:vhdlcode:`ReportAlerts` has 4 optional parameters: Name, :vhdlcode:`AlertLogID`, :vhdlcode:`ExternalErrors`, and
-:vhdlcode:`ReportAll`. Name overrides the name specified by :vhdlcode:`SetTestName`. :vhdlcode:`AlertLogID` allows
-reporting alerts for a specific :vhdlcode:`AlertLogID` and its children (if any). :vhdlcode:`ExternalErrors` allows
-separately detected errors to be reported. :vhdlcode:`ExternalErrors` is type :vhdlcode:`AlertCountType` and the value
-(FAILURE => 0, ERROR => 5, WARNING => 1) indicates detection logic separate from :vhdlcode:`AlertLogPkg` saw 0 Failures,
-5 Errors, and 1 Warning. See notes under
-
-:vhdlcode:`AlertCountType`. When :vhdlcode:`ReportAll` is true, :vhdlcode:`ReportAlerts` reports a summary as well as
-details for each source – whether the test failed or passed.
+:vhdlcode:`ReportAlerts` has 4 optional parameters: :vhdlcode:`Name`, :vhdlcode:`AlertLogID`,
+:vhdlcode:`ExternalErrors`, and :vhdlcode:`ReportAll`. :vhdlcode:`Name` overrides the name specified by
+:vhdlcode:`SetTestName`. :vhdlcode:`AlertLogID` allows reporting alerts for a specific :vhdlcode:`AlertLogID` and its
+children (if any). :vhdlcode:`ExternalErrors` allows separately detected errors to be reported.
+:vhdlcode:`ExternalErrors` is type :vhdlcode:`AlertCountType` and the value
+:vhdlcode:`(FAILURE => 0, ERROR => 5, WARNING => 1)` indicates detection logic separate from :vhdlcode:`AlertLogPkg` saw
+0 Failures, 5 Errors, and 1 Warning. See notes under :vhdlcode:`AlertCountType`. When :vhdlcode:`ReportAll` is true,
+:vhdlcode:`ReportAlerts` reports a summary as well as details for each source – whether the test failed or passed.
 
 .. code-block:: VHDL
 
@@ -2252,15 +2253,20 @@ Options that impact what causes a test to fail:
    * - Parameter / Constant Name
      - Description
      - Value
-   * - :vhdlcode:`FailOnWarning` :vhdlcode:`ALERT_LOG_FAIL_ON_WARNING`
+   * - | :vhdlcode:`FailOnWarning`
+       | :vhdlcode:`ALERT_LOG_FAIL_ON_WARNING`
      - Count warnings as test errors.
      - TRUE
-   * - :vhdlcode:`FailOnDisabledErrors` :vhdlcode:`ALERT_LOG_FAIL_ON_DISABLED_ERRORS`
-     - If :vhdlcode:`FailOnDisabledErrors` is enabled and :vhdlcode:`DisabledAlerts` /= 0, then 1) Test Fails 2)
-       :vhdlcode:`DisabledAlerts` are printed in the report summary. 3) :vhdlcode:`DisabledAlerts` print for each
-       :vhdlcode:`AlertLogID`
+   * - | :vhdlcode:`FailOnDisabledErrors`
+       | :vhdlcode:`ALERT_LOG_FAIL_ON_DISABLED_ERRORS`
+     - If :vhdlcode:`FailOnDisabledErrors` is enabled and :vhdlcode:`DisabledAlerts` /= 0, then
+
+       #. Test Fails
+       #. :vhdlcode:`DisabledAlerts` are printed in the report summary.
+       #. :vhdlcode:`DisabledAlerts` print for each :vhdlcode:`AlertLogID`
      - TRUE
-   * - :vhdlcode:`FailOnRequirementErrors` :vhdlcode:`ALERT_LOG_FAIL_ON_REQUIREMENT_ERR` ORS
+   * - | :vhdlcode:`FailOnRequirementErrors`
+       | :vhdlcode:`ALERT_LOG_FAIL_ON_REQUIREMENT_ERRORS`
      - If :vhdlcode:`FailOnRequirementErrors` is enabled, a Test fails if it does not reach its requirements (PASSED
        goals).
      - TRUE
@@ -2274,7 +2280,8 @@ Options that impact requirements:
    * - Parameter / Constant Name
      - Description
      - Value
-   * - :vhdlcode:`DefaultPassedGoal` :vhdlcode:`ALERT_LOG_DEFAULT_PASSED_GOAL`
+   * - | :vhdlcode:`DefaultPassedGoal`
+       | :vhdlcode:`ALERT_LOG_DEFAULT_PASSED_GOAL`
      - Set the Default Passed Goal for :vhdlcode:`ReadSpecification` and :vhdlcode:`GetReqID`
      - 1
 
@@ -2287,10 +2294,12 @@ Options that impact information printed by both Alert and Log:
    * - Parameter / Constant Name
      - Description
      - Value
-   * - :vhdlcode:`WriteTimeLast` :vhdlcode:`ALERT_LOG_WRITE_TIME_FIRST`
-     - Write time last when TRUE or first when FALSE. FALSE
-     -
-   * - :vhdlcode:`TimeJustifyAmount` :vhdlcode:`ALERT_LOG_TIME_JUSTIFY_AMOUNT`
+   * - | :vhdlcode:`WriteTimeLast`
+       | :vhdlcode:`ALERT_LOG_WRITE_TIME_FIRST`
+     - Write time last when TRUE or first when FALSE.
+     - FALSE
+   * - | :vhdlcode:`TimeJustifyAmount`
+       | :vhdlcode:`ALERT_LOG_TIME_JUSTIFY_AMOUNT`
      - Print level.
      - 9
 
@@ -2303,16 +2312,20 @@ Options that impact information printed by Alert:
    * - Parameter / Constant Name
      - Description
      - Value
-   * - :vhdlcode:`WriteAlertErrorCount` :vhdlcode:`ALERT_LOG_WRITE_ERRORCOUNT`
+   * - | :vhdlcode:`WriteAlertErrorCount`
+       | :vhdlcode:`ALERT_LOG_WRITE_ERRORCOUNT`
      - Print Error Count immediately after %% Alert
      - FALSE
-   * - :vhdlcode:`WriteAlertLevel` :vhdlcode:`ALERT_LOG_WRITE_LEVEL`
+   * - | :vhdlcode:`WriteAlertLevel`
+       | :vhdlcode:`ALERT_LOG_WRITE_LEVEL`
      - Print level.
      - TRUE
-   * - :vhdlcode:`WriteAlertName` :vhdlcode:`ALERT_LOG_WRITE_NAME`
+   * - | :vhdlcode:`WriteAlertName`
+       | :vhdlcode:`ALERT_LOG_WRITE_NAME`
      - Print :vhdlcode:`AlertLogID` name.
      - TRUE
-   * - :vhdlcode:`WriteAlertTime` :vhdlcode:`ALERT_LOG_WRITE_TIME`
+   * - | :vhdlcode:`WriteAlertTime`
+       | :vhdlcode:`ALERT_LOG_WRITE_TIME`
      - Alerts print time.
      - TRUE
 
@@ -2325,16 +2338,20 @@ Options that impact information printed by Log:
    * - Parameter / Constant Name
      - Description
      - Value
-   * - :vhdlcode:`WriteLogErrorCount` :vhdlcode:`ALERT_LOG_WRITE_ERRORCOUNT`
+   * - | :vhdlcode:`WriteLogErrorCount`
+       | :vhdlcode:`ALERT_LOG_WRITE_ERRORCOUNT`
      - Print Error Count immediately after %% Log
      - FALSE
-   * - :vhdlcode:`WriteLogLevel` :vhdlcode:`ALERT_LOG_WRITE_LEVEL`
+   * - | :vhdlcode:`WriteLogLevel`
+       | :vhdlcode:`ALERT_LOG_WRITE_LEVEL`
      - Print level.
      - TRUE
-   * - :vhdlcode:`WriteLogName` :vhdlcode:`ALERT_LOG_WRITE_NAME`
+   * - | :vhdlcode:`WriteLogName`
+       | :vhdlcode:`ALERT_LOG_WRITE_NAME`
      - Print :vhdlcode:`AlertLogID` name.
      - TRUE
-   * - :vhdlcode:`WriteLogTime` :vhdlcode:`ALERT_LOG_WRITE_TIME`
+   * - | :vhdlcode:`WriteLogTime`
+       | :vhdlcode:`ALERT_LOG_WRITE_TIME`
      - Logs print time.
      - TRUE
 
@@ -2347,27 +2364,35 @@ Options that impact the text report printed by :vhdlcode:`ReportAlerts`:
    * - Parameter / Constant Name
      - Description
      - Value
-   * - :vhdlcode:`ReportHierarchy` :vhdlcode:`ALERT_LOG_REPORT_HIERARCHY`
+   * - | :vhdlcode:`ReportHierarchy`
+       | :vhdlcode:`ALERT_LOG_REPORT_HIERARCHY`
      - When multiple :vhdlcode:`AlertLogIDs` exist, print an error summary for each level.
      - TRUE
-   * - :vhdlcode:`PrintPassed` :vhdlcode:`ALERT_LOG_PRINT_PASSED`
+   * - | :vhdlcode:`PrintPassed`
+       | :vhdlcode:`ALERT_LOG_PRINT_PASSED`
      - If :vhdlcode:`PrintPassed` is enabled, print number of passed logs in the report summary and for each
        :vhdlcode:`AlertLogID`
      - TRUE
-   * - :vhdlcode:`PrintAffirmations` :vhdlcode:`ALERT_LOG_PRINT_AFFIRMATIONS`
+   * - | :vhdlcode:`PrintAffirmations`
+       | :vhdlcode:`ALERT_LOG_PRINT_AFFIRMATIONS`
      - If :vhdlcode:`PrintAffirmations` is enabled, print the number of affirmations in the report summary and for each
        :vhdlcode:`AlertLogID`
      - FALSE
-   * - :vhdlcode:`PrintDisabledAlerts` :vhdlcode:`ALERT_LOG_PRINT_DISABLED_ALERTS`
+   * - | :vhdlcode:`PrintDisabledAlerts`
+       | :vhdlcode:`ALERT_LOG_PRINT_DISABLED_ALERTS`
      - If :vhdlcode:`PrintDisabledAlerts` is Enabled, print :vhdlcode:`DisabledAlerts` in the report summary and for
        each :vhdlcode:`AlertLogID`
      - FALSE
-   * - :vhdlcode:`PrintRequirements` :vhdlcode:`ALERT_LOG_PRINT_REQUIREMENTS`
-     - If :vhdlcode:`PrintRequirements` is enabled, then 1) In the summary of :vhdlcode:`ReportAlerts`, print a
-       requirements summary (# met of # total). 2) In the detailed report, print a requirements
-       :vhdlcode:`ReportAlerts`, print a requirements summary (# met of # total).
+   * - | :vhdlcode:`PrintRequirements`
+       | :vhdlcode:`ALERT_LOG_PRINT_REQUIREMENTS`
+     - If :vhdlcode:`PrintRequirements` is enabled, then
+
+       #. In the summary of :vhdlcode:`ReportAlerts`, print a requirements summary (# met of # total).
+       #. In the detailed report, print a requirements :vhdlcode:`ReportAlerts`, print a requirements summary
+          (# met of # total).
      - FALSE
-   * - :vhdlcode:`PrintIfHaveRequirements` :vhdlcode:`ALERT_LOG_PRINT_IF_HAVE_REQUIREMEN` TS
+   * - | :vhdlcode:`PrintIfHaveRequirements`
+       | :vhdlcode:`ALERT_LOG_PRINT_IF_HAVE_REQUIREMENTS`
      - If :vhdlcode:`PrintIfHaveRequirements` is enabled and the test has requirements, then in the summary of
        :vhdlcode:`ReportAlerts`, print a requirements summary (# met of # total).
      - TRUE
