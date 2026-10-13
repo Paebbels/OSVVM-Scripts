@@ -25,7 +25,7 @@ to it. If the :vhdlcode:`TranscriptFile` is not open all OSVVM printing will go 
 The following shows the basic use model. Set the test name (using :vhdlcode:`SetTestName`). Open the transcript file
 (using :vhdlcode:`TranscriptOpen`). Mirror the transcript file to OUTPUT (:vhdlcode:`SetTranscriptMirror`). Print using
 the transcripting capability. Close the transcript file (:vhdlcode:`TranscriptClose`) just before the end of the test.
-Generate reports (using :vhdlcode:`EndOfTestReports`). Stop the test case (using std.env.stop).
+Generate reports (using :vhdlcode:`EndOfTestReports`). Stop the test case (using :vhdlcode:`std.env.stop`).
 
 .. code-block:: VHDL
 
@@ -137,7 +137,7 @@ SetTranscriptMirror
 ===================
 
 :vhdlcode:`SetTranscriptMirror` sets mirror mode in which case all OSVVM printing goes to both the
-:vhdlcode:`TranscriptFile` and std.textio.OUTPUT.
+:vhdlcode:`TranscriptFile` and :vhdlcode:`std.textio.OUTPUT`.
 
 .. code-block:: VHDL
 
@@ -180,7 +180,7 @@ IsTranscriptMirrored
 WriteLine
 =========
 
-Writeline writes the buffer using the transcript capability.
+:vhdlcode:`Writeline` writes the buffer using the transcript capability.
 
 .. code-block:: VHDL
 
@@ -194,7 +194,7 @@ Writeline writes the buffer using the transcript capability.
 Print
 =====
 
-Print writes a string using the transcript capability.
+:vhdlcode:`Print` writes a string using the transcript capability.
 
 .. code-block:: VHDL
 
@@ -207,7 +207,7 @@ Print writes a string using the transcript capability.
 Blank
 =====
 
-Blank puts a variable number of blank lines in the output.
+:vhdlcode:`Blank` puts a variable number of blank lines in the output.
 
 .. code-block:: VHDL
 
@@ -220,9 +220,10 @@ Blank puts a variable number of blank lines in the output.
 PrintLine
 =========
 
-Print prints the string using the transcript capability. Like Alert and Log, :vhdlcode:`PrintLine` prefixes the line
-with :vhdlcode:`OSVVM_PRINT_PREFIX`. In addition, like Log, print allows message filtering using Level and
-:vhdlcode:`AlertLogID`. Unlike Log, :vhdlcode:`PrintLine` does not print the time, "log", or the Log level.
+:vhdlcode:`Print` prints the string using the transcript capability. Like :vhdlcode:`Alert` and :vhdlcode:`Log`,
+:vhdlcode:`PrintLine` prefixes the line with :vhdlcode:`OSVVM_PRINT_PREFIX`. In addition, like :vhdlcode:`Log`, print
+allows message filtering using :vhdlcode:`Level` and :vhdlcode:`AlertLogID`. Unlike :vhdlcode:`Log`,
+:vhdlcode:`PrintLine` does not print the time, "log", or the Log level.
 
 .. code-block:: VHDL
 
@@ -235,10 +236,11 @@ with :vhdlcode:`OSVVM_PRINT_PREFIX`. In addition, like Log, print allows message
 PrintHeader
 ===========
 
-Print prints the string plus prefix and suffix lines to frame the message and make it stand out. Each character in the
-prefix and suffix indicates a line to print. Each line printed is prefixed by :vhdlcode:`OSVVM_PRINT_PREFIX`. If the
-character is a space, then print a blank line, otherwise, repeat that character :vhdlcode:`OSVVM_LINE_LENGTH` times. In
-addition, like Log, :vhdlcode:`PrintHeader` supports message filtering using Level and :vhdlcode:`AlertLogID`.
+:vhdlcode:`Print` prints the string plus prefix and suffix lines to frame the message and make it stand out. Each
+character in the prefix and suffix indicates a line to print. Each line printed is prefixed by
+:vhdlcode:`OSVVM_PRINT_PREFIX`. If the character is a space, then print a blank line, otherwise, repeat that character
+:vhdlcode:`OSVVM_LINE_LENGTH` times. In addition, like :vhdlcode:`Log`, :vhdlcode:`PrintHeader` supports message
+filtering using :vhdlcode:`Level` and :vhdlcode:`AlertLogID`.
 
 .. code-block:: VHDL
 
@@ -248,7 +250,7 @@ addition, like Log, :vhdlcode:`PrintHeader` supports message filtering using Lev
    Level : LogType ) ;
 
 There is also a short form that uses :vhdlcode:`OSVVM_HEADER_PREFIX` (default " ") and :vhdlcode:`OSVVM_HEADER_SUFFIX`
-(default "\*") instead of having a Prefix and Suffix parameter.
+(default "\*") instead of having a :vhdlcode:`Prefix` and :vhdlcode:`Suffix` parameter.
 
 .. code-block:: VHDL
 
@@ -263,8 +265,8 @@ HeaderLine
 
 :vhdlcode:`HeaderLIne` prints a string of characters that indicate a line to print. Each line printed is prefixed by
 :vhdlcode:`OSVVM_PRINT_PREFIX`. If the character is a space, then print a blank line, otherwise, repeat that character
-:vhdlcode:`OSVVM_LINE_LENGTH` times. In addition, like Log, :vhdlcode:`HeaderLine` supports message filtering using
-Level and :vhdlcode:`AlertLogID`.
+:vhdlcode:`OSVVM_LINE_LENGTH` times. In addition, like :vhdlcode:`Log`, :vhdlcode:`HeaderLine` supports message
+filtering using :vhdlcode:`Level` and :vhdlcode:`AlertLogID`.
 
 .. code-block:: VHDL
 
