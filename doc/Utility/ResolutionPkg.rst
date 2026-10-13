@@ -74,7 +74,7 @@ the above resolved subtypes as elements of the record.
        Data_out    : integer_max ;
      end record InterfaceRecType ;
 
-     procedure DoTrans (IntefaceRec : inout InterfaceRecType ; . . . ) ;
+     procedure DoTrans (InterfaceRec : inout InterfaceRecType ; . . . ) ;
      .  .  .
    End package InterfacePkg ;
    entity TestCtrl is
@@ -84,12 +84,12 @@ the above resolved subtypes as elements of the record.
      ) ;
    end entity TestCtrl ;
 
-   entity IntefaceModel is
+   entity InterfaceModel is
      port (
        InterfaceRec : inout InterfaceRecType ;
        . . .
      ) ;
-   end entity TestCtrl ;
+   end entity InterfaceModel ;
 
 The default value on each record element is :vhdlcode:`type'left`. The :vhdlcode:`resolved_max` resolution function
 returns the maximum value driven on the record. Undriven record elements from a particular model contribute the value
@@ -121,7 +121,7 @@ also provides the following type definitions.
    type     boolean_vector_max_c is array (natural range <>) of boolean_max ;
 
 These work well, however, not as well as subtypes. With a type, the conversion between :vhdlcode:`string_max_c` is no
-longer automatic with :vhdlcode:`string`. In this case, a type conversion (type cast can be used).
+longer automatic with :vhdlcode:`string`. In this case, a type conversion (type cast) can be used.
 
 .. code-block:: VHDL
 
@@ -160,7 +160,7 @@ A function named :vhdlcode:`resolved_sum` is defined for the types :vhdlcode:`in
 Subtypes
 ========
 
-Requests a transaction from the test initiation (client) to the model (TLM or VVC).
+The following subtypes are defined in :vhdlcode:`ResolutionPkg`:
 
 .. code-block:: VHDL
 
@@ -176,7 +176,7 @@ Requests a transaction from the test initiation (client) to the model (TLM or VV
 Compatibility Mode Types
 ========================
 
-Suspends a model until a transaction is requested via :vhdlcode:`RequestTransaction`.
+The package also provides the following type definitions.
 
 .. code-block:: VHDL
 
@@ -253,7 +253,7 @@ the above resolved subtypes as elements of the record.
        Data_out    => 0
      ) ;
 
-     procedure DoTrans (IntefaceRec : inout InterfaceRecType ; . . . ) ;
+     procedure DoTrans (InterfaceRec : inout InterfaceRecType ; . . . ) ;
      .  .  .
    End package InterfacePkg ;
    entity TestCtrl is
@@ -263,12 +263,12 @@ the above resolved subtypes as elements of the record.
      ) ;
    end entity TestCtrl ;
 
-   entity IntefaceModel is
+   entity InterfaceModel is
      port (
        InterfaceRec : inout InterfaceRecType := INTERFACE_INIT ;
        . . .
      ) ;
-   end entity TestCtrl ;
+   end entity InterfaceModel ;
 
 When a value is undriven by a model, the model will contribute the value from the default initialization for that record
 element.
@@ -285,7 +285,7 @@ Conversion Functions
 Extend and Reduce
 =================
 
-:vhdlcode:`Extend` and :vhdlcode:`reduce` serve the same purpose as :vhdlcode:`numeric_std.resize`. :vhdlcode:`Extend`
+:vhdlcode:`Extend` and :vhdlcode:`Reduce` serve the same purpose as :vhdlcode:`numeric_std.resize`. :vhdlcode:`Extend`
 will either make the vector larger or keep it the same size. :vhdlcode:`Reduce` will either make a vector smaller or
 keep it the same size.
 
