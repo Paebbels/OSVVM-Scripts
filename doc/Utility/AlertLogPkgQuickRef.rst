@@ -52,7 +52,7 @@ regressions. Log prints when the :vhdlcode:`LogLevel` is enabled or the optional
 
    Log("Uart Parity Received", INFO) ;
    --                                    Enable
-   Log("Received read responset", DEBUG, TRUE) ;
+   Log("Received read response", DEBUG, TRUE) ;
 
 .. _UTILITY/AlertLogPkgQuickRef/SimpleModeBasicErrorsAndMessages/LogEnableDisable:
 
@@ -143,11 +143,11 @@ Hierarchy mode requires the following additional steps or modified steps.
 NewID: Create Hierarchy
 =======================
 
-Create an :vhdlcode:`AlertLogId` and associate it with the name.
+Create an :vhdlcode:`AlertLogID` and associate it with the name.
 
 .. code-block:: VHDL
 
-   Signal ModelID, ProtocolID : AlertLogIDType ;
+   signal ModelID, ProtocolID : AlertLogIDType ;
    . . .
    ModelID <= NewID("Uart_1") ;
    wait for 0 ns ;
@@ -314,8 +314,8 @@ the output goes (:vhdlcode:`std.textio.OUTPUT`, :vhdlcode:`TranscriptFile`, or b
 Alert Stop Counts
 *****************
 
-:vhdlcode:`SetAlertStopCount` stops a simulation after a specified number of alerts have occurred. This debug to start
-sooner.
+:vhdlcode:`SetAlertStopCount` stops a simulation after a specified number of alerts have occurred. This allows debug to
+start sooner.
 
 Use :vhdlcode:`SetAlertStopCount` without an :vhdlcode:`AlertLogID` to set the stop count for accumulated alerts across
 the entire test case.
