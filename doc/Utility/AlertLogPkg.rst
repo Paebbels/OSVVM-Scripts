@@ -111,7 +111,7 @@ This will print as:
    %%       51340.0 ns  Alert  ERROR    X86 Lite received ready when it was idle
 
 Alerts have levels FAILURE, ERROR, and WARNING. Error is the default if a level is not specified. Alerts are enabled by
-default and rarely disabled (see :vhdlcode:`SetAlertEnable`).
+default and rarely disabled (see :ref:`SetAlertEnable <UTILITY/AlertLogPkg/SetAlertEnableAlertEnableDisable>`).
 
 Affirmations are for checking test values. When the condition is true, the affirmation prints a PASSED message (using
 log), otherwise, it prints an ERROR message (using alert).
@@ -500,15 +500,16 @@ AlertLogReportModeType
 
    type AlertLogReportModeType is (DISABLED, ENABLED, NONZERO) ;
 
-When DISABLED, an :vhdlcode:`AlertLogID` does not print in :vhdlcode:`ReportAlerts` (text reports) or
-:vhdlcode:`WriteAlertYaml` (Yaml/HTML reports). When NONZERO, an :vhdlcode:`AlertLogID` does not print in
-:vhdlcode:`ReportAlerts`, but prints in :vhdlcode:`WriteAlertYaml`. Hence, NONZERO shortens the text reports to what is
-essential. When ENABLED, an :vhdlcode:`AlertLogID` prints in :vhdlcode:`ReportAlerts` and :vhdlcode:`WriteAlertYaml`.
+When :vhdlcode:`DISABLED`, an :vhdlcode:`AlertLogID` does not print in :vhdlcode:`ReportAlerts` (text reports) or
+:vhdlcode:`WriteAlertYaml` (Yaml/HTML reports). When :vhdlcode:`NONZERO`, an :vhdlcode:`AlertLogID` does not print in
+:vhdlcode:`ReportAlerts`, but prints in :vhdlcode:`WriteAlertYaml`. Hence, :vhdlcode:`NONZERO` shortens the text reports
+to what is essential. When :vhdlcode:`ENABLED`, an :vhdlcode:`AlertLogID` prints in :vhdlcode:`ReportAlerts` and
+:vhdlcode:`WriteAlertYaml`.
 
 None of these settings impact printing in Alert or Log.
 
-DISABLED is intended to be used for data structures that are not used for self-checking and may produce errors on
-parameter checks. These errors are not lost as they are still accumulated in the parent ID.
+:vhdlcode:`DISABLED` is intended to be used for data structures that are not used for self-checking and may produce
+errors on parameter checks. These errors are not lost as they are still accumulated in the parent ID.
 
 .. _UTILITY/AlertLogPkg/AlertLogPrintParentType:
 
@@ -586,8 +587,9 @@ parent.
      wait ;
    end process Initialize ;
 
-The :vhdlcode:`ReportMode` and :vhdlcode:`PrintParent` parameters are described in :vhdlcode:`AlertLogReportModeType`
-and :vhdlcode:`AlertLogPrintParentType`.
+The :vhdlcode:`ReportMode` and :vhdlcode:`PrintParent` parameters are described in
+:ref:`AlertLogReportModeType <UTILITY/AlertLogPkg/AlertLogReportModeType>` and
+:ref:`AlertLogPrintParentType <UTILITY/AlertLogPkg/AlertLogPrintParentType>`.
 
 Setting the :vhdlcode:`CreateHierarchy` parameter to FALSE allows packages to create a unique :vhdlcode:`AlertLogID`
 without triggering :vhdlcode:`ReportAlerts` to print the hierarchy of the structure – unless the testbench or a
@@ -777,7 +779,8 @@ Prints as (line length shortened to fit page width):
 Alert Method Reference
 **********************
 
-Alert is intended for parameter error checking. For self-checking see affirmations.
+Alert is intended for parameter error checking. For self-checking see
+:ref:`affirmations <UTILITY/AlertLogPkg/AffirmationReference>`.
 
 .. _UTILITY/AlertLogPkg/AlertType:
 
@@ -1218,7 +1221,8 @@ Within OSVVM scripting:
 * Run each test case with OSVVM script API command :tclcode:`simulate` or :tclcode:`RunTest`.
 * Run the entire test suite with OSVVM script API command :tclcode:`build`.
 
-Details of the reports are shown in the "OSVVM Test Writer's User Guide" in the Documentation repository.
+Details of the reports are shown in the ":ref:`OSVVM Test Writer's User Guide <FRAMEWORK/TestWriters>`" in the
+Documentation repository.
 
 .. _UTILITY/AlertLogPkg/EndOfTestReportsInReportPkg:
 
@@ -2000,7 +2004,8 @@ The report summary is the first line printed by :vhdlcode:`ReportAlerts`/:vhdlco
    Warnings: 0  Passed: 0  Affirmations Checked: 2
 
 Note in the above message, two affirmations were done and they both resulted in an error, however, the error was
-disabled (see :vhdlcode:`SetAlertEnable`) so it reported as a Disabled Error.
+disabled (see :ref:`SetAlertEnable <UTILITY/AlertLogPkg/SetAlertEnableAlertEnableDisable>`) so it reported as a Disabled
+Error.
 
 Options can be enabled or disabled using :vhdlcode:`SetAlertLogOptions`. Let's look at the report piece by piece.
 
@@ -2105,8 +2110,9 @@ At test completion call :vhdlcode:`ReportAlerts` to generate a simple text based
 children (if any). :vhdlcode:`ExternalErrors` allows separately detected errors to be reported.
 :vhdlcode:`ExternalErrors` is type :vhdlcode:`AlertCountType` and the value
 :vhdlcode:`(FAILURE => 0, ERROR => 5, WARNING => 1)` indicates detection logic separate from :vhdlcode:`AlertLogPkg` saw
-0 Failures, 5 Errors, and 1 Warning. See notes under :vhdlcode:`AlertCountType`. When :vhdlcode:`ReportAll` is true,
-:vhdlcode:`ReportAlerts` reports a summary as well as details for each source – whether the test failed or passed.
+0 Failures, 5 Errors, and 1 Warning. See notes under :ref:`AlertCountType <UTILITY/AlertLogPkg/AlertCountType>`. When
+:vhdlcode:`ReportAll` is true, :vhdlcode:`ReportAlerts` reports a summary as well as details for each source – whether
+the test failed or passed.
 
 .. code-block:: VHDL
 
@@ -2157,15 +2163,16 @@ Alert and Log Output Control Options
 All OSVVM Alert and Log output controls get their initial value from a settings in :file:`OsvvmSettingsPkg_default.vhd`.
 
 For most projects setting them in the :vhdlcode:`OsvvmSettingsPkg` for the entire project should be sufficient. These
-values can be customized for a project as described in the OSVVM Settings User Guide. This is the recommended approach.
+values can be customized for a project as described in the :ref:`OSVVM Settings User Guide <UTILITY/OsvvmSettings>`.
+This is the recommended approach.
 
 .. _UTILITY/AlertLogPkg/SettingsInOsvvmSettingsPkgDefaultVhd:
 
 Settings In OsvvmSettingsPkg_default.vhd
 ========================================
 
-See OSVVM Settings User Guide for details on these and how to change them. This is the recommended approach to change
-these values. Note that there are additional values that do not have a setting.
+See :ref:`OSVVM Settings User Guide <UTILITY/OsvvmSettings>` for details on these and how to change them. This is the
+recommended approach to change these values. Note that there are additional values that do not have a setting.
 
 .. _UTILITY/AlertLogPkg/SetAlertLogJustify:
 
@@ -2184,8 +2191,9 @@ Logs are justified so they align. Default value is determined by the setting :vh
 OsvvmOptionsType
 ================
 
-:vhdlcode:`OsvvmOptionsType` defines the values for options. User values are: :vhdlcode:`OPT_DEFAULT`, DISABLED, FALSE,
-ENABLED, TRUE. The values DISABLED and FALSE are handled the same. The values ENABLED and TRUE are treated the same. The
+:vhdlcode:`OsvvmOptionsType` defines the values for options. User values are: :vhdlcode:`OPT_DEFAULT`,
+:vhdlcode:`DISABLED`, :vhdlcode:`FALSE`, :vhdlcode:`ENABLED`, :vhdlcode:`TRUE`. The values :vhdlcode:`DISABLED` and
+:vhdlcode:`FALSE` are handled the same. The values :vhdlcode:`ENABLED` and :vhdlcode:`TRUE` are treated the same. The
 value :vhdlcode:`OPT_USE_DEFAULT` causes the variable to use its default value. :vhdlcode:`OsvvmOptionsType` is defined
 in :vhdlcode:`OsvvmGlobalPkg`.
 
@@ -2398,7 +2406,7 @@ Options that impact the text report printed by :vhdlcode:`ReportAlerts`:
      - TRUE
 
 In the event you missed the earlier notice, :vhdlcode:`SetAlertLogOptions` is deprecated. It is recommended to use
-:vhdlcode:`OsvvmSettingsPkg` instead. See Osvvm Settings User Guide.
+:vhdlcode:`OsvvmSettingsPkg` instead. See :ref:`Osvvm Settings User Guide <UTILITY/OsvvmSettings>`.
 
 .. _UTILITY/AlertLogPkg/DeprecatedReportAlertLogOptionsPrintReportOptions:
 
@@ -2508,8 +2516,9 @@ Deprecated: WriteAlerts
      OpenKind    : File_Open_Kind := WRITE_MODE
    ) ;
 
-The first line of :vhdlcode:`WriteAlerts` prints the report summary in a CSV format (see :vhdlcode:`WriteTestSummary`).
-The format of :vhdlcode:`WriteAlerts` is as follows:
+The first line of :vhdlcode:`WriteAlerts` prints the report summary in a CSV format (see
+:ref:`WriteTestSummary <UTILITY/AlertLogPkg/DeprecatedWriteTestSummary>`). The format of :vhdlcode:`WriteAlerts` is as
+follows:
 
 .. code-block:: text
 
@@ -2762,7 +2771,7 @@ Compiling and Using OSVVM Utility Library
 *****************************************
 
 Compilation order for OSVVM Utility Library is in :file:`CHANGELOG.md` and :file:`osvvm.pro`. To run :file:`osvvm.pro`
-see the Script User Guide.
+see the :ref:`Script User Guide <UG>`.
 
 OSVVM Utility library is released under the Apache open source license. It is free (both to download and use - there are
 no license fees). You can download it from osvvm.org or from our development area on GitHub
