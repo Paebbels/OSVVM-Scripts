@@ -71,15 +71,6 @@ License
    UserGuide/index
    Reports/index
 
-.. toctree::
-   :caption: OSVVM Libraries
-   :hidden:
-
-   Framework/index
-   Utility/index
-   MIT/index
-   VC/index
-
 .. raw:: latex
 
    \part{References and Reports}

@@ -177,6 +177,7 @@ extensions = [
 intersphinx_mapping = {
 	"python": ("https://docs.python.org/3", None),
 	"pyTool": ("https://pyTooling.github.io/pyTooling/", None),
+	"osvvm":  ("https://osvvm.github.io/", None),
 }
 
 
