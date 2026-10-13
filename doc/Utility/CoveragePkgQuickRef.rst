@@ -335,7 +335,7 @@ creates the range 1 to 9 in a single illegal bin.
    IllegalBin(1,9)
 
 The method :vhdlcode:`SetIllegalMode` controls signaling when a value is in an illegal bin. See the
-:vhdlcode:`CoveragePkg` User Guide for details
+:ref:`CoveragePkg User Guide <UTILITY/CoveragePkg>` for details
 
 Errors detected by the coverage model are reported as alerts and are reported by :vhdlcode:`ReportAlerts`.
 
@@ -424,12 +424,12 @@ Specify one name per item bin.
 Test Case Detailed Reports
 **************************
 
-Call :vhdlcode:`EndOfTestReports` (see :vhdlcode:`AlertLogPkg`) at the end of a test to get a report for each coverage
-model in the test case in :file:`Reports/<TestName>.html`.
+Call :vhdlcode:`EndOfTestReports` (see :ref:`AlertLogPkg <UTILITY/AlertLogPkg>`) at the end of a test to get a report
+for each coverage model in the test case in :file:`Reports/<TestName>.html`.
 
 .. _UTILITY/CoveragePkgQuickRef/MoreDetailedInformation:
 
 More Detailed Information
 *************************
 
-See: :osvvmdoc:`CoveragePkg_Users_Guide.pdf <CoveragePkg_user_guide>`.
+See: :ref:`UTILITY/CoveragePkg`.
