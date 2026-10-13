@@ -71,12 +71,12 @@ instantiation within that test bench using the generics and PCIe port connection
 
 * What is the maximum link width required?
 
-   * Configured with the PCIe ports’ size of the connected :vhdlcode:`LinkType` array ( :vhdlcode:`PcieModel` ) or the
+   * Configured with the PCIe ports’ size of the connected :vhdlcode:`LinkType` array (:vhdlcode:`PcieModel`) or the
      width of the serial vectors (:vhdlcode:`PcieModelSerial`).
 
 * What data input/output format is required 8b10b or PIPE?
 
-   * Configured with the PIPE generic ( :vhdlcode:`PcieModel` only)
+   * Configured with the :vhdlcode:`PIPE` generic (:vhdlcode:`PcieModel` only)
 
 * Is the :vhdlcode:`PcieModel` to be an Upstream link (RC or switch EP facing) or a Downstream link (Endpoint or switch
   RC facing)?
@@ -90,7 +90,7 @@ instantiation within that test bench using the generics and PCIe port connection
 
 * Is link training initialisation required from electrical idle to L0?
 
-   * Configured with :vhdlcode:`ENABLE_INIT_PHY` .
+   * Configured with :vhdlcode:`ENABLE_INIT_PHY`.
 
 There are three test benches for the PCIe VC that demonstrate the VC main configurations. The first, :vhdlcode:`TbPcie`,
 uses the VC in a "classic " manner with an "upstream" requester" and "downstream" responder driven by VHDL test
@@ -136,10 +136,9 @@ The PcieModel VC HDL component
 The :vhdlcode:`PcieModel` component is has a clock and reset signal inputs (:vhdlcode:`Clk` and :vhdlcode:`nReset`),
 where the clock frequency needs to be set to the base symbol rate. E.g. PCIe GEN1 has a 2.5Gb/s rate, so for 10 bit
 symbols, this is 250MSym/s and a clock rate of 250 MHz. The active low reset signal must be asserted for a minimum of 1
-cycle. The test control interface is via the :vhdlcode:`TransRec` port of type
-
-:vhdlcode:`AddressBusRecType` [5], and there are a pair of PCIe links, in output and input of type :vhdlcode:`LinkType`
-which carry the 10-bit encoded data or, if configured, the 9-bit pre-encoded PIPE data.
+cycle. The test control interface is via the :vhdlcode:`TransRec` port of type :vhdlcode:`AddressBusRecType` [5], and
+there are a pair of PCIe links, in output and input of type :vhdlcode:`LinkType` which carry the 10-bit encoded data or,
+if configured, the 9-bit pre-encoded PIPE data.
 
 The entity declaration for the :vhdlcode:`PcieModel` VC is defined as shown below:
 
@@ -198,13 +197,13 @@ configurations space and whether enabled there. For testing of correct handling 
 included. If enabled, any auto-generated completion TLPs will include an ECRC in response to a TLP request that also has
 an ECRC.
 
-By default, the VC will generate a 10-bit stream of scrambled and 8b10b encoded data. The PIPE generic, when set to
-true, bypasses the 8b10 encoding (and the corresponding received data decoding) to produce a stream of 9-bit pre-encoded
-symbols, with 8 bits of data (bits 7 down to 0) and a control symbol indicator (bit 8), matching a PIPE interface’s data
-paths. Note that a PIPE’s data path ports can also be wider than a symbol, with 16, 32 and 64 bit widths supported with
-additional control bits for each of the extra bytes. This would require some wrapper logic to widen and down-clock the
-:vhdlcode:`PcieModel` output for each lane. In addition to disabling the 8b10 encoding, the scrambling can also be
-disabled with the :vhdlcode:`DISABLE_SCRAMBLING` boolean generic.
+By default, the VC will generate a 10-bit stream of scrambled and 8b10b encoded data. The :vhdlcode:`PIPE` generic, when
+set to :vhdlcode:`true`, bypasses the 8b10 encoding (and the corresponding received data decoding) to produce a stream
+of 9-bit pre-encoded symbols, with 8 bits of data (bits 7 down to 0) and a control symbol indicator (bit 8), matching a
+PIPE interface’s data paths. Note that a PIPE’s data path ports can also be wider than a symbol, with 16, 32 and 64 bit
+widths supported with additional control bits for each of the extra bytes. This would require some wrapper logic to
+widen and down-clock the :vhdlcode:`PcieModel` output for each lane. In addition to disabling the 8b10 encoding, the
+scrambling can also be disabled with the :vhdlcode:`DISABLE_SCRAMBLING` boolean generic.
 
 The :vhdlcode:`ENABLE_INIT_PHY` generic is used to indicate to the running software if configured to automatically
 generate initialisation sequences, to run the physical layer link training or not. Note that the link training is
@@ -328,12 +327,12 @@ PCIe Serial Interface Wrapper Component
 =======================================
 
 An alternative top level :vhdlcode:`PcieModel` component is available as :vhdlcode:`PcieModelSerial`. This is the same
-as the :vhdlcode:`PcieModel` components except in two important ways. Firstly, it does not have the PIPE boolean generic
-as only 8b10b encode output can be serialised and, secondly it a single-ended input and output pair for each lane. These
-are organised as :vhdlcode:`std_logic_vector` :vhdlcode:`SerLinkIn` and :vhdlcode:`SerLinkOut` ports in place of the
-:vhdlcode:`LinkType` :vhdlcode:`PcieLinkIn` and :vhdlcode:`PcieLinkOut` ports of the :vhdlcode:`PcieModel`. The serial
-ports require an additional clock input, :vhdlcode:`SerClk`, running at ten times the normal :vhdlcode:`Clk` input. This
-can be phased aligned with the :vhdlcode:`Clk`, but it is not strictly necessary.
+as the :vhdlcode:`PcieModel` components except in two important ways. Firstly, it does not have the :vhdlcode:`PIPE`
+boolean generic as only 8b10b encode output can be serialised and, secondly it a single-ended input and output pair for
+each lane. These are organised as :vhdlcode:`std_logic_vector` :vhdlcode:`SerLinkIn` and :vhdlcode:`SerLinkOut` ports in
+place of the :vhdlcode:`LinkType` :vhdlcode:`PcieLinkIn` and :vhdlcode:`PcieLinkOut` ports of the :vhdlcode:`PcieModel`.
+The serial ports require an additional clock input, :vhdlcode:`SerClk`, running at ten times the normal :vhdlcode:`Clk`
+input. This can be phased aligned with the :vhdlcode:`Clk`, but it is not strictly necessary.
 
 The model does not require the normal differential pair of signals used for PCIe, but a DUT that does requires this can
 simply create inverted signals from the :vhdlcode:`SerLinkOut` bits for its negative inputs and leave its inverted
@@ -378,18 +377,20 @@ code will look like the following:
 .. code-block:: c++
 
    #include "pcieVcInterface.h"
+
    extern "C" void VUserMain62 (int node)
    {
        pcieVcInterface *vc = new pcieVcInterface(node);
+
        // Should not return
        vc->run();
    }
 
 This example code is for a :vhdlcode:`PcieModel` instantiated with the :vhdlcode:`NODE_NUM` generic as 62, thus needs an
-entry point equivalent to “main” as :vhdlcode:`VUserMain62` which must have C linkage. In this code the
+entry point equivalent to “:vhdlcode:`main`” as :vhdlcode:`VUserMain62` which must have C linkage. In this code the
 :file:`pcieVcInterface.h` header file is included and a pointer to the model created in the main function. The model is
-then run using the run() method. For each instantiated model an equivalent :vhdlcode:`VUserMain`\ <n> function must be
-created. These can all reside in the same source file.
+then run using the :vhdlcode:`run()` method. For each instantiated model an equivalent :vhdlcode:`VUserMain<n>` function
+must be created. These can all reside in the same source file.
 
 To compile the model, independently from other OSVVM code, a test script should look something like the following:
 
@@ -402,10 +403,10 @@ To compile the model, independently from other OSVVM code, a test script should 
    TestName   CoSim_pcie
    simulate   Tb_PCIe [CoSim]
 
-This script is adapted from the :file:`PCIe/testbench/tests.pro` file. The source code files are in a PCIe/tests/vc
-directory, and they are all compiled with the :vhdlcode:`MkVproc` vc command.
+This script is adapted from the :file:`PCIe/testbench/tests.pro` file. The source code files are in a
+:file:`PCIe/tests/vc` directory, and they are all compiled with the :tclcode:`MkVproc vc` command.
 
-The simulate :vhdlcode:`Tb_PCIe` [:vhdlcode:`CoSim`] command then runs the model.
+The :tclcode:`simulate Tb_PCIe [CoSim]` command then runs the model.
 
 .. _VC/PCIe/ConfigurationOptionsForThePCIeVC:
 
@@ -434,175 +435,121 @@ The type of options for the :vhdlcode:`PcieModel` available fall into two catego
 For the first category details can be found in the pcievhost documentation [2], but the table below summarises the
 available options:
 
-.. list-table::
-   :header-rows: 1
-   :widths: 287 64 63 330
-
-   * - TYPE
-     - VALUE?
-     - UNITS
-     - Description
-   * - Configuration setting values for :vhdlcode:`CONFIG_FC_HDR_RATE`
-     - yes
-     - cycles
-     - pcievhost model Rx Header consumption rate (default 4)
-   * - :vhdlcode:`CONFIG_FC_DATA_RATE`
-     - yes
-     - cycles
-     - Rx Data consumption rate (default 4)
-   * - :vhdlcode:`CONFIG_ENABLE_FC`
-     - no
-     -
-     - Enable auto flow control (default)
-   * - :vhdlcode:`CONFIG_DISABLE_FC`
-     - no
-     -
-     - Disable auto flow control
-   * - :vhdlcode:`CONFIG_ENABLE_ACK`
-     - yes
-     - cycles
-     - Enable auto acknowledges with processing rate (default rate 1)
-   * - :vhdlcode:`CONFIG_DISABLE_ACK`
-     - no
-     -
-     - Disable auto acknowledges
-   * - :vhdlcode:`CONFIG_ENABLE_MEM`
-     - no
-     -
-     - Enable internal memory (default)
-   * - :vhdlcode:`CONFIG_DISABLE_MEM`
-     - no
-     -
-     - Disable internal memory
-   * - :vhdlcode:`CONFIG_ENABLE_SKIPS`
-     - yes
-     - cycles
-     - Enable regular Skip ordered sets, with interval (default interval 1180)
-   * - :vhdlcode:`CONFIG_DISABLE_SKIPS`
-     - no
-     -
-     - Disable regular Skip ordered sets
-   * - :vhdlcode:`CONFIG_DISABLE_SCRAMBLING`
-     - no
-     -
-     - Disable data scrambling
-   * - :vhdlcode:`CONFIG_ENABLE_SCRAMBLING`
-     - no
-     -
-     - Enable data scrambling (default)
-   * - :vhdlcode:`CONFIG_DISABLE_8B10B`
-     - no
-     -
-     - Disable 8b10b encoding and decoding
-   * - :vhdlcode:`CONFIG_ENABLE_8B10B`
-     - no
-     -
-     - Enable 8b10b encoding and decoding (default)
-   * - :vhdlcode:`CONFIG_DISABLE_ECRC_CMPL`
-     - no
-     -
-     - Disable ECRC auto-generation on completions for requests with ECRCs
-   * - :vhdlcode:`CONFIG_ENABLE_ECRC_CMPL`
-     - no
-     -
-     - Enable ECRC auto-generation on completions for requests with ECRCs (default)
-   * - :vhdlcode:`CONFIG_ENABLE_CRC_CHK`
-     - no
-     -
-     - Enable CRC checks (default)
-   * - :vhdlcode:`CONFIG_DISABLE_CRC_CHK`
-     - no
-     -
-     - Disable CRC checks
-   * - :vhdlcode:`CONFIG_ENABLE_UR_CPL`
-     - no
-     -
-     - Enable auto unsupported request completions (default)
-   * - :vhdlcode:`CONFIG_DISABLE_UR_CPL`
-     - no
-     -
-     - Disable auto unsupported request completions
-   * - :vhdlcode:`CONFIG_ENABLE_INTERNAL_MEM`
-     - no
-     -
-     - Enable internal memory (default)
-   * - :vhdlcode:`CONFIG_DISABLE_INTERNAL_MEM`
-     - no
-     -
-     - Disable internal memory (packets passed to user callback if registered)
-   * - :vhdlcode:`CONFIG_ENABLE_DISPLINK_COLOUR`
-     - no
-     -
-     - Enable colour formatting of link display output (default)
-   * - :vhdlcode:`CONFIG_DISABLE_DISPLINK_COLOUR`
-     - no
-     -
-     - Disable colour formatting of link display output
-   * - :vhdlcode:`CONFIG_BCK_NODE_NUM`
-     - yes
-     - node#
-     - Set the displink display node number for back completing node (default this node# ^ 1)
-   * - :vhdlcode:`CONFIG_POST_HDR_CR`\ †
-     - yes
-     - credits
-     - Initial advertised posted header credits (default 32)
-   * - :vhdlcode:`CONFIG_POST_DATA_CR`\ †
-     - yes
-     - credits
-     - Initial advertised posted data credits (default 1K)
-   * - :vhdlcode:`CONFIG_NONPOST_HDR_CR`\ †
-     - yes
-     - credits
-     - Initial advertised non-posted header credits (default 32)
-   * - :vhdlcode:`CONFIG_NONPOST_DATA_CR`\ †
-     - yes
-     - credits
-     - Initial advertised non-posted data credits (default 1)
-   * - :vhdlcode:`CONFIG_CPL_HDR_CR`\ †
-     - yes
-     - credits
-     - Initial advertised completion header credits (default ∞)
-   * - :vhdlcode:`CONFIG_CPL_DATA_CR`\ †
-     - yes
-     - credits
-     - Initial advertised non-posted data credits (default ∞)
-   * - :vhdlcode:`CONFIG_CPL_DELAY_RATE`\ †
-     - yes
-     - cycles
-     - Auto completion delay rate (default 0)
-   * - :vhdlcode:`CONFIG_CPL_DELAY_SPREAD`\ † Configuration setting values for :file:`ltssm.c` if used
-     - yes
-     - cycles
-     - Auto completion delay randomised spread (default 0)
-   * - Configuration setting values for :file:`ltssm.c` if used :vhdlcode:`CONFIG_LTSSM_LINKNUM`\ ††
-     - yes
-     - integer
-     - Training sequence advertised link number (default 0)
-   * - :vhdlcode:`CONFIG_LTSSM_N_FTS`\ ††
-     - yes
-     - integer
-     - Training sequence number of fast training sequences (default 255)
-   * - :vhdlcode:`CONFIG_LTSSM_TS_CTL`\ ††
-     - yes
-     - integer
-     - Five bit TS control field (default 0)
-   * - :vhdlcode:`CONFIG_LTSSM_DETECT_QUIET_TO`\ ††
-     - yes
-     - cycles
-     - Detect quite timeout (default 1500/6M, depending if :vhdlcode:`LTSSM_ABBREVIATED` defined or not)
-   * - :vhdlcode:`CONFIG_LTSSM_POLL_ACTIVE_TO_COUNT`\ ††
-     - yes
-     - cycles
-     - Polling active TX count (default 16/1024, depending if :vhdlcode:`LTSSM_ABBREVIATED` defined or not)
-   * - :vhdlcode:`CONFIG_LTSSM_DISABLE_DISP_STATE`\ ††
-     - yes
-     - integer
-     - Disable display of link state (default 0 = false)
-   * - † Call before generating transactions to take effect from time 0 †† Call before calling initialising link to
-       take effect in training sequences.
-     -
-     -
-     -
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| TYPE                                                 | VALUE? | UNITS   | Description                                |
++======================================================+========+=========+============================================+
+| Configuration setting values for pcievhost model                                                                     |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_FC_HDR_RATE`                       | yes    | cycles  | Rx Header consumption rate (default 4)     |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_FC_DATA_RATE`                      | yes    | cycles  | Rx Data consumption rate (default 4)       |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_ENABLE_FC`                         | no     |         | Enable auto flow control (default)         |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_DISABLE_FC`                        | no     |         | Disable auto flow control                  |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_ENABLE_ACK`                        | yes    | cycles  | Enable auto acknowledges with processing   |
+|                                                      |        |         | rate (default rate 1)                      |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_DISABLE_ACK`                       | no     |         | Disable auto acknowledges                  |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_ENABLE_MEM`                        | no     |         | Enable internal memory (default)           |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_DISABLE_MEM`                       | no     |         | Disable internal memory                    |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_ENABLE_SKIPS`                      | yes    | cycles  | Enable regular Skip ordered sets, with     |
+|                                                      |        |         | interval (default interval 1180)           |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_DISABLE_SKIPS`                     | no     |         | Disable regular Skip ordered sets          |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_DISABLE_SCRAMBLING`                | no     |         | Disable data scrambling                    |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_ENABLE_SCRAMBLING`                 | no     |         | Enable data scrambling (default)           |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_DISABLE_8B10B`                     | no     |         | Disable 8b10b encoding and decoding        |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_ENABLE_8B10B`                      | no     |         | Enable 8b10b encoding and decoding         |
+|                                                      |        |         | (default)                                  |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_DISABLE_ECRC_CMPL`                 | no     |         | Disable ECRC auto-generation on            |
+|                                                      |        |         | completions for requests with ECRCs        |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_ENABLE_ECRC_CMPL`                  | no     |         | Enable ECRC auto-generation on completions |
+|                                                      |        |         | for requests with ECRCs (default)          |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_ENABLE_CRC_CHK`                    | no     |         | Enable CRC checks (default)                |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_DISABLE_CRC_CHK`                   | no     |         | Disable CRC checks                         |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_ENABLE_UR_CPL`                     | no     |         | Enable auto unsupported request            |
+|                                                      |        |         | completions (default)                      |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_DISABLE_UR_CPL`                    | no     |         | Disable auto unsupported request           |
+|                                                      |        |         | completions                                |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_ENABLE_INTERNAL_MEM`               | no     |         | Enable internal memory (default)           |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_DISABLE_INTERNAL_MEM`              | no     |         | Disable internal memory (packets passed to |
+|                                                      |        |         | user callback if registered)               |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_ENABLE_DISPLINK_COLOUR`            | no     |         | Enable colour formatting of link display   |
+|                                                      |        |         | output (default)                           |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_DISABLE_DISPLINK_COLOUR`           | no     |         | Disable colour formatting of link display  |
+|                                                      |        |         | output                                     |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_BCK_NODE_NUM`                      | yes    | node#   | Set the displink display node number for   |
+|                                                      |        |         | back completing node (default this node# ^ |
+|                                                      |        |         | 1)                                         |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_POST_HDR_CR`\ †                    | yes    | credits | Initial advertised posted header credits   |
+|                                                      |        |         | (default 32)                               |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_POST_DATA_CR`\ †                   | yes    | credits | Initial advertised posted data credits     |
+|                                                      |        |         | (default 1K)                               |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_NONPOST_HDR_CR`\ †                 | yes    | credits | Initial advertised non-posted header       |
+|                                                      |        |         | credits (default 32)                       |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_NONPOST_DATA_CR`\ †                | yes    | credits | Initial advertised non-posted data credits |
+|                                                      |        |         | (default 1)                                |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_CPL_HDR_CR`\ †                     | yes    | credits | Initial advertised completion header       |
+|                                                      |        |         | credits (default ∞)                        |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_CPL_DATA_CR`\ †                    | yes    | credits | Initial advertised non-posted data credits |
+|                                                      |        |         | (default ∞)                                |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_CPL_DELAY_RATE`\ †                 | yes    | cycles  | Auto completion delay rate (default 0)     |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_CPL_DELAY_SPREAD`\ †               | yes    | cycles  | Auto completion delay randomised spread    |
+|                                                      |        |         | (default 0)                                |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| Configuration setting values for :file:`ltssm.c` if used                                                             |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_LTSSM_LINKNUM`\ ††                 | yes    | integer | Training sequence advertised link number   |
+|                                                      |        |         | (default 0)                                |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_LTSSM_N_FTS`\ ††                   | yes    | integer | Training sequence number of fast training  |
+|                                                      |        |         | sequences (default 255)                    |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_LTSSM_TS_CTL`\ ††                  | yes    | integer | Five bit TS control field (default 0)      |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_LTSSM_DETECT_QUIET_TO`\ ††         | yes    | cycles  | Detect quite timeout (default 1500/6M,     |
+|                                                      |        |         | depending if :vhdlcode:`LTSSM_ABBREVIATED` |
+|                                                      |        |         | defined or not)                            |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_LTSSM_POLL_ACTIVE_TO_COUNT`\ ††    | yes    | cycles  | Polling active TX count (default 16/1024,  |
+|                                                      |        |         | depending if :vhdlcode:`LTSSM_ABBREVIATED` |
+|                                                      |        |         | defined or not)                            |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| :vhdlcode:`CONFIG_LTSSM_DISABLE_DISP_STATE`\ ††      | yes    | integer | Disable display of link state (default 0 = |
+|                                                      |        |         | false)                                     |
++------------------------------------------------------+--------+---------+--------------------------------------------+
+| † Call before generating transactions to take effect from time 0                                                     |
+|                                                                                                                      |
+| †† Call before calling initialising link to take effect in training sequences.                                       |
++----------------------------------------------------------------------------------------------------------------------+
 
 The second group of settings configure the VC itself, independent of the pcievhost model. These are used for things such
 as setting values to be used in transaction fields or some simulation control.
@@ -720,8 +667,8 @@ Setting the Transaction Mode
 Unlike some other bus or interconnect interfaces PCIe can generate a range of different types of transactions though,
 fundamentally, these still send a transaction over the link and either get a response (like a read), or don’t (like a
 write). However, to generate the desired transaction type, a value must be set in the :vhdlcode:`TransactionRec`\ ’s
-Params entry. This is done with the Set() procedure and at the :vhdlcode:`PARAM_TRANS_MODE` index. There are six valid
-values for this configuration:
+:vhdlcode:`Params` entry. This is done with the :vhdlcode:`Set()` procedure and at the :vhdlcode:`PARAM_TRANS_MODE`
+index. There are six valid values for this configuration:
 
 .. list-table::
    :header-rows: 1
@@ -760,7 +707,7 @@ Setting Transaction Fields
 --------------------------
 
 Some of the transaction types require additional fields to be set, and further parameters are used to set the desired
-values. The table below shows the Params index values for each of these parameters.
+values. The table below shows the :vhdlcode:`Params` index values for each of these parameters.
 
 .. list-table::
    :header-rows: 1
@@ -922,13 +869,29 @@ Messages are similar to memory writes in that they don’t receive a completion.
 different meaning and some messages also don’t have a payload, determined by its type. Here the “address” will be used
 to specify the message type, and this can be one of the following values:
 
-.. code-block:: text
+.. list-table::
+   :widths: 25 25 25 25
 
-   MSG_ASSERT_INTA             MSG_ASSERT_INTB        MSG_ASSERT_INTC       MSG_ASSERT_INTD
-   MSG_DEASSERT_INTA           MSG_DEASSERT_INTB      MSG_DEASSERT_INTB     MSG_DEASSERT_INTD
-   MSG_PM_ACTIVE_STATE_NAK     MSG_PME                MSG_PME_TURN_OFF      MSG_PME_TO_ACK
-   MSG_ERR_CORR                MSG_ERR_NON_FATAL      MSG_ERR_FATAL         MSG_SET_PWR_LIMIT
-   MSG_UNLOCK                  MSG_VENDOR_0           MSG_VENDOR_1
+   * - :vhdlcode:`MSG_ASSERT_INTA`
+     - :vhdlcode:`MSG_ASSERT_INTB`
+     - :vhdlcode:`MSG_ASSERT_INTC`
+     - :vhdlcode:`MSG_ASSERT_INTD`
+   * - :vhdlcode:`MSG_DEASSERT_INTA`
+     - :vhdlcode:`MSG_DEASSERT_INTB`
+     - :vhdlcode:`MSG_DEASSERT_INTB`
+     - :vhdlcode:`MSG_DEASSERT_INTD`
+   * - :vhdlcode:`MSG_PM_ACTIVE_STATE_NAK`
+     - :vhdlcode:`MSG_PME`
+     - :vhdlcode:`MSG_PME_TURN_OFF`
+     - :vhdlcode:`MSG_PME_TO_ACK`
+   * - :vhdlcode:`MSG_ERR_CORR`
+     - :vhdlcode:`MSG_ERR_NON_FATAL`
+     - :vhdlcode:`MSG_ERR_FATAL`
+     - :vhdlcode:`MSG_SET_PWR_LIMIT`
+   * - :vhdlcode:`MSG_UNLOCK`
+     - :vhdlcode:`MSG_VENDOR_0`
+     - :vhdlcode:`MSG_VENDOR_1`
+     -
 
 The example below is for a message with no data, and :vhdlcode:`WriteAddressAsync` is used as there is no data payload:
 
@@ -938,7 +901,7 @@ The example below is for a message with no data, and :vhdlcode:`WriteAddressAsyn
    Set (TransactionRec.Params, PARAM_REQTAG,     TLP_AUTO_TAG) ;
    WriteAddressAsync(TransactionRec, MSG_ERR_NON_FATAL) ;
 
-For a message requiring data the setup is the same bit the Write procedure is used.
+For a message requiring data the setup is the same bit the :vhdlcode:`Write` procedure is used.
 
 .. code-block:: VHDL
 
@@ -1051,8 +1014,8 @@ Completions require a few more options. As well as setting the transaction type 
 and a completer ID must also be set. There is no auto-tag mode as the tag must be set to the received request’s tag that
 the for which completion is the response. A locked completion should also be the response to a locked memory read
 request. Since a completion is a data push, requiring no response, it is considered a posted write like memory writes,
-and so the standard Write procedure is used. The address for the call to Write needs only be the 7 lower address bits of
-a memory read request, or 0 in completions for other transaction request types. E.g.
+and so the standard :vhdlcode:`Write` procedure is used. The address for the call to :vhdlcode:`Write` needs only be the
+7 lower address bits of a memory read request, or 0 in completions for other transaction request types. E.g.
 
 .. code-block:: VHDL
 
@@ -1589,7 +1552,7 @@ is transaction type dependent. The table below shows the parameter offset defini
      - all
      - The received packet error status
    * - :vhdlcode:`PARAM_REQ_ADDR`
-     - :vhdlcode:`TL_MEM`\ \*, :vhdlcode:`TL_IO`\ \*
+     - :vhdlcode:`TL_MEM*`, :vhdlcode:`TL_IO*`
      - The received address, extended for 64-bit, regardless of type.
    * - :vhdlcode:`PARAM_REQ_TAG`
      - all
@@ -1610,31 +1573,31 @@ is transaction type dependent. The table below shows the parameter offset defini
      - all
      - The received transaction’s AT bits value
    * - :vhdlcode:`PARAM_REQ_FBE`
-     - not :vhdlcode:`TL_MSG`\ \*
+     - not :vhdlcode:`TL_MSG*`
      - The received transaction’s first byte enable bits
    * - :vhdlcode:`PARAM_REQ_LBE`
-     - not :vhdlcode:`TL_MSG`\ \*
+     - not :vhdlcode:`TL_MSG*`
      - The received transaction’s last by enable bits
    * - :vhdlcode:`PARAM_REQ_MSG_CODE`
-     - :vhdlcode:`TL_MSG`\ \*
+     - :vhdlcode:`TL_MSG*`
      - The received message transaction’s code
    * - :vhdlcode:`PARAM_REQ_CFG_FUNC`
-     - :vhdlcode:`TL_CFG`\ \*
+     - :vhdlcode:`TL_CFG*`
      - The received configuration space transaction’s function number
    * - :vhdlcode:`PARAM_REQ_CFG_DEV`
-     - :vhdlcode:`TL_CFG`\ \*
+     - :vhdlcode:`TL_CFG*`
      - The received configuration space transaction’s device number
    * - :vhdlcode:`PARAM_REQ_CFG_BUS`
-     - :vhdlcode:`TL_CFG`\ \*
+     - :vhdlcode:`TL_CFG*`
      - The received configuration space transaction’s bus number
    * - :vhdlcode:`PARAM_REQ_CFG_REG`
-     - :vhdlcode:`TL_CFG`\ \*
+     - :vhdlcode:`TL_CFG*`
      - The received configuration space transaction’s register byte offset (word aligned).
    * - :vhdlcode:`PARAM_REQ_LENGTH`
-     - :vhdlcode:`TL_MEMWR`\ \*, :vhdlcode:`TL_IOWR`, :vhdlcode:`TL_CFGWR`, TLMSGD
+     - :vhdlcode:`TL_MEMWR*`, :vhdlcode:`TL_IOWR`, :vhdlcode:`TL_CFGWR`, :vhdlcode:`TLMSGD`
      - The received write transaction’s payload word length
    * - :vhdlcode:`PARAM_REQ_BYTE_LEN`
-     - :vhdlcode:`TL_MEMWR`\ \*, :vhdlcode:`TL_IOWR`, :vhdlcode:`TL_CFGWR`, TLMSGD
+     - :vhdlcode:`TL_MEMWR*`, :vhdlcode:`TL_IOWR`, :vhdlcode:`TL_CFGWR`, :vhdlcode:`TLMSGD`
      - The received write transaction’s number of active bytes in the payload
 
 .. _VC/PCIe/PCIeExtractWrapperProcedures:
@@ -1796,7 +1759,7 @@ Run-time Control of Display Output
 ==================================
 
 To control the display a file must be present in the directory from which the simulation is run as
-./hex/:vhdlcode:`ContDisps.hex`. If the file is not present, then the simulation will run without any link display
+:file:`./hex/ContDisps.hex`. If the file is not present, then the simulation will run without any link display
 output. An example file is shown below:
 
 .. code-block:: text
@@ -1840,14 +1803,14 @@ useful to have colour output for discriminating between up- and down-link traffi
 simulation or displayed on some simulator’s console, does not decode the escape sequences and pollutes the output with
 literal additional characters. Not that the colour display can also be disabled via the
 :vhdlcode:`CONFIG_DISABLE_DISPLINK_COLOUR` model option, which will override the settings in the
-:vhdlcode:`ContDisps.hex` file.
+:file:`ContDisps.hex` file.
 
 .. _VC/PCIe/ExampleOutput:
 
 Example Output
 ==============
 
-The diagram below shows an example output fragment for the :vhdlcode:`ContDisps.hex` file example above, with all three
+The diagram below shows an example output fragment for the :file:`ContDisps.hex` file example above, with all three
 layers active from time 0 (but not raw output), with the EP doing both RX and TX display and the RC disabled and colour
 output disabled.
 
@@ -1919,11 +1882,11 @@ LTSSM
 
 All ordered set types, including training sequence ordered sets, can be generated from a test program via the API as
 detailed in this document. Included with the model, but not part of it, are the :file:`ltssm.c` and :file:`ltssm.h`
-files located in the Pcie/ltssm directory. This will generate training sequences to automatically take a link from
-electrical idle to the L0 “link up” state. It is incomplete, however, and does not support the low power states (L1, L2
-and L0s) or any of the ancillary states (Disabled, Hot Reset, Loopback or Recovery). The hooks are present in the code
-to add this functionality, and the source code is available to extend as necessary. Or the test code itself can send the
-appropriate OSs as needed.
+files located in the :file:`Pcie/ltssm` directory. This will generate training sequences to automatically take a link
+from electrical idle to the L0 “link up” state. It is incomplete, however, and does not support the low power states
+(L1, L2 and L0s) or any of the ancillary states (Disabled, Hot Reset, Loopback or Recovery). The hooks are present in
+the code to add this functionality, and the source code is available to extend as necessary. Or the test code itself can
+send the appropriate OSs as needed.
 
 By default, the model does not instigate a PHY link training sequence, but this can be initiated with a command:
 
@@ -1991,7 +1954,7 @@ of “credits”, a set of model options for setting each of the six types is av
 * :vhdlcode:`CONFIG_CPL_HDR_CR`
 * :vhdlcode:`CONFIG_CPL_HDR_CR`
 
-E.g. :vhdlcode:`SetModelOptions(TransactionRec, CONFIG_POST_DATA_CR, 1024)` ;
+E.g. :vhdlcode:`SetModelOptions(TransactionRec, CONFIG_POST_DATA_CR, 1024) ;`
 
 The rate at which DLL headers and data packets are consumed can be separately configure using the
 :vhdlcode:`CONFIG_FC_HDR_RATE` and :vhdlcode:`CONFIG_FC_DATA_RATE` model options, both of which have a 4 cycle default
@@ -2062,8 +2025,8 @@ Built into the PCIe C model is a sparse memory model that can model a full 64-bi
 memory requests it will handle these requests internally and access the memory model to load or store data as
 appropriate for reads or writes. For memory reads, it will automatically generate a completion packet to return the
 data. If the model is configured as an endpoint (via the :vhdlcode:`ENDPOINT` generic) and internal memory is enabled,
-then the incoming memory requests will be checked against the active BAR registers and, if outside a valid range, the
-model will automatically return an unsupported request completion. This feature can be disabled with the
+then the incoming memory requests will be checked against the active :vhdlcode:`BAR` registers and, if outside a valid
+range, the model will automatically return an unsupported request completion. This feature can be disabled with the
 :vhdlcode:`CONFIG_DISABLE_UR_CPL` model option.
 
 Internal memory can be disabled through a model option:
@@ -2099,157 +2062,112 @@ prefetchable space of 4Kbytes:
    SetModelOptions(TransactionRec, CFGSPC,       16#00000008#) ;
    SetModelOptions(TransactionRec, CFGSPCMASK,   16#00000fff#) ;
 
-9.3.2.1 Automatic EP Configuration Space Settings
+.. _VC/PCIe/AutomaticEPConfigurationSpaceSettings:
+
+.. rubric:: Automatic EP Configuration Space Settings
 
 If a :vhdlcode:`PcieModel` is configured as an EP and the :vhdlcode:`runAutoEp()` method is used in its
-:vhdlcode:`VUserMain`\ <n> program, then a configuration space is set up as follows:
+:vhdlcode:`VUserMain<n>` program, then a configuration space is set up as follows:
 
-.. list-table::
-   :header-rows: 1
-   :widths: 404 112 112 82
-
-   * - 31:24 23:16 15:8 7:0
-     - value
-     - mask
-     - offset
-   * - PCI compatibility structure device ID vendor id
-     - 0000214fch
-     - ffffffffh
-     - 00h
-   * - status command
-     - 00100006h
-     - ffffffffh
-     - 04h
-   * - class code revision ID
-     - 02800001h
-     - ffffffffh
-     - 08h
-   * - BIST header master cache line type latency size timer
-     - 00000000h
-     - ffffffffh
-     - 0ch
-   * - base address register
-     - 00000008h
-     - ffffff00h
-     - 10h
-   * - base address register
-     - 00000008h
-     - 00000fffh
-     - 14h
-   * - base address register
-     - 00000000h
-     - 000003ffh
-     - 18h
-   * - base address register
-     - 00000000h
-     - ffffffffh
-     - 1ch
-   * - base address register
-     - 00000000h
-     - ffffffffh
-     - 20h
-   * - base address register
-     - 00000000h
-     - ffffffffh
-     - 24h
-   * - cardbus CIS pointer
-     - 00000000h
-     - ffffffffh
-     - 28h
-   * - subsystem ID subsystem vendor ID
-     - 00000000h
-     - ffffffffh
-     - 2ch
-   * - expansion ROM base address
-     - 00000000h
-     - 000007feh
-     - 30h
-   * - reserved capabilities pointer
-     - 00000040h
-     - ffffffffh
-     - 34h
-   * - reserved
-     - 00000000h
-     - ffffffffh
-     - 38h
-   * - max latency min interrupt interrupt grant pin line
-     - 00000000h
-     - ffffffffh
-     - 3ch
-
-.. list-table::
-   :header-rows: 1
-   :widths: 192 212 306
-
-   * - pcie capabilities register
-     - next capability capability ID ptr
-     - 00007c10h ffffffffh 40h
-   * - device capabilities
-     -
-     - 00000001h ffffffffh 44h
-   * - device status
-     - device control
-     - 00002810h ffff0000h 48h
-   * - link capabilities
-     -
-     - 0003fc12h ffffffffh 4ch
-   * - link status
-     - link control
-     - 00910000h fffff004h 50h
-   * - slot capability
-     -
-     - 00000000h ffffffffh 54h
-   * - slot status
-     - slot control
-     - 00000000h ffffffffh 58h
-   * - root capabilities
-     - root control
-     - 00000000h ffffffffh 5ch
-   * - root status
-     -
-     - 00000000h ffffffffh 60h
-   * - device capabilities 2
-     -
-     - 00000000h ffffffffh 64h
-   * - device status 2
-     - device control 2
-     - 00000000h ffffffffh 68h
-   * - link capabilities 2
-     -
-     - 00000000h ffffffffh 6ch
-   * - link status 2
-     - link control 2
-     - 00000002h ffffe06fh 70h
-   * - slot capabilities 2
-     -
-     - 00000000h ffffffffh 74h
-   * - slot status 2
-     - slot control
-     - 00000000h ffffffffh 78h
-   * - message control
-     - MSI capabilities structure next capability capabilities ID ptr
-     - 00809405h ff8effffh 7ch
-   * - message address
-     -
-     - 00000000h 00000003h 80h
-   * - message upper address
-     -
-     - 00000000h 00000000h 84h
-   * - reserved
-     - message data
-     - 00000000h ffff0000h 88h
-   * - mask bits
-     -
-     - 00000000h 00000000h 8ch
-   * - pending bits
-     -
-     - 00000000h ffffffffh 90h
-   * - PMC
-     - Power management capabilities structure next capability capabilities ID ptr
-     - 00030001h ffffffffh 94h
-   * - PMCSR_BSE rsvd
-     - PMCSR
-     - 00000008h ffffe0fch 98h
++-------------+-------------+--------------+--------------+------------+-----------+--------+
+| 31:24       | 23:16       | 15:8         | 7:0          | value      | mask      | offset |
++=============+=============+==============+==============+============+===========+========+
+| PCI compatibility structure                                                               |
++---------------------------+-----------------------------+------------+-----------+--------+
+| device ID                 | vendor id                   | 0000214fch | ffffffffh | 00h    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| status                    | command                     | 00100006h  | ffffffffh | 04h    |
++---------------------------+--------------+--------------+------------+-----------+--------+
+| class code                               | revision ID  | 02800001h  | ffffffffh | 08h    |
++-------------+-------------+--------------+--------------+------------+-----------+--------+
+| BIST        | header type | master       | cache line   | 00000000h  | ffffffffh | 0ch    |
+|             |             | latency      | size         |            |           |        |
+|             |             | timer        |              |            |           |        |
++-------------+-------------+--------------+--------------+------------+-----------+--------+
+| base address register                                   | 00000008h  | ffffff00h | 10h    |
++---------------------------------------------------------+------------+-----------+--------+
+| base address register                                   | 00000008h  | 00000fffh | 14h    |
++---------------------------------------------------------+------------+-----------+--------+
+| base address register                                   | 00000000h  | 000003ffh | 18h    |
++---------------------------------------------------------+------------+-----------+--------+
+| base address register                                   | 00000000h  | ffffffffh | 1ch    |
++---------------------------------------------------------+------------+-----------+--------+
+| base address register                                   | 00000000h  | ffffffffh | 20h    |
++---------------------------------------------------------+------------+-----------+--------+
+| base address register                                   | 00000000h  | ffffffffh | 24h    |
++---------------------------------------------------------+------------+-----------+--------+
+| cardbus CIS pointer                                     | 00000000h  | ffffffffh | 28h    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| subsystem ID              | subsystem vendor ID         | 00000000h  | ffffffffh | 2ch    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| expansion ROM base address                              | 00000000h  | 000007feh | 30h    |
++------------------------------------------+--------------+------------+-----------+--------+
+| reserved                                 | capabilities | 00000040h  | ffffffffh | 34h    |
+|                                          | pointer      |            |           |        |
++------------------------------------------+--------------+------------+-----------+--------+
+| reserved                                                | 00000000h  | ffffffffh | 38h    |
++-------------+-------------+--------------+--------------+------------+-----------+--------+
+| max latency | min grant   | interrupt    | interrupt    | 00000000h  | ffffffffh | 3ch    |
+|             |             | pin          | line         |            |           |        |
++-------------+-------------+--------------+--------------+------------+-----------+--------+
+| PCIe capabilities structure                                                               |
++---------------------------+--------------+--------------+------------+-----------+--------+
+| pcie capabilities         | next         | capability   | 00007c10h  | ffffffffh | 40h    |
+| register                  | capability   | ID           |            |           |        |
+|                           | ptr          |              |            |           |        |
++---------------------------+--------------+--------------+------------+-----------+--------+
+| device capabilities                                     | 00000001h  | ffffffffh | 44h    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| device status             | device control              | 00002810h  | ffff0000h | 48h    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| link capabilities                                       | 0003fc12h  | ffffffffh | 4ch    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| link status               | link control                | 00910000h  | fffff004h | 50h    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| slot capability                                         | 00000000h  | ffffffffh | 54h    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| slot status               | slot control                | 00000000h  | ffffffffh | 58h    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| root capabilities         | root control                | 00000000h  | ffffffffh | 5ch    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| root status                                             | 00000000h  | ffffffffh | 60h    |
++---------------------------------------------------------+------------+-----------+--------+
+| device capabilities 2                                   | 00000000h  | ffffffffh | 64h    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| device status 2           | device control 2            | 00000000h  | ffffffffh | 68h    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| link capabilities 2                                     | 00000000h  | ffffffffh | 6ch    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| link status 2             | link control 2              | 00000002h  | ffffe06fh | 70h    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| slot capabilities 2                                     | 00000000h  | ffffffffh | 74h    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| slot status 2             | slot control                | 00000000h  | ffffffffh | 78h    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| MSI capabilities structure                                                                |
++---------------------------+--------------+--------------+------------+-----------+--------+
+| message control           | next         | capability   | 00809405h  | ff8effffh | 7ch    |
+|                           | capabilities | ID           |            |           |        |
+|                           | ptr          |              |            |           |        |
++---------------------------+--------------+--------------+------------+-----------+--------+
+| message address                                         | 00000000h  | 00000003h | 80h    |
++---------------------------------------------------------+------------+-----------+--------+
+| message upper address                                   | 00000000h  | 00000000h | 84h    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| reserved                  | message data                | 00000000h  | ffff0000h | 88h    |
++---------------------------+-----------------------------+------------+-----------+--------+
+| mask bits                                               | 00000000h  | 00000000h | 8ch    |
++---------------------------------------------------------+------------+-----------+--------+
+| pending bits                                            | 00000000h  | ffffffffh | 90h    |
++---------------------------------------------------------+------------+-----------+--------+
+| Power management capabilities structure                                                   |
++---------------------------+--------------+--------------+------------+-----------+--------+
+| PMC                       | next         | capability   | 00030001h  | ffffffffh | 94h    |
+|                           | capabilities | ID           |            |           |        |
+|                           | ptr          |              |            |           |        |
++-------------+-------------+--------------+--------------+------------+-----------+--------+
+| PMCSR_BSE   | rsvd        | PMCSR                       | 00000008h  | ffffe0fch | 98h    |
++-------------+-------------+-----------------------------+------------+-----------+--------+
 
 .. _VC/PCIe/IOSpace:
 
@@ -2269,34 +2187,41 @@ OSVVM’s co-simulation capabilities map these calls (and others) to the C or C+
 driven from software in this way, though this is true of all the OSVVM VCs.
 
 However, the PCIe model is a true co-simulation component and can be driven directly by software using the C++ API that
-the underlying pcievhost model provides [2]. Here the :vhdlcode:`VUserMain`\ <n> function does not call the
-:vhdlcode:`pcieVcInterface` run() method but creates a :vhdlcode:`pcieModelClass` API object and makes calls directly to
-this interface. A template program might look like the following:
+the underlying pcievhost model provides [2]. Here the :vhdlcode:`VUserMain<n>` function does not call the
+:vhdlcode:`pcieVcInterface` :vhdlcode:`run()` method but creates a :vhdlcode:`pcieModelClass` API object and makes calls
+directly to this interface. A template program might look like the following:
 
 .. code-block:: c++
 
    #include <stdio.h>
    #include <stdlib.h>
+
    #include "OsvvmCosim.h"
    #include "pcieVcInterface.h"
    #include "ltssm.h"
+
    //-------------------------------------------------------------
    static void VUserInput (pPkt_t pkt, int status, void* usrptr) {
        // handle received packets here
+
        // Once packet is finished with, the allocated space *must* be freed.
        // All input packets have their own memory space to avoid overwrites
        // which shared buffers.
        DISCARD_PACKET(pkt);
    }
+
    //-------------------------------------------------------------
    extern "C" void VUserMain63 (int node) {
        // Create an API object for this node
        pcieModelClass* pcie = new pcieModelClass(node);
+
        // Initialise PCIe VHost, with input callback function & pass in node number.
        pcie->initialisePcie(VUserInput, &node);
+
        /********** CONFIGURE MODEL*************/
        /**** DO ANY LINK/DLL INITIALISATION ***/
        /*********** DO ANY TESTS **************/
+
        // Send out idles forever
        while(true) pcie->sendIdle(10000);
    }
@@ -2320,12 +2245,11 @@ The type is just an offset where the value to be read is available but comes wit
 shown below:
 
 .. list-table::
-   :header-rows: 1
    :widths: 149 446
 
-   * - NODENUMADDR
+   * - :vhdlcode:`NODENUMADDR`
      - Fetch the node number generic’s value
-   * - LANESADDR
+   * - :vhdlcode:`LANESADDR`
      - Fetch the number of lanes for the connected link
    * - :vhdlcode:`EP_ADDR`
      - Fetch the :vhdlcode:`ENDPOINT` generic’s setting
@@ -2334,10 +2258,10 @@ shown below:
    * - :vhdlcode:`RESET_STATE`
      - Fetch the current state of the reset input port (1 = being reset)
 
-When accessing these types, the value is returned in the value pointer. The delta argument is to control whether the
-access takes a cycle or not of simulation time. It is usually the case for these value that they should be “delta”
-cycles, taking no simulation time, and the argument is usually set to :vhdlcode:`pcieVcInterface`::DELTACYCLE. Lastly
-the node number is passed in to send the access to the correct instantiation.
+When accessing these types, the value is returned in the :vhdlcode:`value` pointer. The delta argument is to control
+whether the access takes a cycle or not of simulation time. It is usually the case for these value that they should be
+“delta” cycles, taking no simulation time, and the argument is usually set to :vhdlcode:`pcieVcInterface::DELTACYCLE`.
+Lastly the node number is passed in to send the access to the correct instantiation.
 
 .. _VC/PCIe/SummaryOfPcieInterfacePackageProcedures:
 
@@ -2494,7 +2418,7 @@ interface for processing by user test code using the :vhdlcode:`PcieInterfacePkg
 process these TLPs.
 
 The model also has code to display formatted link traffic information to the output. This is coded in :file:`displink.c`
-which is passed information from both input and output functions. It reads an external :vhdlcode:`ContDisp.hex` file to
+which is passed information from both input and output functions. It reads an external :file:`ContDisp.hex` file to
 give the user the ability to control what data to show and where in the simulation to display this.
 
 .. _VC/PCIe/LimitationsOfTheModel:
@@ -2510,7 +2434,7 @@ together for ease of reference.
 Transaction Layer Packets
 =========================
 
-All TLPs can be generated using all three methods of writing tests: classic VHDL, OSVVM :vhdlcode:`CoSim` program or
+All TLPs can be generated using all three methods of writing tests: classic VHDL, OSVVM CoSim program or
 co-simulation running directly on the model. Only the latter has access all the PCIe C model’s API. The model itself has
 various assumptions and limitations:
 
@@ -2544,8 +2468,8 @@ all the packets can be generated from the running program. For the other approac
    * NAKs can’t be generated, but the model will NAK a packet if errors introduced externally from the
      :vhdlcode:`PcieModel` VC.
 
-* Power management DLLPs can’t be generated except if running a direct co -simulation program
-* Vendor specific DLLPs can’t be generated except if running a direct co -simulation program
+* Power management DLLPs can’t be generated except if running a direct co-simulation program
+* Vendor specific DLLPs can’t be generated except if running a direct co-simulation program
 
 .. _VC/PCIe/PhysicalLayerOrderedSetsAndTrainingSequences:
 
@@ -2571,11 +2495,11 @@ The PCIe VC is a model to generate PCIe traffic patterns to drive PCIe IP under 
 machine (LTSSM) does not form part of the model, but provides the means, via its C API, for generating the TS and OS
 traffic required to implement an LTSSM.
 
-An external program source code is provided in the form of PCIe/ltssm.[ch], and this source code is compiled into the
-co-simulation code for the model. This sits on top of the C API of the model, making calls to generate and receive the
-Physical Layer patterns. It is not a complete LTSSM implementation but has enough functionality to go from an electrical
-idle state to L0 in GEN1 mode. The source code has hooks to allow expansion for further functionality, with all major
-states having an equivalent function.
+An external program source code is provided in the form of :file:`PCIe/ltssm.[ch]`, and this source code is compiled
+into the co-simulation code for the model. This sits on top of the C API of the model, making calls to generate and
+receive the Physical Layer patterns. It is not a complete LTSSM implementation but has enough functionality to go from
+an electrical idle state to L0 in GEN1 mode. The source code has hooks to allow expansion for further functionality,
+with all major states having an equivalent function.
 
 The list below summarises what is yet to be implemented in the :file:`ltssm.c` code, needing input from the user.
 
@@ -2594,9 +2518,9 @@ The list below summarises what is yet to be implemented in the :file:`ltssm.c` c
    * Hooks are in place to do so
    * The model can generate fast training sequences (FTS)
 
-Users can expand upon this code or substitute their own. Whatever code is in the PCIe/ltssm directory will be compiled
-and linked with the other PCIE co-simulation code. If the :vhdlcode:`PcieInitLink` procedure is called, this makes its
-way to the PCIe models C code which is expecting to call a C function with the following prototype:
+Users can expand upon this code or substitute their own. Whatever code is in the :file:`PCIe/ltssm` directory will be
+compiled and linked with the other PCIE co-simulation code. If the :vhdlcode:`PcieInitLink` procedure is called, this
+makes its way to the PCIe models C code which is expecting to call a C function with the following prototype:
 
 .. code-block:: c++
 
@@ -2639,12 +2563,14 @@ TLP Output Functions
                                     int node);
    pPktData_t Message              (int code, PktData_t *data, int length, int tag, uint32 rid,
                                     bool queue, int node);
+
    pPktData_t MemWriteDigest       (uint64 addr, PktData_t *data, int length, int tag, uint32 rid,
                                     bool digest, bool queue, int node);
    pPktData_t MemReadDigest        (uint64 addr, int length, int tag, uint32 rid, bool digest,
                                     bool queue, int node);
    pPktData_t MemReadLockDigest    (uint64 addr, int length, int tag, uint32 rid, bool lock,
                                     bool digest,bool queue, int node);
+
    pPktData_t CompletionDigest     (uint64 addr, PktData_t *data, int status, int fbe, int lbe,
                                     int word_length, int tag, uint32 cid, uint32 rid, bool digest,
                                     bool queue, int node);
@@ -2661,6 +2587,7 @@ TLP Output Functions
                                     bool queue, int node);
    pPktData_t MessageDigest        (int code, PktData_t *data, int length, int tag, uint32 rid,
                                     bool digest, bool queue, int node);
+
    pPktData_t CompletionDelay      (uint64 addr, PktData_t *data, int status, int fbe, int lbe,
                                     int length, int tag, uint32 cid, uint32 rid, int node);
    pPktData_t PartCompletionDelay  (uint64 addr, PktData_t *data, int status, int fbe, int lbe,
@@ -2670,6 +2597,8 @@ TLP Output Functions
                                   (uint64 addr, PktData_t *data, int status, int fbe, int lbe,
                                     int rlength, int length, int tag, uint32 cid, uint32 rid,
                                     bool lock, bool digest, bool delay, bool queue, int node);
+
+
    void       SendPacket           (void);
 
 .. _VC/PCIe/DLLPOutputFunctions:
@@ -2750,6 +2679,7 @@ Internal Memory Access Functions
    uint32_t ReadRamByte       (uint64 addr, uint32 node);
    uint32_t ReadRamWord       (uint64 addr, int little_endian, uint32 node);
    uint64_t ReadRamDWord      (uint64 addr, int little_endian, uint32 node);
+
    void     WriteConfigSpace     (const uint32 addr, const uint32 data, const uint32 node);
    uint32_t ReadConfigSpace      (const uint32 addr, const uint32 node);
    void     WriteConfigSpaceMask (const uint32 addr, const uint32 data, const uint32 node);
@@ -2761,7 +2691,7 @@ C++ API Class
 -------------
 
 In addition to the C API described in the previous sections, there is a C++ API class that wraps the API functionality
-into a :vhdlcode:`pcieModelClass`. This is defined in :file:`pcieModeClass.h` in the PCIe/include/ directory, which can
-be included in user code compiled for C++. The methods of the class match one-to-one with the API C functions but with
-the first letter of the method name in lower case and with no trailing node parameter. An exception to this is that the
-:vhdlcode:`getPcieVersionString` C function maps to a :vhdlcode:`getPcieVersionStr` in the class.
+into a :vhdlcode:`pcieModelClass`. This is defined in :file:`pcieModeClass.h` in the :file:`PCIe/include/` directory,
+which can be included in user code compiled for C++. The methods of the class match one-to-one with the API C functions
+but with the first letter of the method name in lower case and with no trailing node parameter. An exception to this is
+that the :vhdlcode:`getPcieVersionString` C function maps to a :vhdlcode:`getPcieVersionStr` in the class.
