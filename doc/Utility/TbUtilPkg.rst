@@ -21,13 +21,13 @@ Testing for Mutual Exclusion
 OneHot
 ======
 
-Function :vhdlcode:`OneHot` returns true when exactly one of its input is a one.
+Function :vhdlcode:`OneHot` returns true when exactly one of its inputs is a one.
 
 .. code-block:: VHDL
 
    function OneHot ( constant A : in std_logic_vector ) return boolean ;
    . . .
-   AffirmIf(OneHot( (Sel1 & Sel2 & Sel3 & Sel4), . . .) ;
+   AffirmIf(OneHot( (Sel1 & Sel2 & Sel3 & Sel4) ), . . .) ;
    . . .
 
 .. _UTILITY/TbUtilPkg/ZeroOneHot:
@@ -35,13 +35,13 @@ Function :vhdlcode:`OneHot` returns true when exactly one of its input is a one.
 ZeroOneHot
 ==========
 
-Function :vhdlcode:`ZeroOneHot` returns true when either exactly one of its input is a one or they are all zero.
+Function :vhdlcode:`ZeroOneHot` returns true when either exactly one of its inputs is a one or they are all zero.
 
 .. code-block:: VHDL
 
-   function ZerOneHot ( constant A : in std_logic_vector ) return boolean ;
+   function ZeroOneHot ( constant A : in std_logic_vector ) return boolean ;
    . . .
-   AffirmIf(ZeroOneHot( (Sel1 & Sel2 & Sel3 & Sel4), . . .) ;
+   AffirmIf(ZeroOneHot( (Sel1 & Sel2 & Sel3 & Sel4) ), . . .) ;
    . . .
 
 .. _UTILITY/TbUtilPkg/VerificationComponentHandshakingForTransactionInitiation:
@@ -116,7 +116,7 @@ Suspends a model until a transaction is requested via :vhdlcode:`RequestTransact
           Rdy  => TransRec.Rdy,
           Ack  => TransRec.Ack
        ) ;
-       case ModelRec.Operation is
+       case TransRec.Operation is
          when CPU_WRITE =>
             -- do CPU Write signaling
             . . .
@@ -150,7 +150,7 @@ Toggle type handshaking is used to block one process until another process has s
 WaitForToggle
 =============
 
-:vhdlcode:`WaitForToggle` block until its input signal changes. The call to :vhdlcode:`WaitForToggle` must occur before
+:vhdlcode:`WaitForToggle` blocks until its input signal changes. The call to :vhdlcode:`WaitForToggle` must occur before
 input changes or the change will not be seen.
 
 .. code-block:: VHDL
@@ -310,7 +310,7 @@ Usage
 
    CpuProc : process
    begin
-      InitDut(. . . )_;
+      InitDut(. . . ) ;
       Toggle(CpuReady) ;
       -- run numerous Cpu test transactions
       . . .
@@ -371,7 +371,7 @@ this time step.
    alias changing_edge is ChangingEdge [std_logic, std_logic return boolean] ;
 
 :vhdlcode:`EdgeRose` is similar to :vhdlcode:`rising_edge` except :vhdlcode:`EdgeRose` checks if clock changed on a time
-step (by checking :vhdlcode:`C'last_event=0 sec`), where as, :vhdlcode:`rising_edge` checks if a clock changed during
+step (by checking :vhdlcode:`C'last_event=0 sec`), whereas, :vhdlcode:`rising_edge` checks if a clock changed during
 this delta cycle (by checking :vhdlcode:`C'event`). :vhdlcode:`EdgeRose` does the following check.
 
 .. code-block:: VHDL
