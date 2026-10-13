@@ -95,9 +95,9 @@ signal is used.
 
    signal BurstCov : DelayCoverageIDType ;
 
-Step 2, construct the data structure. The wait for 0 is necessary since :vhdlcode:`ModelID` is constructed at time 0 and
-is not available immediately. This is done in :vhdlcode:`TransactionDispatcher` process since there are API commands
-that also update the :vhdlcode:`BurstCov` signal.
+Step 2, construct the data structure. The :vhdlcode:`wait for 0` is necessary since :vhdlcode:`ModelID` is constructed
+at time 0 and is not available immediately. This is done in :vhdlcode:`TransactionDispatcher` process since there are
+API commands that also update the :vhdlcode:`BurstCov` signal.
 
 .. code-block:: VHDL
 
@@ -221,7 +221,7 @@ it as a single word or burst transfer.
    WaitForClock(StreamTxRec, 4) ;
 
 If you run the simulation, you can tell when it changes from transferring individual words to transferring bursts by
-checking for TLast = 1.
+checking for :vhdlcode:`TLast = 1`.
 
 .. _UTILITY/DelayCoveragePkg/Part2ReplaceTheOldDelayCoverageWithNewDelayCoverage:
 
@@ -301,7 +301,7 @@ Add bins to the :vhdlcode:`CoverageIDs` referenced in :vhdlcode:`DelayCovID_Rand
    AddBins (DelayCovID_Random.BeatDelayCov,     5, GenBin(2)) ; --  5% 2 cycle delay
 
 Copy the :vhdlcode:`CoverageIDs` in variable :vhdlcode:`DelayCovID_random` to the :vhdlcode:`DelayCoveragePkg`
-singleton. Since :vhdlcode:`DelayCovID_Random.ID` = :vhdlcode:`DelayCoverageID.ID`, this copies over the original
+singleton. Since :vhdlcode:`DelayCovID_Random.ID = DelayCoverageID.ID`, this copies over the original
 :vhdlcode:`CoverageIDs` in the singleton (and used by VC) – don’t despair we still have a reference to the original
 :vhdlcode:`CoverageIDs` in the :vhdlcode:`DelayCoverageID` variable.
 
@@ -402,8 +402,8 @@ Now run this test case using:
 
    build <Path-To-OsvvmLibraries>/OsvvmLibraries/AXI4/AxiStream/RunDemoTests.pro
 
-Note that you can tell when it changes from transferring individual words to transferring bursts by checking for TLast =
-1.
+Note that you can tell when it changes from transferring individual words to transferring bursts by checking for
+:vhdlcode:`TLast = 1`.
 
 .. _UTILITY/DelayCoveragePkg/CompilingAndUsingOSVVMUtilityLibrary:
 
