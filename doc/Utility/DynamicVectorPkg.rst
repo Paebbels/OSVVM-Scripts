@@ -12,7 +12,7 @@ A dynamic vector is a resizable vector. Like a vector it supports random access 
 numbered 0 to N-1, where N is the number of elements in the vector. As a data structure, it supports insertion and
 deletion, but it is optimized for insertion and deletion at the end of the vector (index N-1).
 
-Dynamic vectors are implemented in a singleton data structure and can be passed around using their ID. This makes
+Dynamic vectors are implemented in a singleton data structure and can be passed around using their ID. This makes them
 suitable for handling burst transfer information – particularly if the bursts are different sizes. As a singleton,
 different aspects of the verification environment such as packet generator, verification component (VC) driving the
 packet, and VC receiving and checking the packet can all reference the packet of data using its ID.
@@ -52,7 +52,7 @@ variable.
 .. code-block:: VHDL
 
    architecture Model of Sram is
-     signal VectorID : VectorIDType ;
+     signal VectorID : DynamicVectorIDType ;
     . . .
 
 .. _UTILITY/DynamicVectorPkg/NewIDConstructTheDynamicVector:
@@ -92,10 +92,9 @@ The function :vhdlcode:`Get` reads either an element or a vector from an Index l
 location must already exist.
 
 .. code-block:: VHDL
-   :force:
 
    ElementValue := Get(VectorID, Index) ;
-   VectorValue  := Get(VectorID, Index, VectorValue’length) ;
+   VectorValue  := Get(VectorID, Index, VectorValue'length) ;
 
 .. _UTILITY/DynamicVectorPkg/SetWriteToASpecifiedIndexOfTheVector:
 
@@ -149,7 +148,7 @@ value at index 1 to 25 (:vhdlcode:`Set`).
 
    library OSVVM ;
      context osvvm.OsvvmContext ;
-     use osvvm.GenericVectorPkg_IntV.all ;
+     use osvvm.DynamicVectorPkg_IntV.all ;
 
    entity Tb_Basic_1 is
    end Tb_Basic_1 ;
@@ -193,7 +192,7 @@ value at index 1 to 25 (:vhdlcode:`Set`).
        EndOfTestReports ;
        std.env.stop ;
        wait ;
-     end process ControlProc ;
+     end process TestProc ;
 
    end Test1 ;
 
@@ -257,7 +256,7 @@ Delete: Remove values at a specified Index
 Indexing, Index Operations, and Iterators
 *****************************************
 
-:vhdlcode:`Get` and :vhdlcode:`set` can access vector values at an index location. Assuming the vector currently
+:vhdlcode:`Get` and :vhdlcode:`Set` can access vector values at an index location. Assuming the vector currently
 contains 8 8-bit values, then a for loop can be used to iterate across all values in the vector.
 
 .. code-block:: VHDL
@@ -268,7 +267,7 @@ contains 8 8-bit values, then a for loop can be used to iterate across all value
    end loop ;
 
 Each ID of the data structure has an iterator associated with it. The iterator supports sequencing across the data
-structure getting one item at a time. As values are set/get the iterator updates. The following accomplishes the
+structure getting one item at a time. As values are set/get the iterator updates. The following accomplishes the same
 sequencing as the previous task.
 
 .. code-block:: VHDL
@@ -348,7 +347,7 @@ Set the iterator index value. Without a parameter, it sets the value to 0.
 HasNext
 =======
 
-Return TRUE when if there are :vhdlcode:`NumValues` (default = 1) available at the current iterator.
+Return TRUE if there are :vhdlcode:`NumValues` (default = 1) available at the current iterator.
 
 .. code-block:: VHDL
 
@@ -384,7 +383,7 @@ Return :vhdlcode:`NumValues` elements using the current iterator and then increm
 HasPrevious
 ===========
 
-Return TRUE when if there are :vhdlcode:`NumValues` (default = 1) available before the current iterator.
+Return TRUE if there are :vhdlcode:`NumValues` (default = 1) available before the current iterator.
 
 .. code-block:: VHDL
 
@@ -469,7 +468,7 @@ FindPrevious
 ============
 
 :vhdlcode:`FindPrevious` searches from the current iterator value to :vhdlcode:`GetFirstIndex` for a value and returns
-the index where it was found or -1 if not. The iterator is updated using :vhdlcode:`IndexPrevoius`. Allows finding a
+the index where it was found or -1 if not. The iterator is updated using :vhdlcode:`IndexPrevious`. Allows finding a
 value multiple times within a vector.
 
 .. code-block:: VHDL
@@ -592,7 +591,7 @@ The generic interface for :vhdlcode:`DynamicVectorGenericPkg` is shown below.
 .. code-block:: VHDL
 
    package DynamicVectorGenericPkg is
-     generic (type VectorType is vector (type is range <>) of type is private ) ;
+     generic (type VectorType is array (type is range <>) of type is private ) ;
      . . .
 
 .. _UTILITY/DynamicVectorPkg/InstancesOfDynamicVectorGenericPkg:
