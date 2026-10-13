@@ -26,7 +26,7 @@ signals xAddr, xData, xStrb, xLen, xLast, xValid, and xReady, are set on a trans
 xID, xSize, xBurst, xLock, xCache, xProt, xQOS, xRegion, xUser, and xResp are set using values inside the model.
 
 The :vhdlcode:`Axi4Subordinate` is a transaction-based Subordinate. The :vhdlcode:`Axi4Memory` is a memory Subordinate
-that responds to operations on the :vhdlcode:`AxiBus` inteface.
+that responds to operations on the :vhdlcode:`AxiBus` interface.
 
 The :vhdlcode:`Axi4Memory` responds to AXI4 accesses on :vhdlcode:`AxiBus` by either writing to or reading from its
 internal memory data structure (see OSVVM’s :vhdlcode:`MemoryGenericPkg`). It handles both AXI4 single word and burst
@@ -34,7 +34,7 @@ transfers. For bursting, it currently only handles incrementing bursts. The memo
 the verification component. :vhdlcode:`MemoryPkg` currently limits the memory address to 40 bits.
 
 In addition to the AXI4 bus interface (connected to the DUT), the :vhdlcode:`Axi4Memory` also supports a transaction
-interface (:vhdlcode:`TransRec`) to the test sequencer (:vhdlcode:`TextCtrl`) that provides a "backdoor"
+interface (:vhdlcode:`TransRec`) to the test sequencer (:vhdlcode:`TestCtrl`) that provides a "backdoor"
 (non-functional) transaction interface to the memory. This interface accesses the memory contents on a delta cycle
 basis.
 
@@ -130,7 +130,7 @@ implements the transaction interface as a record.
 :vhdlcode:`AddressBus` Transaction Interface, :vhdlcode:`AddressBusRecType`, is used to connect the verification
 component to :vhdlcode:`TestCtrl`. :vhdlcode:`AddressBusRecType`, shown in :ref:`Figure 3 <VC/Axi4/Figure3>`, is defined
 in the Address Bus Model Independent Transaction package, :file:`AddressBusTransactionPkg.vhd`, which is in the
-directory :file:`OsvvmLbraries/Common/Src`.
+directory :file:`OsvvmLibraries/Common/src`.
 
 .. code-block:: VHDL
    :caption: Figure 3. AddressBusRecType
@@ -196,7 +196,7 @@ AxiBus : Axi4RecType
 ====================
 
 :vhdlcode:`AxiBus` is defined as a record of type :vhdlcode:`Axi4RecType`, shown in :ref:`Figure 5 <VC/Axi4/Figure5>` is
-defined in the package :file:`Axi4InterfacePkg.vhd` which is in the directory :file:`OsvvmLbraries/AXI4/common/src`.
+defined in the package :file:`Axi4InterfacePkg.vhd` which is in the directory :file:`OsvvmLibraries/AXI4/common/src`.
 
 .. code-block:: VHDL
    :caption: Figure 5. Axi4BaseRecType
@@ -376,7 +376,7 @@ Demo Preparation: Getting and Building the OSVVM Libraries
 **********************************************************
 
 OSVVM is available on GitHub at https://github.com/OSVVM as a git repository or at https://osvvm.org/downloads as a ZIP
-file. Retrieve OSVVM from GitHub using git as shown in :ref:`Figure 8 <VC/Axi4/Figure8>`. Note that the "—recursive"
+file. Retrieve OSVVM from GitHub using git as shown in :ref:`Figure 8 <VC/Axi4/Figure8>`. Note that the ``--recursive``
 option is required since the OSVVM repositories are submodules of OsvvmLibraries. Submodules greatly simplify
 development and deployment of the libraries.
 
@@ -429,7 +429,7 @@ Demo: Running the AXI4 Testbenches
 ==================================
 
 Prior to doing this step, do the steps in
-:ref:`section 3, Demo Preparation <VC/Axi4/DemoPreparationGettingAndBuildingTheOSVVMLibraries>`.
+:ref:`Demo Preparation <VC/Axi4/DemoPreparationGettingAndBuildingTheOSVVMLibraries>`.
 
 Use the steps in :ref:`Figure 10 <VC/Axi4/Figure10>` to compile and run the tests for the Axi4 verification components
 in Mentor QuestaSim/ModelSim or Aldec RivieraPRO. If you have not exited the simulator, you only need to do the
@@ -440,7 +440,7 @@ in Mentor QuestaSim/ModelSim or Aldec RivieraPRO. If you have not exited the sim
    :name: VC/Axi4/Figure10
 
    cd sim
-   do ../OsvvmLibraries/startup.tcl
+   source ../OsvvmLibraries/Scripts/StartUp.tcl
    build ../OsvvmLibraries/AXI4/Axi4/RunDemoTests.pro
 
 .. _VC/Axi4/TbAxi4Axi4TestEnvironmentPortBasedInterface:
@@ -612,14 +612,14 @@ both the :vhdlcode:`AxiBus` and transaction interfaces (:vhdlcode:`TransRec`). T
 signals in the AXI interface. It supports single word operations. For bursts, see :vhdlcode:`Axi4Memory`.
 
 Transactions are initiated by the DUT via the :vhdlcode:`AxiBus` interface. The test sequencer (:vhdlcode:`TestCtrl`)
-responds to operations :vhdlcode:`AxiBus` by calling a procedure from the transaction API (defined by Address Bus Model
-Independent Transactions). The procedures pass the transaction information to :vhdlcode:`Axi4Subordinate` via the
+responds to operations on :vhdlcode:`AxiBus` by calling a procedure from the transaction API (defined by Address Bus
+Model Independent Transactions). The procedures pass the transaction information to :vhdlcode:`Axi4Subordinate` via the
 transaction interface (:vhdlcode:`TransRec`).
 
 For generics, it has :vhdlcode:`MODEL_ID_NAME` which optionally specifies the model :vhdlcode:`AlertLogID` name. If the
 :vhdlcode:`MODEL_ID_NAME` is not specified, the component instance label will be used (preferred method). The remaining
 generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. :vhdlcode:`Tpd_Clk_*` specifies the
-delay for each interface output. See the file :file:`Axi4Manager.vhd` for the details of the generics.
+delay for each interface output. See the file :file:`Axi4Subordinate.vhd` for the details of the generics.
 
 .. code-block:: VHDL
    :caption: Figure 15. Axi4Subordinate
@@ -668,14 +668,14 @@ transfers. For bursting, it currently only handles incrementing bursts. The memo
 the verification component. :vhdlcode:`MemoryPkg` currently limits the memory address to 40 bits.
 
 In addition to the AXI4 bus interface (connected to the DUT), the :vhdlcode:`Axi4Memory` also supports a transaction
-interface (:vhdlcode:`TransRec`) to the test sequencer (:vhdlcode:`TextCtrl`) that provides a "backdoor"
+interface (:vhdlcode:`TransRec`) to the test sequencer (:vhdlcode:`TestCtrl`) that provides a "backdoor"
 (non-functional) transaction interface to the memory. This interface accesses the memory contents on a delta cycle
 basis.
 
 For generics, it has :vhdlcode:`MODEL_ID_NAME` which optionally specifies the model :vhdlcode:`AlertLogID` name. If the
 :vhdlcode:`MODEL_ID_NAME` is not specified, the component instance label will be used (preferred method). The remaining
 generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. :vhdlcode:`Tpd_Clk_*` specifies the
-delay for each interface output. See the file :file:`Axi4Manager.vhd` for the details of the generics.
+delay for each interface output. See the file :file:`Axi4Memory.vhd` for the details of the generics.
 
 .. code-block:: VHDL
    :caption: Figure 16. Axi4Memory
@@ -740,7 +740,7 @@ Demo: Running the AXI4 Testbenches
 ==================================
 
 Prior to doing this step, do the steps in
-:ref:`section 3, Demo Preparation <VC/Axi4/DemoPreparationGettingAndBuildingTheOSVVMLibraries>`.
+:ref:`Demo Preparation <VC/Axi4/DemoPreparationGettingAndBuildingTheOSVVMLibraries>`.
 
 Use the steps in :ref:`Figure 17 <VC/Axi4/Figure17>` to compile and run the tests for the Axi4 verification components
 in Mentor QuestaSim/ModelSim or Aldec RivieraPRO. If you have not exited the simulator, you only need to do the
@@ -751,7 +751,7 @@ in Mentor QuestaSim/ModelSim or Aldec RivieraPRO. If you have not exited the sim
    :name: VC/Axi4/Figure17
 
    cd sim
-   do ../OsvvmLibraries/startup.tcl
+   source ../OsvvmLibraries/Scripts/StartUp.tcl
    build ../OsvvmLibraries/AXI4/Axi4/RunDemoTestsVti.pro
 
 .. _VC/Axi4/TbAxi4Axi4TestEnvironmentVirtualTransactionInterface:
@@ -796,9 +796,9 @@ sequencer (:vhdlcode:`TestCtrl`).
    begin
      osvvm.TbUtilPkg.CreateClock(Clk, tperiod_Clk) ;
      osvvm.TbUtilPkg.CreateReset(nReset, . . .) ;
-     Subordinate_1 : Axi4Subordinate(…, AxiBus) ;
-     Manager_1 :    Axi4Manager   (…, AxiBus);
-     TestCtrl_1 :  TestCtrl     (nReset) ;
+     Subordinate_1 : Axi4SubordinateVti port map (…, AxiBus) ;
+     Manager_1 :     Axi4ManagerVti     port map (…, AxiBus);
+     TestCtrl_1 :    TestCtrl           port map (nReset) ;
    end TestHarness ;
 
 .. _VC/Axi4/TestCtrlEntityVirtualTransactionInterfaceExternalNames:
@@ -806,7 +806,7 @@ sequencer (:vhdlcode:`TestCtrl`).
 TestCtrl Entity – Virtual Transaction Interface (External Names)
 ================================================================
 
-Tests are written as architectures of the test sequencer, :vhdlcode:`TestCtrl` (:file:`testbenchVTI`). The entity for
+Tests are written as architectures of the test sequencer, :vhdlcode:`TestCtrl` (:file:`testbenchVti`). The entity for
 :vhdlcode:`TestCtrl`, shown in :ref:`Figure 20 <VC/Axi4/Figure20>`, consists of transaction interface connections.
 
 .. code-block:: VHDL
@@ -865,7 +865,7 @@ generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. 
 delay for each interface output. See the file :file:`Axi4ManagerVti.vhd` for the details of the generics.
 
 .. code-block:: VHDL
-   :caption: Figure 21. Axi4Manager
+   :caption: Figure 21. Axi4ManagerVti
    :name: VC/Axi4/Figure21
 
    entity Axi4ManagerVti is
@@ -874,6 +874,7 @@ delay for each interface output. See the file :file:`Axi4ManagerVti.vhd` for the
      tperiod_Clk      : time   := 10 ns ;
      tpd_Clk_AWAddr   : time   := 2 ns ;
      -- . . .  see entity for remaining generics
+     tpd_Clk_RReady   : time   := 2 ns
    ) ;
    port (
      -- Globals
@@ -918,7 +919,7 @@ generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. 
 delay for each interface output. See the file :file:`Axi4SubordinateVti.vhd` for the details of the generics.
 
 .. code-block:: VHDL
-   :caption: Figure 22. Axi4Subordinate
+   :caption: Figure 22. Axi4SubordinateVti
    :name: VC/Axi4/Figure22
 
    entity Axi4SubordinateVti is
@@ -973,7 +974,7 @@ transfers. For bursting, it currently only handles incrementing bursts. The memo
 the verification component. :vhdlcode:`MemoryPkg` currently limits the memory address to 40 bits.
 
 In addition to the AXI4 bus interface (connected to the DUT), the :vhdlcode:`Axi4Memory` also supports a transaction
-interface (:vhdlcode:`TransRec`) to the test sequencer (:vhdlcode:`TextCtrl`) that provides a "backdoor"
+interface (:vhdlcode:`TransRec`) to the test sequencer (:vhdlcode:`TestCtrl`) that provides a "backdoor"
 (non-functional) transaction interface to the memory. This interface accesses the memory contents on a delta cycle
 basis.
 
@@ -1040,9 +1041,9 @@ process creates interface waveform sequences by calling the transaction procedur
 :vhdlcode:`WriteBurst`, :vhdlcode:`Read`, :vhdlcode:`ReadBurst`, :vhdlcode:`Check` …). This test architecture is based
 on the test :file:`TbAxi4_MemoryReadWrite1.vhd` in the directory :file:`OsvvmLibraries/AXI4/Axi4/testbench`.
 
-For more details on writing tests, see the :ref:`OSVVM Test Writers User Guide <FRAMEWORK/TestWriters>`. For more
-details on writing tests, see the :ref:`OSVVM Test Writers User Guide <FRAMEWORK/TestWriters>`. For examples of using
-specific Address Bus transactions, see the :ref:`Address Bus Independent Transactions User Guide <MIT/AddressBus>`.
+For more details on writing tests, see the :ref:`OSVVM Test Writers User Guide <FRAMEWORK/TestWriters>`. For examples of
+using specific Address Bus transactions, see the
+:ref:`Address Bus Independent Transactions User Guide <MIT/AddressBus>`.
 
 .. code-block:: VHDL
    :caption: Figure 24. TestCtrl Architecture
@@ -1082,7 +1083,7 @@ specific Address Bus transactions, see the :ref:`Address Bus Independent Transac
        ReadCheck(SubordinateRec, X"0000_0010", X"11" ) ;
        . . .
        WaitForBarrier(TestDone) ;
-     end process ReceiverProc ;
+     end process SubordinateProc ;
    end MemoryReadWrite1 ;
 
 .. _VC/Axi4/AXI4VCTransactions:
@@ -1090,7 +1091,7 @@ specific Address Bus transactions, see the :ref:`Address Bus Independent Transac
 AXI4 VC Transactions
 ********************
 
-The AXI4 VCs implement the OSVVM Address Bus Model Independent Transactions. The following is a summary of the supported
+The AXI4 VCs implement the OSVVM Address Bus Model Independent Transactions. The following is a summary of the
 transactions supported by each VC. For details of the transactions, parameter types, and examples, see the
 :ref:`Address Bus Model Independent Transactions User Guide <MIT/AddressBus>` in the documentation repository.
 
@@ -1101,7 +1102,7 @@ Transactions Supported by Axi4Manager
 
 The :vhdlcode:`oData` and :vhdlcode:`iData` in Manager transactions should match the size of the transfer. For example,
 if the transfer is for a byte of data, then only 8 bits should be present. Using the address byte address and the data
-width, the specification of interface characteristics such byte enables in the transaction interface is not necessary
+width, the specification of interface characteristics such as byte enables in the transaction interface is not necessary
 (as it is redundant information).
 
 .. _VC/Axi4/InterfaceIndependentTransactions:
@@ -1202,10 +1203,10 @@ fill the FIFO with a set of values.
    alias WriteBurstFifo : ScoreboardIdType is ManagerRec.WriteBurstFifo ;
    . . .
    Push(WriteBurstFifo, DataWord) ;
-   PushBurstVector   (WriteBurstFifo, VectorOfWords, FifoWidth)
-   PushBurstIncrement(WriteBurstFifo, FirstWord, Count, FifoWidth)
-   PushBurstRandom   (WriteBurstFifo, FirstWord, Count, FifoWidth)
-   PushBurstRandom   (WriteBurstFifo, CoverID,   Count, FifoWidth)
+   PushBurstVector   (WriteBurstFifo, VectorOfWords, FifoWidth) ;
+   PushBurstIncrement(WriteBurstFifo, FirstWord, Count, FifoWidth) ;
+   PushBurstRandom   (WriteBurstFifo, FirstWord, Count, FifoWidth) ;
+   PushBurstRandom   (WriteBurstFifo, CoverID,   Count, FifoWidth) ;
 
 .. _VC/Axi4/CheckingTheBurstFIFO:
 
@@ -1218,10 +1219,10 @@ These are intended to be used after calling :vhdlcode:`ReadBurst` to check the c
    alias ReadBurstFifo  : ScoreboardIdType is ManagerRec.ReadBurstFifo ;
    . . .
    CheckExpected(ReadBurstFifo, CheckWord) ;
-   CheckBurstVector   (ReadBurstFifo, VectorOfWords,    FifoWidth)
-   CheckBurstIncrement(ReadBurstFifo, FirstWord, Count, FifoWidth)
-   CheckBurstRandom   (ReadBurstFifo, FirstWord, Count, FifoWidth)
-   CheckBurstRandom   (ReadBurstFifo, CoverID,   Count, FifoWidth)
+   CheckBurstVector   (ReadBurstFifo, VectorOfWords,    FifoWidth) ;
+   CheckBurstIncrement(ReadBurstFifo, FirstWord, Count, FifoWidth) ;
+   CheckBurstRandom   (ReadBurstFifo, FirstWord, Count, FifoWidth) ;
+   CheckBurstRandom   (ReadBurstFifo, CoverID,   Count, FifoWidth) ;
 
 .. _VC/Axi4/ReadingTheBurstFIFO:
 
@@ -1234,7 +1235,7 @@ These are intended to be used after calling :vhdlcode:`ReadBurst` to manage the 
    alias ReadBurstFifo  : ScoreboardIdType is ManagerRec.ReadBurstFifo ;
    . . .
    DataWord := Pop(ReadBurstFifo) ;
-   PopBurstVector(ReadBurstFifo, VectorOfWords,    FifoWidth)
+   PopBurstVector(ReadBurstFifo, VectorOfWords) ;
 
 .. _VC/Axi4/InterfaceSpecificTransactions:
 
@@ -1463,9 +1464,9 @@ Delays for Valid and Ready can either be a static value (a fixed delay) or can b
 
 .. rubric:: Static Delay: Valid Delay Cycles
 
-The :vhdlcode:`xVALID` :vhdlcode:`_DELAY_CYCLES` value specifies the amount of time to initiate a new transaction on an
-interface. For Burst transactions, :vhdlcode:`xVALID_BURST_DELAY_CYCLES` specifies the amount of time between valid
-within a burst data cycle.
+The :vhdlcode:`xVALID_DELAY_CYCLES` value specifies the amount of time to initiate a new transaction on an interface.
+For Burst transactions, :vhdlcode:`xVALID_BURST_DELAY_CYCLES` specifies the amount of time between valid within a burst
+data cycle.
 
 .. list-table::
    :header-rows: 1
@@ -1498,9 +1499,9 @@ within a burst data cycle.
 
 .. _VC/Axi4/RandomDelayTValidDelayCycles:
 
-.. rubric:: Random Delay: TValid Delay Cycles
+.. rubric:: Random Delay: xValid Delay Cycles
 
-Random delays for TValid are controlled by an array of Delay Coverage Models whose subtype is
+Random delays for xValid are controlled by an array of Delay Coverage Models whose subtype is
 :vhdlcode:`AxiDelayCoverageIdArrayType`. For more information on delay coverage models, see
 :ref:`UTILITY/DelayCoveragePkg`.
 
@@ -1523,7 +1524,7 @@ The delay coverage array type is indexed by the constants defined in the followi
    * - Subordinate
      - :vhdlcode:`READ_DATA_ID`
 
-To use random delays in the verification component, call :vhdlcode:`SetUseRandomDelays`. At this point the TValid delays
+To use random delays in the verification component, call :vhdlcode:`SetUseRandomDelays`. At this point the xValid delays
 will be randomized using the default coverage model.
 
 .. code-block:: VHDL
@@ -1563,7 +1564,7 @@ The delay coverage model can be changed using :vhdlcode:`SetDelayCoverageID`.
        AddBins (ReadAddressDelayCov.BurstDelayCov,   GenBin(2,5,1)) ;
        AddBins (ReadAddressDelayCov.BeatDelayCov,    GenBin(0)) ;
 
-:vhdlcode:`Axi4Subordinate` and :vhdlcode:`AxiMemory` sets the default delays to the following.
+:vhdlcode:`Axi4Subordinate` and :vhdlcode:`Axi4Memory` sets the default delays to the following.
 
 .. code-block:: VHDL
 
@@ -1612,7 +1613,7 @@ When :vhdlcode:`xREADY_BEFORE_VALID` is TRUE then the interface may assert xREAD
 
 .. rubric:: Static Delay: Ready Delay Cycles
 
-When :vhdlcode:`xx_READY_BEFORE_VALID` is TRUE, then :vhdlcode:`xx_READY_DELAY_CYCLES` is a relative to when the last
+When :vhdlcode:`xx_READY_BEFORE_VALID` is TRUE, then :vhdlcode:`xx_READY_DELAY_CYCLES` is relative to when the last
 transfer completed. :ref:`Figure 25 <VC/Axi4/Figure25>` shows :vhdlcode:`xx_READY_DELAY_CYCLES` = 2 when
 :vhdlcode:`xx_READY_BEFORE_VALID` is TRUE.
 
@@ -1623,7 +1624,7 @@ transfer completed. :ref:`Figure 25 <VC/Axi4/Figure25>` shows :vhdlcode:`xx_READ
    Figure 25. xx_READY_DELAY_CYCLES = 2 when xx_READY_BEFORE_VALID is TRUE
 
 
-When :vhdlcode:`xx_READY_BEFORE_VALID` is FALSE, then :vhdlcode:`xx_READY_DELAY_CYCLES` is a relative to when xValid is
+When :vhdlcode:`xx_READY_BEFORE_VALID` is FALSE, then :vhdlcode:`xx_READY_DELAY_CYCLES` is relative to when xValid is
 asserted. :ref:`Figure 26 <VC/Axi4/Figure26>` shows :vhdlcode:`xx_READY_DELAY_CYCLES` = 2 when
 :vhdlcode:`xx_READY_BEFORE_VALID` is FALSE.
 
@@ -1659,9 +1660,9 @@ asserted. :ref:`Figure 26 <VC/Axi4/Figure26>` shows :vhdlcode:`xx_READY_DELAY_CY
 
 .. _VC/Axi4/RandomDelayTReadyDelayCycles:
 
-.. rubric:: Random Delay: TReady Delay Cycles
+.. rubric:: Random Delay: xReady Delay Cycles
 
-Random delays for TReady and random settings for :vhdlcode:`RECEIVE_READY_BEFORE_VALID` are controlled an array of Delay
+Random delays for xReady and random settings for :vhdlcode:`xx_READY_BEFORE_VALID` are controlled by an array of Delay
 Coverage Models whose subtype is :vhdlcode:`AxiDelayCoverageIdArrayType`. For more information on delay coverage models,
 see :ref:`UTILITY/DelayCoveragePkg`.
 
@@ -1684,8 +1685,8 @@ The delay coverage array type is indexed by the constants defined in the followi
    * - Subordinate
      - :vhdlcode:`READ_DATA_ID`
 
-To use random delays in the verification component, call :vhdlcode:`SetUseRandomDelays`. At this point TReady delays and
-:vhdlcode:`RECEIVE_READY_BEFORE_VALID` settings will be randomized.
+To use random delays in the verification component, call :vhdlcode:`SetUseRandomDelays`. At this point xReady delays and
+:vhdlcode:`xx_READY_BEFORE_VALID` settings will be randomized.
 
 .. code-block:: VHDL
 
@@ -1720,7 +1721,7 @@ The delay coverage model can be changed using :vhdlcode:`SetDelayCoverageID`.
        AddCross(ReadDataDelayCov.BurstDelayCov,   GenBin(0,1,1), GenBin(2,5,1)) ;
        AddCross(ReadDataDelayCov.BeatDelayCov,    GenBin(0),     GenBin(0)) ;
 
-:vhdlcode:`Axi4Subordinate` and :vhdlcode:`AxiMemory` sets the default delays to the following.
+:vhdlcode:`Axi4Subordinate` and :vhdlcode:`Axi4Memory` sets the default delays to the following.
 
 .. code-block:: VHDL
 
@@ -1742,8 +1743,8 @@ For examples of using this feature, see :file:`TbAxi4_Axi<VC>RandomTiming1.vhd` 
 
 .. _VC/Axi4/TimeoutNoXReadyInResponseXValid:
 
-Timeout: No xReady in response xValid
--------------------------------------
+Timeout: No xReady in response to xValid
+----------------------------------------
 
 On the AXI4 interface, it is expected that after a xValid is asserted, an xReady will be asserted within a reasonable
 amount of time. The :vhdlcode:`xx_READY_TIME_OUT` specifies the number of clocks that xValid is asserted without xReady
@@ -1768,7 +1769,7 @@ before a FAILURE is generated. The :vhdlcode:`xx_READY_TIME_OUT` value is an int
    * - Manager
      - :vhdlcode:`READ_ADDRESS_READY_TIME_OUT`
      - 25
-   * - Responder
+   * - Subordinate
      - :vhdlcode:`READ_DATA_READY_TIME_OUT`
      - 25
 
@@ -1781,7 +1782,7 @@ On the AXI4 interface, after a Write Address cycle and its corresponding Write D
 expected that the Subordinate will initiate a Write Response cycle (signaled with BVALID) within a reasonable amount of
 time. Likewise, after a Read Address cycle is completed, it is expected that the Subordinate will initiate a Read Data
 cycle (signaled with RVALID) within a reasonable amount of time. The :vhdlcode:`xx_VALID_TIME_OUT` specifies the number
-of clocks within which the Subordinate must asssert xValid before a FAILURE is generated. :vhdlcode:`xx_VALID_TIME_OUT`
+of clocks within which the Subordinate must assert xValid before a FAILURE is generated. :vhdlcode:`xx_VALID_TIME_OUT`
 value is an integer.
 
 .. list-table::
@@ -1927,7 +1928,7 @@ Write Data Default Values
      - Manager
      - No
      - All
-     - Write Address
+     - Write Data
    * - WSTRB
      - Manager
      - No
@@ -2117,7 +2118,7 @@ Read Data Default Values
      - Subordinate
      - No
      - All
-     - Write Address
+     - Read Data
    * - RRESP
      - Subordinate
      - Yes
@@ -2132,7 +2133,7 @@ Read Data Default Values
      - Manager
      - No
      - All
-     - Set when Subordinate ready to accept values
+     - Set when Manager ready to accept values
    * - RID
      - Subordinate
      - Yes
@@ -2175,7 +2176,7 @@ All AXI interface values are :vhdlcode:`std_logic_vector` and must match the siz
 Setting BRESP and RRESP
 -----------------------
 
-By default, the expected value for BRESP and RRESP are OKAY. When testing a subordinates response to an incorrect
+By default, the expected value for BRESP and RRESP are OKAY. When testing a subordinate's response to an incorrect
 address, a SLVERR is expected. AXI4 models support the enumeration values :vhdlcode:`OKAY`, :vhdlcode:`EXOKAY`,
 :vhdlcode:`SLVERR`, and :vhdlcode:`DECERR` of type :vhdlcode:`Axi4RespEnumType`. :ref:`Figure 29 <VC/Axi4/Figure29>`
 shows how to set BRESP and RRESP to expect a SLVERR for a single transfer.
