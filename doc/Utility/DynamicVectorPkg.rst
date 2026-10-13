@@ -10,12 +10,15 @@ DynamicVectorGenericPkg Overview
 
 A dynamic vector is a resizable vector. Like a vector it supports random access to elements via indices. The indices are
 numbered 0 to N-1, where N is the number of elements in the vector. As a data structure, it supports insertion and
-deletion, but it is optimized for insertion and deletion at the end of the vector (index N-1). Dynamic vectors are
-implemented in a singleton data structure and can be passed around using their ID. This makes suitable for handling
-burst transfer information – particularly if the bursts are different sizes. As a singleton, different aspects of the
-verification environment such as packet generator, verification component (VC) driving the packet, and VC receiving and
-checking the packet can all reference the packet of data using its ID. Dynamic vectors have similarities to C/Rust/Ada
-vectors, SystemVerilog dynamic arrays, Python lists, and Java VectorLists.
+deletion, but it is optimized for insertion and deletion at the end of the vector (index N-1).
+
+Dynamic vectors are implemented in a singleton data structure and can be passed around using their ID. This makes
+suitable for handling burst transfer information – particularly if the bursts are different sizes. As a singleton,
+different aspects of the verification environment such as packet generator, verification component (VC) driving the
+packet, and VC receiving and checking the packet can all reference the packet of data using its ID.
+
+Dynamic vectors have similarities to C/Rust/Ada vectors, SystemVerilog dynamic arrays, Python lists, and Java
+VectorLists.
 
 .. _UTILITY/DynamicVectorPkg/BasicUsage:
 
@@ -99,8 +102,8 @@ location must already exist.
 Set: Write to a specified Index of the Vector
 =============================================
 
-The procedure Set writes either an element or a vector to an Index location in the vector. Set overwrites any previous
-values. The Index location must already exist.
+The procedure :vhdlcode:`Set` writes either an element or a vector to an Index location in the vector. :vhdlcode:`Set`
+overwrites any previous values. The Index location must already exist.
 
 .. code-block:: VHDL
 
@@ -140,7 +143,7 @@ Putting the basic pieces together
 
 The following declares the :vhdlcode:`VectorID` (variable :vhdlcode:`VectorID`), constructs it (:vhdlcode:`NewID`), adds
 3 elements to the vector (:vhdlcode:`Append`), checks the first and last value (using :vhdlcode:`Get`), and changes the
-value at index 1 to 25 (Set).
+value at index 1 to 25 (:vhdlcode:`Set`).
 
 .. code-block:: VHDL
 
@@ -201,12 +204,15 @@ Append, Insert, Prepend, and Delete
 
 :vhdlcode:`Append`, :vhdlcode:`Insert`, :vhdlcode:`Prepend`, and :vhdlcode:`Delete` increase or decrease the size of the
 vector. This can result in shifting values and memory allocation. Most of these operations are O(n) – meaning take an
-amount of time that is proportional to the size of the vector. For :vhdlcode:`Append`, which adds values to the end of
-the vector, this time can be amortized to O(1) – meaning constant time access independent of the vector size – by
-doubling the capacity of the vector (amount of information that the vector can store) every time the size exceeds
-capacity. As a result, the allocate/deallocate and copy that can occur with append occurs infrequently. For insert,
-prepend, and delete that occur at random locations in the vector or at the beginning, there will always be shifting of
-O(n) values. Note that these operations can impact any index or iterator being used to access the vector.
+amount of time that is proportional to the size of the vector.
+
+For :vhdlcode:`Append`, which adds values to the end of the vector, this time can be amortized to O(1) – meaning
+constant time access independent of the vector size – by doubling the capacity of the vector (amount of information that
+the vector can store) every time the size exceeds capacity. As a result, the allocate/deallocate and copy that can occur
+with append occurs infrequently.
+
+For insert, prepend, and delete that occur at random locations in the vector or at the beginning, there will always be
+shifting of O(n) values. Note that these operations can impact any index or iterator being used to access the vector.
 
 .. _UTILITY/DynamicVectorPkg/InsertAddValueSAtASpecifiedIndex:
 
@@ -275,9 +281,10 @@ sequencing as the previous task.
 
 The initial iterator is created by :vhdlcode:`NewID` when the vector is constructed. If multiple iterators are
 desirable, then additional iterators can be created by :vhdlcode:`CopyID`. The ID returned by :vhdlcode:`CopyID`
-references the same vector as the original ID - hence, the copy is referred to as a shallow copy. The vector exists as
-long as there is an ID that references it. :vhdlcode:`Deallocate` releases an ID. When :vhdlcode:`Deallocate` is called
-on the last iterator associated with an ID, the vector is deallocated.
+references the same vector as the original ID - hence, the copy is referred to as a shallow copy.
+
+The vector exists as long as there is an ID that references it. :vhdlcode:`Deallocate` releases an ID. When
+:vhdlcode:`Deallocate` is called on the last iterator associated with an ID, the vector is deallocated.
 
 .. _UTILITY/DynamicVectorPkg/CopyIDCreateNewIterator:
 
@@ -563,11 +570,12 @@ Returns the :vhdlcode:`AlertLogID` of the vector data structure that is either c
 Writing/Reading Vector Values
 *****************************
 
-Note this feature reflects the current implementation and may change. Vector values are written and read so that the
-right most value is stored first. When the vector elements are integer, this is not so important. When the vector
-elements are :vhdlcode:`std_logic`, if the low bytes are written into the vector first and each element is written low
-bit first, then when 32-bit words are read out (and the bits are reversed), then the 32-bit word is in the proper order
-– without any transformations required.
+Note this feature reflects the current implementation and may change.
+
+Vector values are written and read so that the right most value is stored first. When the vector elements are integer,
+this is not so important. When the vector elements are :vhdlcode:`std_logic`, if the low bytes are written into the
+vector first and each element is written low bit first, then when 32-bit words are read out (and the bits are reversed),
+then the 32-bit word is in the proper order – without any transformations required.
 
 .. _UTILITY/DynamicVectorPkg/GenericsAndInstancesOfDynamicVectorGenericPkg:
 
@@ -618,11 +626,14 @@ Reference all packages in the OSVVM Utility library by using the context declara
      context osvvm.OsvvmContext ;
 
 Compilation order for OSVVM Utility Library is in :osvvmdoc:`OSVVM_release_notes.pdf <OSVVM_release_notes>`. Rather than
-learning this, we recommend using the OSVVM compilation scripts. OSVVM Utility library is released under the Apache open
-source license. It is free (both to download and use - there are no license fees). You can download it from osvvm.org or
-from our development area on GitHub (https://github.com/OSVVM/OSVVM). If you add features to the package, please donate
-them back under the same license as candidates to be added to the standard version of the package. If you need features,
-be sure to contact us.
+learning this, we recommend using the OSVVM compilation scripts.
+
+OSVVM Utility library is released under the Apache open source license. It is free (both to download and use - there are
+no license fees). You can download it from osvvm.org or from our development area on GitHub
+(https://github.com/OSVVM/OSVVM).
+
+If you add features to the package, please donate them back under the same license as candidates to be added to the
+standard version of the package. If you need features, be sure to contact us.
 
 We also support the OSVVM user community and blogs through http://www.osvvm.org. Interested in sharing about your
 experience using OSVVM? Let us know, you can blog about it at osvvm.org.
