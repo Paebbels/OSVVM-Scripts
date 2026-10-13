@@ -9,15 +9,16 @@ IfElsePkg Overview
 ******************
 
 :vhdlcode:`IfElsePkg` provides a function that returns one of two input values based on a conditional. It is a stand in
-for the "when else" language capability that is in VHDL- 2019 (but is not currently supported by all simulators).
+for the "when else" language capability that is in VHDL-2019 (but is not currently supported by all simulators).
 
 .. _UTILITY/IfElsePkg/IfElseFunction:
 
 IfElse Function
 ***************
 
-:vhdlcode:`IfElse` function returns the value from parameter A when the expression is true, otherwise, it returns the
-value from parameter B. AType can be string, :vhdlcode:`std_logic`, :vhdlcode:`std_logic_vector`, integer, or boolean.
+:vhdlcode:`IfElse` function returns the value from parameter :vhdlcode:`A` when the expression is true, otherwise, it
+returns the value from parameter :vhdlcode:`B`. :vhdlcode:`AType` can be :vhdlcode:`string`, :vhdlcode:`std_logic`,
+:vhdlcode:`std_logic_vector`, :vhdlcode:`integer`, or :vhdlcode:`boolean`.
 
 .. code-block:: VHDL
 
@@ -42,7 +43,7 @@ Reference all packages in the OSVVM Utility library by using the context declara
    library OSVVM ;
      context osvvm.OsvvmContext ;
 
-Compilation order for OSVVM Utility Library is in :osvvmdoc:`OSVVM_release_notes.pdf <OSVVM_release_notes>`. Rather than
+Compilation order for OSVVM Utility Library is in :osvvmdoc:`OSVVM_release_notes.pdf <osvvm_release_notes>`. Rather than
 learning this, we recommend using the OSVVM compilation scripts.
 
 OSVVM Utility library is released under the Apache open source license. It is free (both to download and use - there are
