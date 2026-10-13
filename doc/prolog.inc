@@ -10,3 +10,7 @@
 .. role:: tclcode(code)
    :language: tcl
    :class: highlight
+
+.. role:: vhdlcode(code)
+   :language: VHDL
+   :class: highlight

@@ -8,9 +8,9 @@ Address Bus Model Independent Transactions
 Overview
 ********
 
-The Address Bus Model Independent Transaction package (AddressBusTransactionPkg.vhd) defines a transaction interface (a
-record for communication between the test sequencer and the verification component) and transaction initiation
-procedures that are suitable for Address Bus Interfaces.
+The Address Bus Model Independent Transaction package (:file:`AddressBusTransactionPkg.vhd`) defines a transaction
+interface (a record for communication between the test sequencer and the verification component) and transaction
+initiation procedures that are suitable for Address Bus Interfaces.
 
 Be sure to read the OSVVM's Structured Testbench Framework Guide first. This guide provides background on the overall
 structure of OSVVM's testbench and how the pieces of the Model Independent Transactions fit within the overall approach.
@@ -41,7 +41,8 @@ Address Bus Transaction Interface
 *********************************
 
 The Address Bus Transaction interface connects the test sequencer to a verification component. As such, it is the
-primary channel for information exchange between the two. This is done with the record type AddressBusRecType.
+primary channel for information exchange between the two. This is done with the record type
+:vhdlcode:`AddressBusRecType`.
 
 .. _MIT/AddressBus/AddressBusRecType:
 
@@ -81,13 +82,13 @@ AddressBusRecType
      Options            : integer_max ;
    end record AddressBusRecType ;
 
-One of the challenges of using a single record, such as AddressBusRecType, as an interface is dealing with multiple
-drivers on each record element. OSVVM does this giving each element a resolved type, such as bit_max,
-std_logic_vector_max_c, integer_max, time_max, and boolean_max. These are defined in the OSVVM package ResolutionPkg.
-These types allow the record to support multiple drivers and use resolution functions based on function maximum (return
-largest value).
+One of the challenges of using a single record, such as :vhdlcode:`AddressBusRecType`, as an interface is dealing with
+multiple drivers on each record element. OSVVM does this giving each element a resolved type, such as
+:vhdlcode:`bit_max`, :vhdlcode:`std_logic_vector_max_c`, :vhdlcode:`integer_max`, :vhdlcode:`time_max`, and
+:vhdlcode:`boolean_max`. These are defined in the OSVVM package :vhdlcode:`ResolutionPkg`. These types allow the record
+to support multiple drivers and use resolution functions based on function maximum (return largest value).
 
-The type AddressBusOperationType is discussed in
+The type :vhdlcode:`AddressBusOperationType` is discussed in
 :ref:`VC section <MIT/AddressBus/VerificationComponentsAndStreamModelIndependentTransactions>` of this document.
 
 .. _MIT/AddressBus/BurstFifoIsInTheInterface:
@@ -95,11 +96,13 @@ The type AddressBusOperationType is discussed in
 BurstFifo is in the Interface
 =============================
 
-The WriteBurstFifo and ReadBurstFifo are inside AddressBusRecType. This makes the burst FIFOs easily accessible to both
-the verification component and the Test Sequencer (TestCtrl). The type, ScoreboardIdType, is a reference (though not an
-access type) to the scoreboard singleton data structure in ScoreboardGenericPkg. Using ScoreboardIdType allows the
-structure to be used as either a FIFO (by SendBurst or GetBurst) or a Scoreboard (by CheckBurst). The FIFO is
-std_logic_vector based and uses the ScoreboardPkg_slv instance from OsvvmLibraries/osvvm.
+The :vhdlcode:`WriteBurstFifo` and :vhdlcode:`ReadBurstFifo` are inside :vhdlcode:`AddressBusRecType`. This makes the
+burst FIFOs easily accessible to both the verification component and the Test Sequencer (:vhdlcode:`TestCtrl`). The
+type, :vhdlcode:`ScoreboardIdType`, is a reference (though not an access type) to the scoreboard singleton data
+structure in :vhdlcode:`ScoreboardGenericPkg`. Using :vhdlcode:`ScoreboardIdType` allows the structure to be used as
+either a FIFO (by :vhdlcode:`SendBurst` or :vhdlcode:`GetBurst`) or a Scoreboard (by :vhdlcode:`CheckBurst`). The FIFO
+is :vhdlcode:`std_logic_vector` based and uses the :vhdlcode:`ScoreboardPkg_slv` instance from
+:file:`OsvvmLibraries/osvvm`.
 
 .. _MIT/AddressBus/UsageOfTheRecordInterface:
 
@@ -142,7 +145,7 @@ your simulator and go to the sim directory. Once there, use the steps in :ref:`F
 build the OSVVM Libraries (utility and verification component). These directions are supported in Mentor
 QuestaSim/ModelSim or Aldec RivieraPRO. Aldec's ActiveHDL, Synopsys' VCS, and Cadence's Xcelium are also supported but
 require a few extra steps. For these steps and additional details of the OSVVM scripting environment see
-:osvvmdoc:`Script_user_guide.pdf <Script_user_guide>` (in OsvvmLibraries/Documentation).
+:osvvmdoc:`Script_user_guide.pdf <Script_user_guide>` (in :file:`OsvvmLibraries/Documentation`).
 
 .. code-block:: tcl
    :caption: Figure 2. Building OSVVM and running the Demo
@@ -166,10 +169,10 @@ Types of Transactions
 A transaction may be either a directive or an interface transaction.
 
 Directive transactions interact with the verification component without generating any transactions or interface
-waveforms. Examples of these are WaitForClock and GetAlertLogID.
+waveforms. Examples of these are :vhdlcode:`WaitForClock` and :vhdlcode:`GetAlertLogID`.
 
 An interface transaction results in interface signaling to the DUT. An interface transaction may be either blocking
-(such as Write or Read) or non-blocking (such as WriteAsync and TryReadData).
+(such as Write or Read) or non-blocking (such as :vhdlcode:`WriteAsync` and :vhdlcode:`TryReadData`).
 
 A blocking transaction is an interface transaction that does not does not return (complete) until the interface
 operation requested by the transaction has completed.
@@ -334,7 +337,7 @@ The following code does 16 Write operations followed by 16 Read operations.
        AffirmIfEqual(RxData, X"0000_0000" + I, "Read Data " ) ;
      end loop ;
 
-The following code does 16 Write operations followed by 16 ReadCheck operations.
+The following code does 16 Write operations followed by 16 :vhdlcode:`ReadCheck` operations.
 
 .. code-block:: VHDL
 
@@ -407,7 +410,7 @@ ReadBurst
 Example
 -------
 
-The following code does 16-word bursts. FIFO interaction is done separately with push and CheckExpected.
+The following code does 16-word bursts. FIFO interaction is done separately with push and :vhdlcode:`CheckExpected`.
 
 .. code-block:: VHDL
 
@@ -434,7 +437,7 @@ Patterns for Interface Independent Burst Transactions
 Burst with Vector of Words
 --------------------------
 
-Burst transactions that accept an array of std_logic_vector.
+Burst transactions that accept an array of :vhdlcode:`std_logic_vector`.
 
 .. code-block:: VHDL
 
@@ -488,7 +491,8 @@ The following code does 13-word bursts using a vector pattern.
 Burst with an Incrementing Pattern
 ----------------------------------
 
-Burst transactions that the first word as a std_logic_vector and additional words that are one larger in value.
+Burst transactions that the first word as a :vhdlcode:`std_logic_vector` and additional words that are one larger in
+value.
 
 .. code-block:: VHDL
 
@@ -538,7 +542,8 @@ The following code does 12-word bursts with an incrementing pattern.
 Burst with a Random Pattern
 ---------------------------
 
-Burst transactions that the first word as a std_logic_vector and additional words that are one larger in value.
+Burst transactions that the first word as a :vhdlcode:`std_logic_vector` and additional words that are one larger in
+value.
 
 .. code-block:: VHDL
 
@@ -587,7 +592,8 @@ The following code does 13-word bursts with a random pattern.
 Burst with an Intelligent Coverage Random Pattern
 -------------------------------------------------
 
-Burst transactions that the first word as a std_logic_vector and additional words that are one larger in value.
+Burst transactions that the first word as a :vhdlcode:`std_logic_vector` and additional words that are one larger in
+value.
 
 .. code-block:: VHDL
 
@@ -647,10 +653,11 @@ The following does 12-word bursts with an Intelligent Coverage Random pattern.
 FIFO Fill and Check Patterns and Composite Bursts
 =================================================
 
-FIFO fill patterns can be used in conjunction with WriteBurst to build burst transactions that are a composite of
-Vector, Increment, and Random patterns. Likewise FIFO check patterns can be used with GetBurst in a similar fashion.
+FIFO fill patterns can be used in conjunction with :vhdlcode:`WriteBurst` to build burst transactions that are a
+composite of Vector, Increment, and Random patterns. Likewise FIFO check patterns can be used with :vhdlcode:`GetBurst`
+in a similar fashion.
 
-FIFO fill and check patterns are implemented in FifoFillPkg_slv.vhd (in the osvvm_common library).
+FIFO fill and check patterns are implemented in :file:`FifoFillPkg_slv.vhd` (in the :vhdlcode:`osvvm_common` library).
 
 .. _MIT/AddressBus/BasicFIFOOperations:
 
@@ -929,8 +936,8 @@ FIFO Pop Burst
 
 .. rubric:: PopBurstVector
 
-PopBurstVector returns the contents of the FIFO as a vector. The vector can either be an array of std_logic_vector
-(slv_vector) or integer_vector.
+:vhdlcode:`PopBurstVector` returns the contents of the FIFO as a vector. The vector can either be an array of
+:vhdlcode:`std_logic_vector` (:vhdlcode:`slv_vector`) or :vhdlcode:`integer_vector`.
 
 .. code-block:: VHDL
 
@@ -956,7 +963,7 @@ PopBurstVector returns the contents of the FIFO as a vector. The vector can eith
 
 .. rubric:: Example: PopBurstVector
 
-The following does 5-word bursts using PopBurstVector and slv_vector.
+The following does 5-word bursts using :vhdlcode:`PopBurstVector` and :vhdlcode:`slv_vector`.
 
 .. code-block:: VHDL
 
@@ -969,7 +976,7 @@ The following does 5-word bursts using PopBurstVector and slv_vector.
        (X"0000_C001", X"0000_C003", X"0000_C005", X"0000_C007", X"0000_C009"),
        "slvBurstVector = C001, C003, C005, C007, C009") ;
 
-The following does 5-word bursts using PopBurstVector and integer_vector.
+The following does 5-word bursts using :vhdlcode:`PopBurstVector` and :vhdlcode:`integer_vector`.
 
 .. code-block:: VHDL
 
@@ -991,9 +998,9 @@ Interface Specific Transactions
 Interface specific transactions support split transaction interfaces - such as AXI which independently operates the
 write address, write data, write response, read address, and read data interfaces. Interface specific transactions
 provide a transaction for each independent aspect of the split transaction interface that can be called independently.
-This allows a WriteDataAsync transaction to be dispatched and then perhaps 4 clocks later a WriteAddressAsync
-transaction to be dispatched. This gives the test writer direct control of all aspects of the interface and facilitates
-testing of all interface characteristics. Most of these transactions are asynchronous.
+This allows a :vhdlcode:`WriteDataAsync` transaction to be dispatched and then perhaps 4 clocks later a
+:vhdlcode:`WriteAddressAsync` transaction to be dispatched. This gives the test writer direct control of all aspects of
+the interface and facilitates testing of all interface characteristics. Most of these transactions are asynchronous.
 
 .. _MIT/AddressBus/InterfaceSpecificWriteTransactions:
 
@@ -1120,8 +1127,8 @@ respond an address bus cycle. These verification components primarily implement 
 result, they do not support bursting.
 
 OSVVM supports bursting in memory-based verification components. These verification components allow a manager to
-interact with the memory using either single word or burst cycles. The Axi4Memory VC described in the AXI4 VC User Guide
-is an example of this.
+interact with the memory using either single word or burst cycles. The :vhdlcode:`Axi4Memory` VC described in the AXI4
+VC User Guide is an example of this.
 
 .. _MIT/AddressBus/InterfaceIndependentTransactions:
 
@@ -1353,8 +1360,9 @@ waveforms. These transactions are supported by all verification components.
 Common Directive Transactions
 =============================
 
-These are common as they will likely be supported by most interfaces. Note GetErrorCount internally calls GetAlertLogID,
-so if a VC supports GetAlertLogID, it automatically supports GetErrorCount.
+These are common as they will likely be supported by most interfaces. Note :vhdlcode:`GetErrorCount` internally calls
+:vhdlcode:`GetAlertLogID`, so if a VC supports :vhdlcode:`GetAlertLogID`, it automatically supports
+:vhdlcode:`GetErrorCount`.
 
 .. code-block:: VHDL
 
@@ -1442,8 +1450,9 @@ BurstMode Control Directives
 ============================
 
 The burst FIFOs hold bursts of data that is to be sent to or was received from the interface. The burst FIFO can be
-configured in the modes defined for StreamFifoBurstModeType. Currently these modes defined as a subtype of integer. The
-intention of using integers is to facilitate model specific extensions without the need to define separate transactions.
+configured in the modes defined for :vhdlcode:`StreamFifoBurstModeType`. Currently these modes defined as a subtype of
+integer. The intention of using integers is to facilitate model specific extensions without the need to define separate
+transactions.
 
 .. code-block:: VHDL
 
@@ -1555,10 +1564,10 @@ Verification Components and Stream Model Independent Transactions
 AddressBusOperationType
 =======================
 
-AddressBusOperationType is an enumerated type that indicates to the verification component type of transaction that is
-being dispatched. Being an enumerated type, it allows the determination of the operation in the simulator’s waveform
-window. The tables in the following sections show the AddressBusOperationType value with the corresponding transactions
-in the Manager or Subordinate VC.
+:vhdlcode:`AddressBusOperationType` is an enumerated type that indicates to the verification component type of
+transaction that is being dispatched. Being an enumerated type, it allows the determination of the operation in the
+simulator’s waveform window. The tables in the following sections show the :vhdlcode:`AddressBusOperationType` value
+with the corresponding transactions in the Manager or Subordinate VC.
 
 .. _MIT/AddressBus/VerificationComponentsAndStreamModelIndependentTransactions/BasicInterfaceIndependentTransactions:
 
@@ -1567,27 +1576,28 @@ Basic Interface Independent Transactions
 
 .. list-table::
    :header-rows: 1
+   :widths: 276 221 221
 
-   * - AddressBusOperationType Value
+   * - :vhdlcode:`AddressBusOperationType` Value
      - Manager Transaction Name
      - Subordinate Transaction Name
-   * - WRITE_OP
-     - Write
-     - GetWrite
-   * - READ_OP
-     - Read
-     - SendRead
-   * - READ_CHECK
-     - ReadCheck
+   * - :vhdlcode:`WRITE_OP`
+     - :vhdlcode:`Write`
+     - :vhdlcode:`GetWrite`
+   * - :vhdlcode:`READ_OP`
+     - :vhdlcode:`Read`
+     - :vhdlcode:`SendRead`
+   * - :vhdlcode:`READ_CHECK`
+     - :vhdlcode:`ReadCheck`
      -
-   * - WRITE_AND_READ
-     - WriteAndRead
+   * - :vhdlcode:`WRITE_AND_READ`
+     - :vhdlcode:`WriteAndRead`
      -
-   * - WRITE_BURST
-     - WriteBurst
+   * - :vhdlcode:`WRITE_BURST`
+     - :vhdlcode:`WriteBurst`
      -
-   * - READ_BURST
-     - ReadBurst
+   * - :vhdlcode:`READ_BURST`
+     - :vhdlcode:`ReadBurst`
      -
 
 .. _MIT/AddressBus/VerificationComponentsAndStreamModelIndependentTransactions/InterfaceSpecificTransactions:
@@ -1597,51 +1607,52 @@ Interface Specific Transactions
 
 .. list-table::
    :header-rows: 1
+   :widths: 276 221 221
 
-   * - AddressBusOperationType Value
+   * - :vhdlcode:`AddressBusOperationType` Value
      - Manager Transaction Name
      - Subordinate Transaction Name
-   * - ASYNC_WRITE
-     - WriteAsync
-     - TryGetWrite
-   * - WRITE_ADDRESS
+   * - :vhdlcode:`ASYNC_WRITE`
+     - :vhdlcode:`WriteAsync`
+     - :vhdlcode:`TryGetWrite`
+   * - :vhdlcode:`WRITE_ADDRESS`
      -
-     - GetWriteAddress
-   * - ASYNC_WRITE_ADDRESS
-     - WriteAddressAsync
-     - TryGetWriteAddress
-   * - WRITE_DATA
+     - :vhdlcode:`GetWriteAddress`
+   * - :vhdlcode:`ASYNC_WRITE_ADDRESS`
+     - :vhdlcode:`WriteAddressAsync`
+     - :vhdlcode:`TryGetWriteAddress`
+   * - :vhdlcode:`WRITE_DATA`
      -
-     - GetWriteData
-   * - ASYNC_WRITE_DATA
-     - WriteDataAsync
-     - TryGetWriteData
-   * - ASYNC_READ
+     - :vhdlcode:`GetWriteData`
+   * - :vhdlcode:`ASYNC_WRITE_DATA`
+     - :vhdlcode:`WriteDataAsync`
+     - :vhdlcode:`TryGetWriteData`
+   * - :vhdlcode:`ASYNC_READ`
      -
-     - TrySendRead
-   * - READ_ADDRESS
+     - :vhdlcode:`TrySendRead`
+   * - :vhdlcode:`READ_ADDRESS`
      -
-     - GetReadAddress
-   * - ASYNC_READ_ADDRESS
-     - ReadAddressAsync
-     - TryGetReadAddress
-   * - READ_DATA
-     - ReadData
-     - SendReadData
-   * - READ_DATA_CHECK
-     - ReadCheckData
+     - :vhdlcode:`GetReadAddress`
+   * - :vhdlcode:`ASYNC_READ_ADDRESS`
+     - :vhdlcode:`ReadAddressAsync`
+     - :vhdlcode:`TryGetReadAddress`
+   * - :vhdlcode:`READ_DATA`
+     - :vhdlcode:`ReadData`
+     - :vhdlcode:`SendReadData`
+   * - :vhdlcode:`READ_DATA_CHECK`
+     - :vhdlcode:`ReadCheckData`
      -
-   * - ASYNC_READ_DATA
-     - TryReadData
-     - SendReadDataAsync
-   * - ASYNC_READ_DATA_CHECK
-     - TryReadCheckData
+   * - :vhdlcode:`ASYNC_READ_DATA`
+     - :vhdlcode:`TryReadData`
+     - :vhdlcode:`SendReadDataAsync`
+   * - :vhdlcode:`ASYNC_READ_DATA_CHECK`
+     - :vhdlcode:`TryReadCheckData`
      -
-   * - ASYNC_WRITE_AND_READ
-     - WriteAndReadAsync
+   * - :vhdlcode:`ASYNC_WRITE_AND_READ`
+     - :vhdlcode:`WriteAndReadAsync`
      -
-   * - ASYNC_WRITE_BURST
-     - WriteBurstAsync
+   * - :vhdlcode:`ASYNC_WRITE_BURST`
+     - :vhdlcode:`WriteBurstAsync`
      -
 
 .. _MIT/AddressBus/VerificationComponentsAndStreamModelIndependentTransactions/DirectiveTransactions:
@@ -1656,22 +1667,23 @@ Common Directive Transactions
 
 .. list-table::
    :header-rows: 1
+   :widths: 276 221 221
 
-   * - AddressBusOperationType Value
+   * - :vhdlcode:`AddressBusOperationType` Value
      - Manager Transaction Name
      - Subordinate Transaction Name
-   * - WAIT_FOR_CLOCK
-     - WaitForClock
-     - WaitForClock
-   * - GET_TRANSACTION_COUNT
-     - GetTransactionCount
-     - GetTransactionCount
-   * - GET_ALERTLOG_ID
-     - GetAlertLogID
-     - GetAlertLogID
-   * - WAIT_FOR_TRANSACTION
-     - WaitForTransaction
-     - WaitForTransaction
+   * - :vhdlcode:`WAIT_FOR_CLOCK`
+     - :vhdlcode:`WaitForClock`
+     - :vhdlcode:`WaitForClock`
+   * - :vhdlcode:`GET_TRANSACTION_COUNT`
+     - :vhdlcode:`GetTransactionCount`
+     - :vhdlcode:`GetTransactionCount`
+   * - :vhdlcode:`GET_ALERTLOG_ID`
+     - :vhdlcode:`GetAlertLogID`
+     - :vhdlcode:`GetAlertLogID`
+   * - :vhdlcode:`WAIT_FOR_TRANSACTION`
+     - :vhdlcode:`WaitForTransaction`
+     - :vhdlcode:`WaitForTransaction`
 
 .. _MIT/AddressBus/VerificationComponentsAndStreamModelIndependentTransactions/ExtendedDirectiveTransactions:
 
@@ -1680,22 +1692,23 @@ Extended Directive Transactions
 
 .. list-table::
    :header-rows: 1
+   :widths: 276 221 221
 
-   * - AddressBusOperationType Value
+   * - :vhdlcode:`AddressBusOperationType` Value
      - Manager Transaction Name
      - Subordinate Transaction Name
-   * - WAIT_FOR_WRITE_TRANSACTION
-     - WaitForWriteTransaction
-     - WaitForWriteTransaction
-   * - WAIT_FOR_READ_TRANSACTION
-     - WaitForReadTransaction
-     - WaitForReadTransaction
-   * - GET_WRITE_TRANSACTION_COUNT
-     - GetWriteTransactionCount
-     - GetWriteTransactionCount
-   * - GET_READ_TRANSACTION_COUNT
-     - GetReadTransactionCount
-     - GetReadTransactionCount
+   * - :vhdlcode:`WAIT_FOR_WRITE_TRANSACTION`
+     - :vhdlcode:`WaitForWriteTransaction`
+     - :vhdlcode:`WaitForWriteTransaction`
+   * - :vhdlcode:`WAIT_FOR_READ_TRANSACTION`
+     - :vhdlcode:`WaitForReadTransaction`
+     - :vhdlcode:`WaitForReadTransaction`
+   * - :vhdlcode:`GET_WRITE_TRANSACTION_COUNT`
+     - :vhdlcode:`GetWriteTransactionCount`
+     - :vhdlcode:`GetWriteTransactionCount`
+   * - :vhdlcode:`GET_READ_TRANSACTION_COUNT`
+     - :vhdlcode:`GetReadTransactionCount`
+     - :vhdlcode:`GetReadTransactionCount`
 
 .. _MIT/AddressBus/VerificationComponentsAndStreamModelIndependentTransactions/BurstModeControlDirectives:
 
@@ -1704,15 +1717,16 @@ BurstMode Control Directives
 
 .. list-table::
    :header-rows: 1
+   :widths: 276 221 221
 
-   * - AddressBusOperationType Value
+   * - :vhdlcode:`AddressBusOperationType` Value
      - Manager Transaction Name
      - Subordinate Transaction Name
-   * - SET_BURST_MODE
-     - SetBurstMode
+   * - :vhdlcode:`SET_BURST_MODE`
+     - :vhdlcode:`SetBurstMode`
      -
-   * - GET_BURST_MODE
-     - GetBurstMode
+   * - :vhdlcode:`GET_BURST_MODE`
+     - :vhdlcode:`GetBurstMode`
      -
 
 .. _MIT/AddressBus/VerificationComponentsAndStreamModelIndependentTransactions/SetAndGetModelOptions:
@@ -1722,24 +1736,25 @@ Set and Get Model Options
 
 .. list-table::
    :header-rows: 1
+   :widths: 276 221 221
 
-   * - AddressBusOperationType Value
+   * - :vhdlcode:`AddressBusOperationType` Value
      - Manager Transaction Name
      - Subordinate Transaction Name
-   * - SET_MODEL_OPTIONS
-     - SetModelOptions
-     - SetModelOptions
-   * - GET_MODEL_OPTIONS
-     - GetModelOptions
-     - GetModelOptions
+   * - :vhdlcode:`SET_MODEL_OPTIONS`
+     - :vhdlcode:`SetModelOptions`
+     - :vhdlcode:`SetModelOptions`
+   * - :vhdlcode:`GET_MODEL_OPTIONS`
+     - :vhdlcode:`GetModelOptions`
+     - :vhdlcode:`GetModelOptions`
 
 .. _MIT/AddressBus/VerificationComponentSupportFunctions:
 
 Verification Component Support Functions
 ========================================
 
-Verification component support functions help decode the operation value (AddressBusOperationType) to determine
-properties about the operation.
+Verification component support functions help decode the operation value (:vhdlcode:`AddressBusOperationType`) to
+determine properties about the operation.
 
 .. code-block:: VHDL
 
@@ -1845,7 +1860,7 @@ Initializing Burst FIFOs
 ------------------------
 
 The burst FIFOs need to be initialized. A good place to do this is in the transaction dispatcher of the verification
-components. :ref:`Figure 4 <MIT/AddressBus/Figure4>` shows the declaration of a BurstFifo.
+components. :ref:`Figure 4 <MIT/AddressBus/Figure4>` shows the declaration of a :vhdlcode:`BurstFifo`.
 
 .. code-block:: VHDL
    :caption: Figure 4. BurstFifo Initialization
@@ -1902,25 +1917,3 @@ reformat data going into or coming out of the Burst FIFO – either in the verif
      constant DropUndriven      : in    boolean := FALSE ;
      constant ByteAddress       : in    natural := 0
    ) ;
-
-.. _MIT/AddressBus/AboutTheAuthorJimLewis:
-
-About the Author - Jim Lewis
-****************************
-
-Jim Lewis, the founder of SynthWorks, has thirty plus years of design, teaching, and problem solving experience. In
-addition to working as a Principal Trainer for SynthWorks, Mr Lewis has done ASIC and FPGA design, custom model
-development, and consulting.
-
-Mr. Lewis is chair of the IEEE 1076 VHDL Working Group (VASG) and is the primary developer of the Open Source VHDL
-Verification Methodology (OSVVM.org) packages. Neither of these activities generate revenue. Please support our
-volunteer efforts by buying your VHDL training from SynthWorks.
-
-If you find bugs these packages or would like to request enhancements, you can reach me at jim@synthworks.com.
-
-.. _MIT/AddressBus/References:
-
-References
-**********
-
-[1] Jim Lewis, VHDL Testbenches and Verification, student manual for SynthWorks' class.
