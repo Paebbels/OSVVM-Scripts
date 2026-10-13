@@ -482,9 +482,11 @@ model have been covered. :vhdlcode:`WriteBin` reports the coverage.
      begin
        -- create coverage model
        AddCross(ACov, GenBin(0,7), GenBin(0,7) );  -- Model
+
        loop
          Src1 := RV.RandInt(0, 7) ;     -- Uniform Randomization
          Src2 := RV.RandInt(0, 7) ;
+
          DoAluOp(TRec, Src1, Src2) ;    -- Transaction
          ICover(ACov, (Src1, Src2) ) ;  -- Accumulate
          exit when IsCovered(ACov) ;    -- Done?
@@ -520,7 +522,7 @@ significantly adds to simulation run times. Ideally we would like to run only N 
 Running the previous ALU testbench, we get the following coverage matrix when the code completes. Note that some test
 cases were generated 10 time before all were done at least 1 time. It took 315 randomizations to generate all 64 unique
 pairs. This is slightly less than 5X more iterations than the 64 in the ideal case. This correlates well with theory as
-315  64 \* log(64). By changing the seed value, the exact number of randomizations may increase or decrease but this
+315 ≈ 64 \* log(64). By changing the seed value, the exact number of randomizations may increase or decrease but this
 would be a silly way to try to reduce the number of iterations a test runs.
 
 .. figure:: images/CoveragePkg/Page15-3.png
@@ -554,8 +556,10 @@ In this example, we will replace the uniform randomization with :vhdlcode:`RandI
      begin
        -- create coverage model
        AddCross(ACov, GenBin(0,7), GenBin(0,7) );  -- Model
+
        loop
          (Src1, Src2) := GetRandPoint(ACov) ; -- Intelligent Coverage Randomization
+
          DoAluOp(TRec, Src1, Src2) ;    -- Transaction
          ICover(ACov, (Src1, Src2) ) ;  -- Accumulate
          exit when IsCovered(ACov) ;    -- Done?
@@ -625,8 +629,8 @@ each bin is specified in the table below.
    :widths: 195 216 216
 
    * - Coverage Goal
-     - :vhdlcode:`Src1`
-     - :vhdlcode:`Src2`
+     - Src1
+     - Src2
    * - 2
      - 0
      - 1, 2, 3, 4, 5, 6, 7
@@ -652,11 +656,11 @@ each bin is specified in the table below.
      - 7
      - 0, 1, 2, 3, 4, 5, 6
    * - Illegal
-     - :vhdlcode:`Src1` = :vhdlcode:`Src2`
+     - :vhdlcode:`Src1 = Src2`
      -
 
 To model the above functional coverage, we use a separate call for each different coverage goal. The function,
-:vhdlcode:`IllegalBin`, is used to mark the bins with :vhdlcode:`Src1` = :vhdlcode:`Src2` illegal. This is shown below.
+:vhdlcode:`IllegalBin`, is used to mark the bins with :vhdlcode:`Src1 = Src2` illegal. This is shown below.
 
 .. code-block:: VHDL
 
@@ -678,8 +682,10 @@ To model the above functional coverage, we use a separate call for each differen
        AddCross(ACov,  4,  GenBin (5),  GenBin(0,4) & IllegalBin(5) & GenBin(6,7)) ;
        AddCross(ACov,  3,  GenBin (6),  GenBin(0,5) & IllegalBin(6) & GenBin(7)) ;
        AddCross(ACov,  2,  GenBin (7),  GenBin(0,6) & IllegalBin(7) ) ;
+
        loop              -- Done?
          (Src1, Src2) := GetRandPoint(ACov) ;      -- Randomize with coverage
+
          DoAluOp(TRec, Src1, Src2) ;              -- Do a transaction
          ICover(ACov, (Src1, Src2) ) ;            -- Accumulate
          exit when IsCovered(ACov) ;              -- Done?
@@ -1504,16 +1510,34 @@ way to set these values now.
 The default values for these parameters and the variable from :vhdlcode:`OsvvmSettingsPkg` that set them are shown in
 the table below.
 
-.. code-block:: text
+.. list-table::
+   :header-rows: 1
+   :widths: 207 247 98
 
-   Parameter Constant                Default
-   WritePassFail COVERAGE_WRITE_PASS_FAIL FALSE
-   WriteBinInfo COVERAGE_WRITE_BIN_INFO TRUE
-   WriteCount COVERAGE_WRITE_COUNT   TRUE
-   WriteAnyIllegal COVERAGE_WRITE_ANY_ILLEGAL FALSE
-   Deprecated WritePrefix COVERAGE_PRINT_PREFIX "%% "
-   Deprecated PassName COVERAGE_PASS_NAME "PASSED"
-   Deprecated FailName COVERAGE_FAIL_NAME "FAILED"
+   * - Parameter
+     - Constant
+     - Default
+   * - :vhdlcode:`WritePassFail`
+     - :vhdlcode:`COVERAGE_WRITE_PASS_FAIL`
+     - :vhdlcode:`FALSE`
+   * - :vhdlcode:`WriteBinInfo`
+     - :vhdlcode:`COVERAGE_WRITE_BIN_INFO`
+     - :vhdlcode:`TRUE`
+   * - :vhdlcode:`WriteCount`
+     - :vhdlcode:`COVERAGE_WRITE_COUNT`
+     - :vhdlcode:`TRUE`
+   * - :vhdlcode:`WriteAnyIllegal`
+     - :vhdlcode:`COVERAGE_WRITE_ANY_ILLEGAL`
+     - :vhdlcode:`FALSE`
+   * - *Deprecated* :vhdlcode:`WritePrefix`
+     - :vhdlcode:`COVERAGE_PRINT_PREFIX`
+     - :vhdlcode:`"%% "`
+   * - *Deprecated* :vhdlcode:`PassName`
+     - :vhdlcode:`COVERAGE_PASS_NAME`
+     - :vhdlcode:`"PASSED"`
+   * - *Deprecated* :vhdlcode:`FailName`
+     - :vhdlcode:`COVERAGE_FAIL_NAME`
+     - :vhdlcode:`"FAILED"`
 
 When all parameters are TRUE, the report will print with the following format.
 
@@ -1543,7 +1567,7 @@ The coverage models are implemented in a singleton data structure inside of :vhd
 allows us to iterate across all of the coverage models to gather information.
 
 Generally only :vhdlcode:`SetCovWeight` is called directly in your testbenches. The others are called as a result of
-calling :vhdlcode:`EndOfTestReports` (see :osvvmdoc:`AlertLogPkg_User_Guide.pdf <AlertLogPkg_User_Guide>`).
+calling :vhdlcode:`EndOfTestReports` (see :osvvmdoc:`AlertLogPkg_User_Guide.pdf <AlertLogPkg_user_guide>`).
 :vhdlcode:`EndOfTestReports` generates YAML information for test reports, alert reports and coverage reports (by calling
 :vhdlcode:`WriteCovYaml`).
 
@@ -1563,11 +1587,12 @@ coverage models. It also stores the settings applied to a coverage model.
    ) ;
 
 Instead of calling :vhdlcode:`WriteCovYaml` directly, it is recommended to call :vhdlcode:`EndOfTestReports` at the end
-of a simulation (see :vhdlcode:`AlertLogPkg_User_Guide`). In addition, when a test is run using the OSVVM script
-simulate, the YAML file will automatically be converted to HTML (by script :tclcode:`Cov2Html`). Details of the OSVVM
-reports are shown in the "OSVVM Test Writer's User Guide" and the "Script User Guide" in the Documentation repository.
+of a simulation (see :osvvmdoc:`AlertLogPkg_User_Guide <AlertLogPkg_user_guide>`). In addition, when a test is run using
+the OSVVM script :tclcode:`simulate`, the YAML file will automatically be converted to HTML (by script
+:tclcode:`Cov2Html`). Details of the OSVVM reports are shown in the "OSVVM Test Writer's User Guide" and the "Script
+User Guide" in the Documentation repository.
 
-If :vhdlcode:`FileName` is "", :vhdlcode:`OSVVM_RAW_OUTPUT_DIRECTORY`/<:tclcode:`TestName`>\ :file:`_cov.yml` is used.
+If :vhdlcode:`FileName` is "", :file:`OSVVM_RAW_OUTPUT_DIRECTORY/<TestName>_cov.yml` is used.
 
 .. _UTILITY/CoveragePkg/ReadCovYamlReadYAMLCoverageModels:
 
@@ -1583,7 +1608,7 @@ ReadCovYaml: Read YAML coverage models
      Merge    : boolean := FALSE
    ) ;
 
-If :vhdlcode:`FileName` is "", :vhdlcode:`OSVVM_RAW_OUTPUT_DIRECTORY`/<:tclcode:`TestName`>\ :file:`_cov.yml` is used.
+If :vhdlcode:`FileName` is "", :file:`OSVVM_RAW_OUTPUT_DIRECTORY/<TestName>_cov.yml` is used.
 If the :vhdlcode:`Merge` flag is TRUE, the model information is merged with an existing coverage model of the same name.
 
 .. _UTILITY/CoveragePkg/GotCoverageAreThereAnyCoverageModelsInCoveragePkg:
@@ -1794,18 +1819,15 @@ Selection of the randomization weight is done using :vhdlcode:`SetWeightMode`. C
 deprecated modes) are :vhdlcode:`AT_LEAST` and :vhdlcode:`REMAIN`. These are as specified in the following table. Also
 see :vhdlcode:`SetCovTarget` as it can scale the :vhdlcode:`AtLeast` value.
 
-.. list-table::
-   :header-rows: 1
-   :widths: 195 378
-
-   * - :vhdlcode:`Mode`
-     - :vhdlcode:`Weight`
-   * - :vhdlcode:`AT_LEAST`
-     - :vhdlcode:`AtLeast`
-   * - :vhdlcode:`REMAIN`
-     - :vhdlcode:`AtLeast` - Count \*
-   * - \* Note :vhdlcode:`AtLeast` is adjusted if the coverage target /= 100 %
-     -
++--------------------------+----------------------------------------------------+
+| Mode                     | Weight                                             |
++==========================+====================================================+
+| :vhdlcode:`AT_LEAST`     | :vhdlcode:`AtLeast`                                |
++--------------------------+----------------------------------------------------+
+| :vhdlcode:`REMAIN`       | :vhdlcode:`AtLeast - Count` \*                     |
++--------------------------+----------------------------------------------------+
+| \* Note :vhdlcode:`AtLeast` is adjusted if the coverage target /= 100 %       |
++--------------------------+----------------------------------------------------+
 
 The interface for procedure :vhdlcode:`SetWeightMode` is shown below.
 
@@ -2508,6 +2530,7 @@ can build up our coverage model incrementally using constants and concatenation.
        wait for 0 ns ; -- Allow ACov to update
        -- Capture coverage model
        AddCross (ACov, ALU_BIN_CONST ) ;
+
        loop
          -- Randomize register addresses -- see RandomPkg documentation
          (RegIn1, RegIn2) := GetRandPoint(ACov) ;
@@ -2562,7 +2585,7 @@ Reference all packages in the OSVVM Utility library by using the context declara
    library OSVVM ;
      context osvvm.OsvvmContext ;
 
-Compilation order for OSVVM Utility Library is in :osvvmdoc:`OSVVM_release_notes.pdf <OSVVM_release_notes>`. Rather than
+Compilation order for OSVVM Utility Library is in :osvvmdoc:`OSVVM_release_notes.pdf <osvvm_release_notes>`. Rather than
 learning this, we recommend using the OSVVM compilation scripts.
 
 OSVVM Utility library is released under the Apache open source license. It is free (both to download and use - there are
@@ -2584,8 +2607,8 @@ While code coverage is generally a useful metric, there are some cases where it 
 
 To help understand the issue, consider the following process. If :vhdlcode:`SelA`, :vhdlcode:`SelB`, and
 :vhdlcode:`SelC` all are 1 when :vhdlcode:`Clk` rises, then all of the lines of code execute and the code coverage is
-100%. However, only the assignment, "Y <= A" has an observable impact on the output. The assignments, "Y <= C" and Y <=
-B" are not observable, and hence, are not validated.
+100%. However, only the assignment, ":vhdlcode:`Y <= A`" has an observable impact on the output. The assignments,
+":vhdlcode:`Y <= C`" and :vhdlcode:`Y <= B`" are not observable, and hence, are not validated.
 
 .. code-block:: VHDL
 
