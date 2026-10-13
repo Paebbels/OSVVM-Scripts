@@ -20,26 +20,27 @@ OSVVM Settings Directory for VHDL and Script Settings
 *****************************************************
 
 The OSVVM Settings Directory for VHDL and Script settings is found in the directory specified by joining the Tcl
-variables $SettingsRootDirectory, $SettingsDirectory, and $::osvvm:::vhdlcode:`OsvvmSettingsSubDirectory`.
+variables :tclcode:`$SettingsRootDirectory`, :tclcode:`$SettingsDirectory`, and
+:tclcode:`$::osvvm::OsvvmSettingsSubDirectory`.
 
-The :vhdlcode:`SettingsRootDirectory` is $OsvvmLibraries. $OsvvmLibraries is the location of your OsvvmLibraries
-install. $OsvvmLibraries is a Tcl variable set by the scripts when started with $\
-:file:`OsvvmLibraries/Scripts/StartUp.tcl`.
+The :tclcode:`SettingsRootDirectory` is :tclcode:`$OsvvmLibraries`. :tclcode:`$OsvvmLibraries` is the location of your
+OsvvmLibraries install. :tclcode:`$OsvvmLibraries` is a Tcl variable set by the scripts when started with
+:file:`$OsvvmLibraries/Scripts/StartUp.tcl`.
 
-The :vhdlcode:`SettingsDirectory` is determined by the first of the following found:
+The :tclcode:`SettingsDirectory` is determined by the first of the following found:
 
-* The Tcl variable $::osvvm:::vhdlcode:`OsvvmSettingsDirectory` - (highest precedence)
-* Environment variable :vhdlcode:`OSVVM_SETTINGS_DIR`
-* Directory $\ :file:`OsvvmLibraries/../OsvvmSettings`
-* Directory $\ :file:`OsvvmLibraries/osvvm` for vhdl settings and $\ :file:`OsvvmLibraries/Scripts` for script settings
+* The Tcl variable :tclcode:`$::osvvm::OsvvmSettingsDirectory` - (highest precedence)
+* Environment variable ``OSVVM_SETTINGS_DIR``
+* Directory :file:`$OsvvmLibraries/../OsvvmSettings`
+* Directory :file:`$OsvvmLibraries/osvvm` for vhdl settings and :file:`$OsvvmLibraries/Scripts` for script settings
   - (lowest precedence)
 
-The :vhdlcode:`OSVVM_SETTINGS_DIR` variable can contain either an absolute path or a relative path. If
-:vhdlcode:`OSVVM_SETTINGS_DIR` contains an absolute path, then the path of $OsvvmLibraries in the join is ignored.
+The ``OSVVM_SETTINGS_DIR`` variable can contain either an absolute path or a relative path. If
+``OSVVM_SETTINGS_DIR`` contains an absolute path, then the path of :tclcode:`$OsvvmLibraries` in the join is ignored.
 
-$::osvvm:::vhdlcode:`OsvvmSettingsSubDirectory` is set by :file:`OsvvmSettingsLocal.tcl`. As a result, this value is ""
+:tclcode:`$::osvvm::OsvvmSettingsSubDirectory` is set by :file:`OsvvmSettingsLocal.tcl`. As a result, this value is ""
 for scripts (since :file:`OsvvmSettingsLocal.tcl` has not been called yet). If multiple simulators are being used, set
-:vhdlcode:`OsvvmSettingsSubDirectory` as follows:
+:tclcode:`OsvvmSettingsSubDirectory` as follows:
 
 .. code-block:: tcl
 
@@ -64,7 +65,7 @@ Utility library are using the same file names and paths.
 
 :vhdlcode:`OSVVM_SETTINGS_REVISION` is important. It is used in :file:`OsvvmSettingsPkg_default.vhd` to pick between new
 and old (backward compatible) settings in the OSVVM Utility library. If you need to update the OSVVM libraries during a
-project, you can set the Tcl variable ::osvvm:::vhdlcode:`OsvvmVersionCompatibility` to the version of the OSVVM version
+project, you can set the Tcl variable :tclcode:`::osvvm::OsvvmVersionCompatibility` to the version of the OSVVM version
 when the project started to maintain compatible settings.
 
 .. code-block:: VHDL
@@ -105,7 +106,7 @@ producing required coverage would be bad. Having these change at the beginning o
 
 Note many of these settings are formulated using :vhdlcode:`OSVVM_SETTINGS_REVISION`, a constant from
 :vhdlcode:`OsvvmScriptSettingsPkg`. :vhdlcode:`OSVVM_SETTINGS_REVISION` in turn is generated from the Tcl variable
-::osvvm:::vhdlcode:`OsvvmVersionCompatibility`.
+:tclcode:`::osvvm::OsvvmVersionCompatibility`.
 
 .. _UTILITY/OsvvmSettings/PackageBodyAndInterfaceGroups:
 
@@ -142,17 +143,17 @@ Shared Settings for All Packages
      - Value
    * - :vhdlcode:`OSVVM_HEADER_PREFIX`
      - Default prefix for :vhdlcode:`LogHeader`, :vhdlcode:`PrintHeader`
-     - " "
+     - :vhdlcode:`" "`
    * - :vhdlcode:`OSVVM_HEADER_SUFFIX`
      - Default suffix for :vhdlcode:`LogHeader`, :vhdlcode:`PrintHeader`
-     - "\*"
+     - :vhdlcode:`"*"`
    * - :vhdlcode:`OSVVM_LINE_LENGTH`
      - Number of times a character repeats in a header line – :vhdlcode:`LogHeader`, :vhdlcode:`PrintHeader`,
        :vhdlcode:`HeaderLine`
      - 162
    * - :vhdlcode:`OSVVM_LINE_WRAP`
      - Length at which to wrap a line. To disable set to :vhdlcode:`integer'high`. Used for :vhdlcode:`MultiLine`
-       printing in Alert, Log, :vhdlcode:`PrintLine`, …
+       printing in :vhdlcode:`Alert`, :vhdlcode:`Log`, :vhdlcode:`PrintLine`, …
      - 162
    * - :vhdlcode:`OSVVM_DEFAULT_TIME_UNITS`
      - Default time units for printing
@@ -160,11 +161,12 @@ Shared Settings for All Packages
    * - :vhdlcode:`OSVVM_DIGITS_FOR_TIME_FRACTION`
      - Digits to print in a time fraction – see format
      - 3
-   * - :vhdlcode:`OSVVM_MAX_DIGITS_FOR_FIXED_POI` :vhdlcode:`NT_REAL`
-     - Digits to print in fixed point – see format Switches to exponent notation after this
+   * - :vhdlcode:`OSVVM_MAX_DIGITS_FOR_FIXED_POINT_REAL`
+     - | Digits to print in fixed point – see format
+       | Switches to exponent notation after this
      - 8
-   * - :vhdlcode:`OSVVM_DIGITS_FOR_REAL_FRACTION` Fraction digits for real – see format
-     -
+   * - :vhdlcode:`OSVVM_DIGITS_FOR_REAL_FRACTION`
+     - Fraction digits for real – see format
      - 4
    * - :vhdlcode:`OSVVM_MAX_TIME_DECIMAL_DIGITS`
      - Size of string used in format for time. Max number of 10**digits in 2**62 – 1 = 19 digits plus 1 for decimal
@@ -204,9 +206,11 @@ Settings for RandomPkg
      - Description
      - Value
    * - :vhdlcode:`RANDOM_USE_NEW_SEED_METHODS`
-     - Selects higher quality seed generation methods for :vhdlcode:`InitSeed`. Make it TRUE for new designs. 2024
-       revisions and later Before 2024
-     - TRUE FALSE
+     - | Selects higher quality seed generation methods for :vhdlcode:`InitSeed`. Make it TRUE for new designs.
+       | 2024 revisions and later
+       | Before 2024
+     - | TRUE
+       | FALSE
 
 .. _UTILITY/OsvvmSettings/SettingsForScoreboardGenericPkg:
 
@@ -221,9 +225,12 @@ Settings for ScoreboardGenericPkg
      - Description
      - Value
    * - :vhdlcode:`SCOREBOARD_YAML_IS_BASE_FILE_NAME`
-     - When TRUE, :vhdlcode:`WriteScoreboardYaml` only requires a base name and fills in the rest of the required
-       naming pattern. 2024 revisions and later Before 2024
-     - TRUE FALSE
+     - | When TRUE, :vhdlcode:`WriteScoreboardYaml` only requires a base name and fills in the rest of the required
+         naming pattern.
+       | 2024 revisions and later
+       | Before 2024
+     - | TRUE
+       | FALSE
 
 .. _UTILITY/OsvvmSettings/SettingsForCoveragePkg:
 
@@ -238,8 +245,11 @@ Settings for CoveragePkg
      - Description
      - Value
    * - :vhdlcode:`COVERAGE_DEFAULT_WEIGHT_MODE`
-     - Selects weight mode to use for randomization. 2024 revisions and later Before 2024
-     - "REMAIN" ":vhdlcode:`AT_LEAST`"
+     - | Selects weight mode to use for randomization.
+       | 2024 revisions and later
+       | Before 2024
+     - | :vhdlcode:`"REMAIN"`
+       | :vhdlcode:`"AT_LEAST"`
    * - :vhdlcode:`COVERAGE_USE_NEW_SEED_METHODS`
      - Selects higher quality seed generation methods for :vhdlcode:`InitSeed`.
      - TRUE
@@ -368,18 +378,22 @@ Control what is a test failure
    * - :vhdlcode:`ALERT_LOG_FAIL_ON_WARNING`
      -
      - TRUE
-   * - :vhdlcode:`ALERT_LOG_FAIL_ON_DISABLED_ERRO` RS
+   * - :vhdlcode:`ALERT_LOG_FAIL_ON_DISABLED_ERRORS`
      -
      - TRUE
-   * - :vhdlcode:`ALERT_LOG_FAIL_ON_REQUIREMENT_E` RRORS
+   * - :vhdlcode:`ALERT_LOG_FAIL_ON_REQUIREMENT_ERRORS`
      -
      - TRUE
-   * - :vhdlcode:`ALERT_LOG_FAIL_ON_VHDL_ASSERT_E` RRORS
-     - With 2026 releases and newer Before 2026
-     - TRUE FALSE
-   * - :vhdlcode:`ALERT_LOG_PRINT_VHDL_ASSERT_ER` RORS
-     - With 2026 releases and newer Before 2026
-     - TRUE FALSE
+   * - :vhdlcode:`ALERT_LOG_FAIL_ON_VHDL_ASSERT_ERRORS`
+     - | With 2026 releases and newer
+       | Before 2026
+     - | TRUE
+       | FALSE
+   * - :vhdlcode:`ALERT_LOG_PRINT_VHDL_ASSERT_ERRORS`
+     - | With 2026 releases and newer
+       | Before 2026
+     - | TRUE
+       | FALSE
 
 .. _UTILITY/OsvvmSettings/AlertLogDetailedPrintingControl:
 
@@ -398,36 +412,43 @@ Alert/Log Detailed Printing Control
      - FALSE
    * - :vhdlcode:`ALERT_LOG_WRAP_INDENT_CHAR`
      - If at start of message, start message on the next line at an indent of :vhdlcode:`ALERT_LOG_INDENTED_LENGTH` and
-       enable line wrapping independent of
-     - '<'
-   * -
-     - :vhdlcode:`ALERT_LOG_WRAP` setting.
-     -
+       enable line wrapping independent of :vhdlcode:`ALERT_LOG_WRAP` setting.
+     - :vhdlcode:`'<'`
    * - :vhdlcode:`ALERT_LOG_WRAP_END_CHAR`
      - If at start of message, print message starting after the Alert/Log prints and enable line wrapping independent
        of :vhdlcode:`ALERT_LOG_WRAP` setting
-     - '>'
+     - :vhdlcode:`'>'`
    * - :vhdlcode:`ALERT_LOG_INDENTED_LENGTH`
      - Number of characters to indent for an indented wrap line. 21 is aligns with printing Alert/Log
      - 21
    * - :vhdlcode:`ALERT_LOG_JUSTIFY_ENABLE`
-     - Align printing of the message at the end of the Alert/Log For releases 2024 and later Releases before 2024
-     - TRUE FALSE
+     - | Align printing of the message at the end of the Alert/Log
+       | For releases 2024 and later
+       | Releases before 2024
+     - | TRUE
+       | FALSE
    * - :vhdlcode:`ALERT_LOG_TIME_JUSTIFY_AMOUNT`
-     - Amount of space for printing time value For releases 2026.08 and later Otherwise
-     - 16 9
-   * - :vhdlcode:`ALERT_LOG_DIGITS_FOR_TIME_FRACTI` ON
+     - | Amount of space for printing time value
+       | For releases 2026.08 and later
+       | Otherwise
+     - | 16
+       | 9
+   * - :vhdlcode:`ALERT_LOG_DIGITS_FOR_TIME_FRACTION`
      - Number of time fraction digits to print with Alert/Log
      - 1
-   * - :vhdlcode:`ALERT_LOG_DIGITS_FOR_REAL_FRACTI` ON
+   * - :vhdlcode:`ALERT_LOG_DIGITS_FOR_REAL_FRACTION`
      - Number of real fraction digits to print in alert/log
      - 4
    * - :vhdlcode:`ALERT_LOG_WRITE_ERRORCOUNT`
-     - Write the current error count immediately after :vhdlcode:`OSVVM_PRINT_PREFIX` AKA Mike Pagen Mode
+     - | Write the current error count immediately after :vhdlcode:`OSVVM_PRINT_PREFIX`
+       | AKA Mike Pagen Mode
      - FALSE
    * - :vhdlcode:`ALERT_LOG_WRITE_TIME_FIRST`
-     - In Alert/Log print time first For releases 2024 and later or if :vhdlcode:`ALSERT_LOG_WRAP` is true Otherwise
-     - TRUE FALSE
+     - | In Alert/Log print time first
+       | For releases 2024 and later or if :vhdlcode:`ALSERT_LOG_WRAP` is true
+       | Otherwise
+     - | TRUE
+       | FALSE
    * - :vhdlcode:`ALERT_LOG_WRITE_NAME`
      - Print Alert / Log
      - TRUE
@@ -439,16 +460,22 @@ Alert/Log Detailed Printing Control
      - TRUE
    * - :vhdlcode:`ALERT_LOG_ID_SEPARATOR`
      - Characters between a parent name and child name
-     - ": "
+     - :vhdlcode:`": "`
    * - :vhdlcode:`ALERT_LOG_SPACES_BEFORE_ALERT`
-     - For releases 2026.08 and later Otherwise
-     - " " " "
+     - | For releases 2026.08 and later
+       | Otherwise
+     - | :vhdlcode:`" "`
+       | :vhdlcode:`"   "`
    * - :vhdlcode:`ALERT_LOG_SPACES_BEFORE_LEVEL`
-     - For releases 2026.08 and later Otherwise
-     - " " " "
-   * - :vhdlcode:`ALERT_LOG_SPACES_BEFORE_ID_NAM` E
-     - For releases 2026.08 and later Otherwise
-     - "" " "
+     - | For releases 2026.08 and later
+       | Otherwise
+     - | :vhdlcode:`" "`
+       | :vhdlcode:`"  "`
+   * - :vhdlcode:`ALERT_LOG_SPACES_BEFORE_ID_NAME`
+     - | For releases 2026.08 and later
+       | Otherwise
+     - | :vhdlcode:`""`
+       | :vhdlcode:`"  "`
 
 .. _UTILITY/OsvvmSettings/ReportAlertsControlsNotRelevantIfUsingHTMLReports:
 
@@ -477,7 +504,7 @@ ReportAlerts Controls. Not relevant if using HTML reports
    * - :vhdlcode:`ALERT_LOG_PRINT_REQUIREMENTS`
      - Print requirements always
      - FALSE
-   * - :vhdlcode:`ALERT_LOG_PRINT_IF_HAVE_REQUIRE` MENTS
+   * - :vhdlcode:`ALERT_LOG_PRINT_IF_HAVE_REQUIREMENTS`
      - Print requirements if have any
      - TRUE
 
@@ -488,18 +515,18 @@ Overriding the Default OsvvmSettings package
 
 The version of :vhdlcode:`OsvvmSettingsPkg` used is determined by the first of the following found:
 
-* ${:vhdlcode:`SettingsDirectory`}/:vhdlcode:`OsvvmSettingsPkg_local.vset` - (highest precedence)
-* ${:vhdlcode:`SettingsDirectory`}/:vhdlcode:`OsvvmSettingsPkg_local.vhd`
-* Directory $\ :file:`OsvvmLibraries/osvvm/OsvvmSettingsPkg_default.vhd` - (lowest)
+* :file:`${SettingsDirectory}/OsvvmSettingsPkg_local.vset` - (highest precedence)
+* :file:`${SettingsDirectory}/OsvvmSettingsPkg_local.vhd`
+* Directory :file:`$OsvvmLibraries/osvvm/OsvvmSettingsPkg_default.vhd` - (lowest)
 
 .. _UTILITY/OsvvmSettings/UsingOsvvmSettingsPkgLocalVset:
 
 Using OsvvmSettingsPkg_local.vset
 =================================
 
-:vhdlcode:`OsvvmSettingsPkg_local.vset` is a file of settings. First item is the constant name, followed immediately by
+:file:`OsvvmSettingsPkg_local.vset` is a file of settings. First item is the constant name, followed immediately by
 a ": ", and then the value. The value can be a VHDL expression. To change the Alert/Log spacing settings back to the
-previous settings, one can do the following in their :vhdlcode:`OsvvmSettingsPkg_local.vset`.
+previous settings, one can do the following in their :file:`OsvvmSettingsPkg_local.vset`.
 
 .. code-block:: text
 
@@ -512,11 +539,11 @@ previous settings, one can do the following in their :vhdlcode:`OsvvmSettingsPkg
 Only the settings that need to be changed are needed in the file. The value to the right of the ": " should be a legal
 VHDL value that is appropriate a constant of its type.
 
-To apply the settings, the scripts read :vhdlcode:`OsvvmSettingsPkg_default.vset` to establish the default settings.
-Then ${:vhdlcode:`SettingsDirectory`}/:vhdlcode:`OsvvmSettingsPkg_local.vset` is read to override the default settings.
-${:vhdlcode:`SettingsDirectory`}/:vhdlcode:`OsvvmSettingsPkg_generated.vhd` is created by substituting the settings into
+To apply the settings, the scripts read :file:`OsvvmSettingsPkg_default.vset` to establish the default settings.
+Then :file:`${SettingsDirectory}/OsvvmSettingsPkg_local.vset` is read to override the default settings.
+:file:`${SettingsDirectory}/OsvvmSettingsPkg_generated.vhd` is created by substituting the settings into
 :file:`OsvvmSettingsPkg_template.vhd`. The scripts then analyze
-${:vhdlcode:`SettingsDirectory`}/:vhdlcode:`OsvvmSettingsPkg_generated.vhd`.
+:file:`${SettingsDirectory}/OsvvmSettingsPkg_generated.vhd`.
 
 .. _UTILITY/OsvvmSettings/UsingOsvvmSettingsPkgLocalVhd:
 
@@ -527,7 +554,7 @@ In this method, :file:`OsvvmSettingsPkg_local.vhd` is created by copying :file:`
 changing the desired values. It is simple in concept, but difficult to maintain. When new settings are added to
 :file:`OsvvmSettingsPkg_default.vhd` they also need to be added to the local package also.
 
-The :vhdlcode:`OsvvmSettingsPkg_local.vset` approach only changes the items that need to change and only needs to be
+The :file:`OsvvmSettingsPkg_local.vset` approach only changes the items that need to change and only needs to be
 updated if a new OSVVM version adds a setting that needs to be changed.
 
 .. _UTILITY/OsvvmSettings/VariablesSetBySimulatorScripts:
@@ -535,7 +562,7 @@ updated if a new OSVVM version adds a setting that needs to be changed.
 Variables Set by Simulator Scripts
 **********************************
 
-The following tcl variables are set by VendorScripts\_<:vhdlcode:`ScriptBaseName`>.tcl. Where :vhdlcode:`ScriptBaseName`
+The following tcl variables are set by :file:`VendorScripts_<ScriptBaseName>.tcl`. Where :tclcode:`ScriptBaseName`
 is a tcl variable that uniquely identifies the tool being run.
 
 .. code-block:: tcl
@@ -627,7 +654,7 @@ Use the old version of :vhdlcode:`CreateClock` and :vhdlcode:`CreateReset` proce
 VHDL File Viewer Settings
 =========================
 
-In the Test Case report, a link to the VHDL test case file is provided. Set variable :vhdlcode:`VhdlFileViewerPrefix` to
+In the Test Case report, a link to the VHDL test case file is provided. Set variable :tclcode:`VhdlFileViewerPrefix` to
 "vscode://file/" to view the file in vscode. The default value, "", views the file in the html viewer.
 
 .. code-block:: tcl
@@ -665,7 +692,7 @@ Formulation of Library Directory
    variable VhdlLibraryDirectory         "VHDL_LIBS"
    variable VhdlLibrarySubdirectory    "${ToolNameVersion}"      ;# default value
 
-Directory to hold temporary files. Typically same as :vhdlcode:`OutputBaseDirectory`.
+Directory to hold temporary files. Typically same as :tclcode:`OutputBaseDirectory`.
 
 .. code-block:: tcl
 
@@ -676,8 +703,10 @@ Directory to hold temporary files. Typically same as :vhdlcode:`OutputBaseDirect
 Supporting Different VHDL Settings for Different Simulators
 ===========================================================
 
-Setting :vhdlcode:`OsvvmSettingsSubDirectory` adds a subdirectory to the search path or generated file path for VHDL
-settings. For details see Settings Directory. A good setting for supporting multiple simulators is:
+Setting :tclcode:`OsvvmSettingsSubDirectory` adds a subdirectory to the search path or generated file path for VHDL
+settings. For details see
+:ref:`Settings Directory <UTILITY/OsvvmSettings/OSVVMSettingsDirectoryForVHDLAndScriptSettings>`. A good setting for
+supporting multiple simulators is:
 
 .. code-block:: tcl
 
@@ -690,14 +719,14 @@ If multiple simulators are not being used, the default value of “” is just f
 Supporting Different Script Settings for Different Simulators
 =============================================================
 
-:vhdlcode:`OsvvmSettingsSubDirectory` cannot be used to select a simulator specific version of
-:file:`OsvvmSettingsLocal.tcl` since :file:`OsvvmSettingsLocal.tcl` sets :vhdlcode:`OsvvmSettingsSubDirectory` – a
+:tclcode:`OsvvmSettingsSubDirectory` cannot be used to select a simulator specific version of
+:file:`OsvvmSettingsLocal.tcl` since :file:`OsvvmSettingsLocal.tcl` sets :tclcode:`OsvvmSettingsSubDirectory` – a
 chicken and egg problem.
 
 Instead, in addition to running :file:`OsvvmSettingsLocal.tcl` (if it exists), :file:`StartUpShared.tcl` will also run
-OsvvmSettingsLocal\_<:vhdlcode:`ScriptBaseName`>.tcl (if it exists).
+:file:`OsvvmSettingsLocal_<ScriptBaseName>.tcl` (if it exists).
 
-If different naming than <:vhdlcode:`ScriptBaseName`> is needed, then :file:`OsvvmSettingsLocal.tcl` can include
+If different naming than <:tclcode:`ScriptBaseName`> is needed, then :file:`OsvvmSettingsLocal.tcl` can include
 something like the following to run simulator specific settings:
 
 .. code-block:: tcl
@@ -731,7 +760,7 @@ What Should Generate TCL Errors
 Stop Build on Number of Analyze and Simulate Errors
 ===================================================
 
-Stop build when :vhdlcode:`AnalyzeErrorStopCount` and :vhdlcode:`SimulteErrorStopCount` errors have occurred. If the
+Stop build when :tclcode:`AnalyzeErrorStopCount` and :tclcode:`SimulteErrorStopCount` errors have occurred. If the
 value is 0, then do not stop. Do not stop is appropriate for regression runs.
 
 .. code-block:: tcl
@@ -767,7 +796,7 @@ Generate Log file with just OSVVM Output
 Select MemoryPkg
 ================
 
-:vhdlcode:`UseMemoryPkg01` TRUE results in selecting 01 policy for :vhdlcode:`MemoryPkg`, otherwise, selects UX01
+:tclcode:`UseMemoryPkg01` TRUE results in selecting 01 policy for :vhdlcode:`MemoryPkg`, otherwise, selects UX01
 policy. Policy 01 stores only values 0 and 1 for if the memory is > 16 bits, cuts the memory storage in half. Policy
 UX01 stores values U, X, 0, and 1 – resulting in a more accurate simulation.
 
@@ -780,7 +809,7 @@ UX01 stores values U, X, 0, and 1 – resulting in a more accurate simulation.
 Requirement Tracking Settings
 =============================
 
-Setting :vhdlcode:`USE_SUM_OF_GOALS` when false, uses maximum goal - good when merging in specification which provides
+Setting :tclcode:`USE_SUM_OF_GOALS` when false, uses maximum goal - good when merging in specification which provides
 the maximum goal which is divided across tests, otherwise, when true, uses sum of goals - good when not merging the
 specification and need to sum up goals to get the total.
 
@@ -788,21 +817,21 @@ specification and need to sum up goals to get the total.
 
    variable USE_SUM_OF_GOALS         "false" ;# when false, uses maximum
 
-Setting :vhdlcode:`REQUIREMENT_CSV_PRINT_STATUS` when false, do not print status in CSV, otherwise, when true, print
+Setting :tclcode:`REQUIREMENT_CSV_PRINT_STATUS` when false, do not print status in CSV, otherwise, when true, print
 status in CSV
 
 .. code-block:: tcl
 
    variable REQUIREMENT_CSV_PRINT_STATUS  "false" ;# do not print Status in CSV
 
-Setting :vhdlcode:`REQUIREMENT_TEST_CASE_FAILS_IF_LESS_THAN_GOAL` when false, test case status remains unchanged
+Setting :tclcode:`REQUIREMENT_TEST_CASE_FAILS_IF_LESS_THAN_GOAL` when false, test case status remains unchanged
 (Errors=0 => PASSED), otherwise, when true, if requirements < goal, change test case status to FAILED
 
 .. code-block:: tcl
 
    variable REQUIREMENT_TEST_CASE_FAILS_IF_LESS_THAN_GOAL  "true"
 
-Setting :vhdlcode:`REQUIREMENT_DOES_NOT_EXCEED_GOAL` when false, sum up actual requirement value, otherwise, when true,
+Setting :tclcode:`REQUIREMENT_DOES_NOT_EXCEED_GOAL` when false, sum up actual requirement value, otherwise, when true,
 requirement = Minimum(Requirement, Goal)
 
 .. code-block:: tcl
@@ -898,7 +927,7 @@ Name of Second Top Level
 Deprecated Settings
 ===================
 
-The setting :vhdlcode:`SettingsAreRelativeToSimulationDirectory` is deprecated and the only valid value is “false”. The
-value will be “false” in :vhdlcode:`StartUpShared`, since :file:`OsvvmSettingsLocal.tcl` has not run yet. As a result,
+The setting :tclcode:`SettingsAreRelativeToSimulationDirectory` is deprecated and the only valid value is “false”. The
+value will be “false” in :file:`StartUpShared`, since :file:`OsvvmSettingsLocal.tcl` has not run yet. As a result,
 if set to “true”, VHDL settings will be in a different directory from the script settings. In a future revision of
 OSVVM, it is likely that setting this to “true” will result in a tcl error.
