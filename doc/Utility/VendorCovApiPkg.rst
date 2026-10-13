@@ -82,7 +82,7 @@ OSVVM Functional Coverage modeling allows the bin to be named after the initial 
 
 .. code-block:: VHDL
 
-   impure function VendorCovCrossCreate( name: string ) return VendorCovHandleType;
+   procedure VendorCovSetName( obj: VendorCovHandleType; name: string );
 
 .. _UTILITY/VendorCovApiPkg/AddingCoverageItemsToABin:
 

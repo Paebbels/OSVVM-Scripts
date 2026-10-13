@@ -33,8 +33,8 @@ Using :vhdlcode:`CoveragePkg` requires the following references.
 
 .. _UTILITY/CoveragePkgQuickRef/DeclareTheCovergeID:
 
-Declare the Coverge ID
-**********************
+Declare the Coverage ID
+***********************
 
 A :vhdlcode:`CoverageID` is a handle to the coverage object that is created internal to :vhdlcode:`CoveragePkg`. The
 object can be a signal or a variable.
@@ -76,7 +76,7 @@ model.
 
    AddBins(Cov1, GenBin(  4, 252, 2)) ;
 
-:vhdlcode:`GenBin` with two parameter, min value and max value, creates one bin per value. As a result, the call
+:vhdlcode:`GenBin` with two parameters, min value and max value, creates one bin per value. As a result, the call
 :vhdlcode:`GenBin(253, 255)` appends three bins with the ranges 253 to 253, 254 to 254, and 255 to 255.
 
 .. code-block:: VHDL
@@ -202,7 +202,7 @@ In the following example, coverage is accumulated on a transaction basis.
       AddCross(Cov,GenBin(0,7),GenBin(0,7));
       loop
         -- Randomize test values,
-        -- see 15 Intelligent Coverage
+        -- see Intelligent Coverage
         (Src1, Src2) := GetRandPoint(Cov) ;
         DoAluOp(TRec, Src1, Src2) ;
         ICover(Cov, (Src1, Src2) ) ;
@@ -218,7 +218,7 @@ Constrained Random is Slower
 ****************************
 
 Constrained random uses uniform randomization to generate tests. For example in the last example, we could have used two
-calls :vhdlcode:`RandInt` to generate the test values.
+calls to :vhdlcode:`RandInt` to generate the test values.
 
 .. code-block:: VHDL
 

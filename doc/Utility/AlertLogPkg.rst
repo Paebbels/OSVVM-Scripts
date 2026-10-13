@@ -13,7 +13,7 @@ Logs, Alerts, and Affirmations.
 
 Logs are for conditional printing. When debugging, we need messages that detail test activity. However, we do not always
 want to print the messages as this would slow the simulation down. In particular for regression testing, we want to have
-only minimal messages – such as pass and pail. As a result, we need to be able to enable and disable messages – and in
+only minimal messages – such as pass and fail. As a result, we need to be able to enable and disable messages – and in
 some cases enable messages from some sources while disabling others.
 
 Alerts are for checking proper behavior or conditions. Use alerts to check that a response (such as ready) is not
@@ -118,7 +118,7 @@ log), otherwise, it prints an ERROR message (using alert).
 
 .. code-block:: VHDL
 
-   AffirmIf(RxData = Expected, "RxData, Actual: " & to_hstring(RxDat),
+   AffirmIf(RxData = Expected, "RxData, Actual: " & to_hstring(RxData),
             "Expected: " & to_hstring(Expected)) ;
 
 Note there are two strings associated with :vhdlcode:`AffirmIf`. The first string prints with both PASSED and ERROR. The
@@ -297,7 +297,7 @@ following code can be added to the test case.
    . . .
    ControlProc : process
    begin
-     BID         <= NewID("TB") ;
+     TBID         <= NewID("TB") ;
      wait for 0 ns ;                          -- Allow the VC to create the ID
      AxiManagerID <= NewID("AxiManager_1") ;  -- These names must match
      UartTxID     <= NewID("UartTx_1") ;      -- the names used in the VC
@@ -328,7 +328,7 @@ ID/:vhdlcode:`ModelID` is referred to as a parent ID and is constructed without 
    signal ModelID, ProtocolID, CheckerID : AlertLogIDType ;
    . . .
    Initialize : process
-     Variable ID : AlertLogID ;
+     Variable ID : AlertLogIDType ;
    begin
      ID := NewID("X86Lite") ;
      ModelID <= ID ;
@@ -352,9 +352,9 @@ Now the message includes both the parent ID name and child ID name.
 .. code-block:: text
 
    %%       51340.0 ns  Alert  ERROR  in X86Lite: Protocol,   X86 Lite received ready
-   when it was
+   when it was idle
 
-Note that when a child ID finds an error, it counts it and its parent also count it.
+Note that when a child ID finds an error, it counts it and its parent also counts it.
 
 .. _UTILITY/AlertLogPkg/MultipleLinePrinting202608:
 
@@ -389,7 +389,7 @@ message started printing. The '>' at the start of the line will not be printed.
    %%>                                               3456789 623456789 723456789
    %%>                                               456789 623456789 723456789
 
-Otherwise, if the OSVVM setting :vhdlcode:`OSVVM_LOG_WRAP` is true, the line will be printed in the same fashion as a
+Otherwise, if the OSVVM setting :vhdlcode:`ALERT_LOG_WRAP` is true, the line will be printed in the same fashion as a
 line starting with '>'.
 
 Otherwise, if the line contains an LF character, the line will wrap at the LF. The first line of the message is printed
@@ -400,7 +400,7 @@ Note that when a line is wrapped, the line starts with %%> rather than %%. This 
 is a continuation and the HTML red coloring of Alert ERROR can span the entire message rather than just the first line.
 
 As a result of all the checks above, the default printing on a single line happens when the line does not contain a LF,
-does not start with either '>' or '<', and :vhdlcode:`OSVVM_LOG_WRAP` is FALSE.
+does not start with either '>' or '<', and :vhdlcode:`ALERT_LOG_WRAP` is FALSE.
 
 .. _UTILITY/AlertLogPkg/PackageReferences:
 
@@ -432,7 +432,7 @@ is not a recommended practice as it will break if the packages are refactored.
 Setting the Test Name and AlertLogIDs
 *************************************
 
-Tests always start in simple model. Hierarchical mode is automatically entered when :vhdlcode:`NewID` is called.
+Tests always start in simple mode. Hierarchical mode is automatically entered when :vhdlcode:`NewID` is called.
 
 All overloading supported for simple mode is also supported in hierarchical mode. The only difference is that in
 hierarchical mode, the first parameter is the :vhdlcode:`AlertLogID`.
@@ -539,7 +539,7 @@ the intent is to look up the requirements ID – but if it does not exist yet th
 
 The main difference between the :vhdlcode:`NewID` and :vhdlcode:`GetID` is that :vhdlcode:`NewID` uses
 :vhdlcode:`ALERTLOG_BASE_ID` as the default parent ID where as :vhdlcode:`GetID` uses
-:vhdlcode:`ALERTLOG_ID_NOT_ASSIGNED`. When the parent ID is :vhdlcode:`ALERTLOG_ID_NOT_ASSIGED`, then the next call to
+:vhdlcode:`ALERTLOG_ID_NOT_ASSIGNED`. When the parent ID is :vhdlcode:`ALERTLOG_ID_NOT_ASSIGNED`, then the next call to
 :vhdlcode:`NewID` will establish the parent ID. Note though once the parent ID is assigned, it cannot be changed.
 
 :vhdlcode:`NewID` is typically called in a verification component. :vhdlcode:`GetID` is typically called in the
@@ -578,12 +578,12 @@ parent.
    signal ModelID, ProtocolID, CheckerID : AlertLogIDType ;
    . . .
    Initialize : process
-     Variable ID : AlertLogID ;
+     Variable ID : AlertLogIDType ;
    begin
      ID := NewID("AxiManager") ;
      ModelID <= ID ;
-     ProtocolID := NewID("Protocol", ID) ;
-     CheckerID  := NewID("Checker",  ID) ;
+     ProtocolID <= NewID("Protocol", ID) ;
+     CheckerID  <= NewID("Checker",  ID) ;
      wait ;
    end process Initialize ;
 
@@ -622,8 +622,8 @@ FindID: Find an AlertLogID
 
 The function, :vhdlcode:`FindID`, finds an existing :vhdlcode:`AlertLogID`. If the :vhdlcode:`AlertLogID` is not found,
 :vhdlcode:`ALERTLOG_ID_NOT_FOUND` is returned. Caution do not use at time 0, as :vhdlcode:`FindID` may return
-:vhdlcode:`ALERTLOG_ID_NOT_FOUND` for an ID that has not been initialized by the model yet. Use :vhdlcode:`GetAlertID`
-for this situation.
+:vhdlcode:`ALERTLOG_ID_NOT_FOUND` for an ID that has not been initialized by the model yet. Use :vhdlcode:`GetID` for
+this situation.
 
 The interface for :vhdlcode:`FindID` is as follows.
 
@@ -654,7 +654,7 @@ PathTail - Used to Discover Instance Name of a Component
 ========================================================
 
 When used in conjunction with attribute :vhdlcode:`PATH_NAME` applied to an entity name, :vhdlcode:`PathTail` returns
-the instance name of component plus any for generate loop indicies. For generate loop indices are added as "\_#".
+the instance name of component plus any for generate loop indices. For generate loop indices are added as "\_#".
 
 .. code-block:: VHDL
 
@@ -888,8 +888,8 @@ the following, :vhdlcode:`AType` can be :vhdlcode:`std_logic`, :vhdlcode:`std_lo
 
    -- without an AlertLogID
    procedure AlertIfEqual( L, R : AType ; Message : string ;
-       Level : AlertType := ERROR )  ;  Message : string ;
-   procedure AlertIfNotEqual( L, R : AType ;
+       Level : AlertType := ERROR )  ;
+   procedure AlertIfNotEqual( L, R : AType ; Message : string ;
        Level : AlertType := ERROR )  ;
 
 .. _UTILITY/AlertLogPkg/AlertIfFilesNotMatch:
@@ -955,7 +955,7 @@ used as a quality metric.
 AffirmIf / AffirmIfNot
 ======================
 
-:vhdlcode:`AffirmIF` has two forms of overloading. The first has a separate :vhdlcode:`ReceivedMessage` and
+:vhdlcode:`AffirmIf` has two forms of overloading. The first has a separate :vhdlcode:`ReceivedMessage` and
 :vhdlcode:`ExpectedMessage`. When the affirmation passes, log is called with just the Received Message. When an
 affirmation fails, alert is called with the :vhdlcode:`ExpectedMessage` concatenated to the end of the
 :vhdlcode:`ReceivedMessage`.
@@ -979,7 +979,7 @@ affirmation fails, alert is called with the :vhdlcode:`ExpectedMessage` concaten
      Enable           : boolean := FALSE
    ) ;
 
-The second overloading of :vhdlcode:`AffirmIF` has a single :vhdlcode:`Message` parameter. Hence, both alert and log
+The second overloading of :vhdlcode:`AffirmIf` has a single :vhdlcode:`Message` parameter. Hence, both alert and log
 print the same message.
 
 .. code-block:: VHDL
@@ -1033,11 +1033,10 @@ since it differentiates between the Received and Expected values. In the followi
 :vhdlcode:`AffirmIfEqual` is effectively an abbreviation for,
 
 .. code-block:: VHDL
-   :force:
 
-   AffirmIf (AlertLogId, Received = Expected,
-     Message & “ Received: “ & to_string(Received),
-     “ /= Expected: “ & to_string(Expected),
+   AffirmIf (AlertLogID, Received = Expected,
+     Message & " Received: " & to_string(Received),
+     " /= Expected: " & to_string(Expected),
      Enable) ;
 
 .. _UTILITY/AlertLogPkg/AffirmIfInRange:
@@ -1157,7 +1156,7 @@ AffirmIfStable, AffirmIfNotStable
    ) ;
 
    -- without an AlertLogID
-   procedure AffirmIfEqual(
+   procedure AffirmIfStable(
      LastChange, Stable  : time ;
      Message             : string := "";
      Enable              : boolean := FALSE
@@ -1247,9 +1246,9 @@ details during an error).
 
 Test pass/fail is determined by :vhdlcode:`AlertErrors` + :vhdlcode:`ExternalErrors` – :vhdlcode:`ExpectedErrors`. If
 the count of FAILURE, ERROR, or WARNING is non-zero the test case fails. :vhdlcode:`AlertErrors` are those tabulated by
-Alerts and Affirmations as the test is running. :vhdlcode:`ExternalErrors` is the parameter of :vhdlcode:`EndOfReports`
-– and may be negative also to indicated expected errors. :vhdlcode:`ExpectedErrors` is the value set by
-:vhdlcode:`SetExpectedAlertCount` (this section) or :vhdlcode:`IncrementExpectedAlertCount`.
+Alerts and Affirmations as the test is running. :vhdlcode:`ExternalErrors` is the parameter of
+:vhdlcode:`EndOfTestReports` – and may be negative also to indicate expected errors. :vhdlcode:`ExpectedErrors` is the
+value set by :vhdlcode:`SetExpectedAlertCount` (next section) or :vhdlcode:`IncrementExpectedAlertCount`.
 
 If the :vhdlcode:`Stop` parameter is true (not recommended), :vhdlcode:`std.env.stop` is called.
 
@@ -1280,7 +1279,7 @@ to :vhdlcode:`IncrementExpectedAlertCount` is:
 
 .. code-block:: VHDL
 
-   IncrementExpectedAlertCount (Level : AlertType ; Count : integer := 1) ;
+   procedure IncrementExpectedAlertCount (Level : AlertType ; Count : integer := 1) ;
 
 .. _UTILITY/AlertLogPkg/GetExpectedAlertCount:
 
@@ -1313,7 +1312,7 @@ Requirement IDs are created with :vhdlcode:`NewReqID`. A group of requirements c
 :vhdlcode:`ReadSpecification`. Then the ID can be looked up using :vhdlcode:`GetReqID`.
 
 Requirements can be checked by using any affirmation and the :vhdlcode:`AlertLogID` that is associated with that
-requirement. Requirements can also be checked using a special form of :vhdlcode:`AffirmIF` that takes the requirement
+requirement. Requirements can also be checked using a special form of :vhdlcode:`AffirmIf` that takes the requirement
 name (as a string).
 
 When a test case completes and calls :vhdlcode:`EndOfTestReports`, a YAML requirements report is automatically
@@ -1327,7 +1326,7 @@ NewReqID
 ========
 
 Use :vhdlcode:`NewReqID` when the intent is to create an :vhdlcode:`AlertLogID` that is used for requirements tracking.
-The interface for :vhdlcode:`NewID` is as follows.
+The interface for :vhdlcode:`NewReqID` is as follows.
 
 .. code-block:: VHDL
 
@@ -1346,7 +1345,7 @@ Call :vhdlcode:`NewReqID` with the name of the requirement and the :vhdlcode:`Pa
 
    signal Uart1ReqID : AlertLogIDType ;
    . . .
-   Uart1ReqID := NewReqID("UART_REQ_1", 2);
+   Uart1ReqID <= NewReqID("UART_REQ_1", 2);
 
 .. _UTILITY/AlertLogPkg/GetReqID:
 
@@ -1383,9 +1382,9 @@ the :vhdlcode:`DefaultPassedGoalVar` is used (default is 1). Change with
 
    . . .
    InitializeProc: process
-   Begin
-     Uart1ReqID := GetReqID("UART_REQ_1");
-     Uart2ReqID := GetReqID("UART_REQ_2", 2);
+   begin
+     Uart1ReqID <= GetReqID("UART_REQ_1");
+     Uart2ReqID <= GetReqID("UART_REQ_2", 2);
 
 .. _UTILITY/AlertLogPkg/ReadSpecification:
 
@@ -1397,7 +1396,7 @@ and are ignored.
 
 .. code-block:: text
 
-   <requiremen1t ID Name> [, Requirement1 Description] [, Requirement1 PASSED Goal]
+   <requirement1 ID Name> [, Requirement1 Description] [, Requirement1 PASSED Goal]
    <requirement2 ID Name> [, Requirement2 Description] [, Requirement2 PASSED Goal]
    . . .
    <requirementN ID Name> [, RequirementN Description] [, RequirementN PASSED Goal]
@@ -1456,7 +1455,7 @@ affirmation passes, log is called with just the Received Message. When an affirm
      Enable             : boolean := FALSE
    ) ;
 
-The second overloading of :vhdlcode:`AffirmIF` has a single :vhdlcode:`Message` parameter. Hence, both alert and log
+The second overloading of :vhdlcode:`AffirmIf` has a single :vhdlcode:`Message` parameter. Hence, both alert and log
 print the same message.
 
 .. code-block:: VHDL
@@ -1469,21 +1468,21 @@ print the same message.
      Enable             : boolean := FALSE
    ) ;
 
-A call to :vhdlcode:`AffirmIF` with two parameters is as follows.
+A call to :vhdlcode:`AffirmIf` with two parameters is as follows.
 
 .. code-block:: VHDL
 
-   AffirmIF("T1.1", A > B, "Test 1.1 A (" & to_string(A) & ")",
+   AffirmIf("T1.1", A > B, "Test 1.1 A (" & to_string(A) & ")",
                             "> B (" & to_string(B) & ")" ) ;
 
 Note that the :vhdlcode:`RequirementsIDName` is case insensitive.
 
 .. _UTILITY/AlertLogPkg/UsingOtherFormsOfAffirmIFWithRequirements:
 
-Using Other Forms of AffirmIF with Requirements
+Using Other Forms of AffirmIf with Requirements
 ===============================================
 
-To use other forms of :vhdlcode:`AffirmIF`, either the ID needs to be known (:vhdlcode:`NewReqID` or
+To use other forms of :vhdlcode:`AffirmIf`, either the ID needs to be known (:vhdlcode:`NewReqID` or
 :vhdlcode:`GetReqID`) or looked up using :vhdlcode:`FindID`.
 
 .. code-block:: VHDL
@@ -1516,7 +1515,7 @@ Test Failure Due to Missed Requirements
 =======================================
 
 When a test has requirements, a test will fail if requirements are not met and :vhdlcode:`FailOnRequirementErrors` is
-true (default is TRUE). Disable using :vhdlcode:`SetAlertLogOptions(FailOnRequirementErrors => TRUE)`.
+true (default is TRUE). Disable using :vhdlcode:`SetAlertLogOptions(FailOnRequirementErrors => FALSE)`.
 
 A test failing due to :vhdlcode:`FailOnRequirementErrors` will result in a :vhdlcode:`ReportAlerts` such as the
 following.
@@ -1577,7 +1576,7 @@ Enabling and Disabling Logs and Alerts
 SetLogEnable: Enable / Disable Logging
 ======================================
 
-Excepting ALWAYS, log enables are disabled by default. :vhdlcode:`SetLogEnable` allows alert levels to be individually
+Excepting ALWAYS, log enables are disabled by default. :vhdlcode:`SetLogEnable` allows log levels to be individually
 enabled. When used without :vhdlcode:`AlertLogID`, :vhdlcode:`SetLogEnable` sets a value for all
 :vhdlcode:`AlertLogIDs`.
 
@@ -1603,7 +1602,7 @@ Hierarchy is true, the :vhdlcode:`AlertLogIDs` of its children.
 Reading Log Enables from a FILE
 ===============================
 
-:vhdlcode:`ReadLogEnables` read enables from a file.
+:vhdlcode:`ReadLogEnables` reads enables from a file.
 
 .. code-block:: VHDL
 
@@ -1641,7 +1640,7 @@ IsLogEnabled /GetLogEnable
    impure function IsLogEnabled(AlertLogID : AlertLogIDType ; Level : LogType)
        return boolean ;
    . . .
-   If IsLogEnabled(UartID, DEBUG) then
+   if IsLogEnabled(UartID, DEBUG) then
    . . .
 
 :vhdlcode:`GetLogEnable` is a synonym for :vhdlcode:`IsLogEnabled`.
@@ -1668,7 +1667,7 @@ When used without :vhdlcode:`AlertLogID`, :vhdlcode:`SetAlertEnable` sets a valu
    SetAlertEnable(WARNING, FALSE) ;
 
 When an :vhdlcode:`AlertLogID` is used, :vhdlcode:`SetAlertEnable` sets a value for that :vhdlcode:`AlertLogID`, and if
-:vhdlcode:`DescendHierarchy` is TRUE, it’s the :vhdlcode:`AlertLogID`'s of its children.
+:vhdlcode:`DescendHierarchy` is TRUE, the :vhdlcode:`AlertLogIDs` of its children.
 
 .. code-block:: VHDL
 
@@ -1707,7 +1706,7 @@ just after the design enters reset, call :vhdlcode:`ClearAlerts`.
 ClearAlertCounts: Reset Alert and Alert Stop Counts
 ===================================================
 
-:vhdlcode:`ClearAlerts` resets alert counts to 0 and alert stop counts back to their default.
+:vhdlcode:`ClearAlertCounts` resets alert counts to 0 and alert stop counts back to their default.
 
 .. code-block:: VHDL
 
@@ -1723,15 +1722,15 @@ by default.
 
 .. code-block:: VHDL
 
-   procedure SetGlobalAlertEnable (A : EnableType := TRUE) ;
-   impure function SetGlobalAlertEnable (A : EnableType := TRUE) return EnableType ;
+   procedure SetGlobalAlertEnable (A : boolean := TRUE) ;
+   impure function SetGlobalAlertEnable (A : boolean := TRUE) return boolean ;
 
 Originally intended to be used to disable alerts during startup, as shown below. Instead, for most applications we
 recommend using :vhdlcode:`ClearAlerts` just after reset.
 
 .. code-block:: VHDL
 
-   InitAlerts : Process
+   InitAlerts : process
      constant DisableAlerts : boolean := SetGlobalAlertEnable(FALSE);
    begin
      wait until nReset = '1' ; --  Deassertion of reset
@@ -1807,7 +1806,7 @@ counter.
 ClearAlertStopCounts: Reset Alert Stop Counts
 =============================================
 
-:vhdlcode:`ClearAlerts` resets alert stop counts back to their default.
+:vhdlcode:`ClearAlertStopCounts` resets alert stop counts back to their default.
 
 .. code-block:: VHDL
 
@@ -1849,7 +1848,7 @@ default bin is used (:vhdlcode:`ALERTLOG_DEFAULT_ID`).
      impure function GetAlertPrintCount(Level : AlertType) return integer ;
      impure function GetAlertPrintCount(AlertLogID : AlertLogIDType) return
    AlertCountType ;
-     impure function GetAlertPrintCountreturn AlertCountType ;
+     impure function GetAlertPrintCount return AlertCountType ;
 
 .. _UTILITY/AlertLogPkg/GettingCounts:
 
@@ -1966,8 +1965,8 @@ SumAlertCount: AlertCountType to Integer Error Count
 Alert and Log Prefix and Suffix to Message
 ******************************************
 
-A prefix and suffix can be added message that is printed with Alert or Log. These are set on an :vhdlcode:`AlertLogID`
-basis using the following operations.
+A prefix and suffix can be added to a message that is printed with Alert or Log. These are set on an
+:vhdlcode:`AlertLogID` basis using the following operations.
 
 .. code-block:: VHDL
 
@@ -2010,14 +2009,14 @@ Error.
 Options can be enabled or disabled using :vhdlcode:`SetAlertLogOptions`. Let's look at the report piece by piece.
 
 If Total Errors /= 0, then the following part of the message prints. In this case, Total Errors is nonzero since
-:vhdlcode:`FailedOnDisabledErrors` is enabled (default) and the disabled errors count as test errors. Hence, Failures,
+:vhdlcode:`FailOnDisabledErrors` is enabled (default) and the disabled errors count as test errors. Hence, Failures,
 Errors, and Warnings are all 0.
 
 .. code-block:: text
 
    Total Error(s) = 2  Failures: 0  Errors: 0  Warnings: 0
 
-If :vhdlcode:`FailedOnDisabledErrors` is disabled, then the same test will PASS as shown below.
+If :vhdlcode:`FailOnDisabledErrors` is disabled, then the same test will PASS as shown below.
 
 .. code-block:: text
 
@@ -2031,7 +2030,7 @@ Next is the Total Disabled Errors summary. It will print if the :vhdlcode:`Disab
 
    Total Disabled Error(s) = 2
 
-Next is the details of the Disabled Errors. These will print if :vhdlcode:`FailedOnDisabledErrors` is enabled and
+Next is the details of the Disabled Errors. These will print if :vhdlcode:`FailOnDisabledErrors` is enabled and
 :vhdlcode:`DisabledAlerts` /= 0 or if :vhdlcode:`PrintDisabledAlerts` is enabled.
 
 .. code-block:: text
@@ -2160,7 +2159,7 @@ This is useful to accumulate values returned by different phases of a test that 
 Alert and Log Output Control Options
 ************************************
 
-All OSVVM Alert and Log output controls get their initial value from a settings in :file:`OsvvmSettingsPkg_default.vhd`.
+All OSVVM Alert and Log output controls get their initial value from a setting in :file:`OsvvmSettingsPkg_default.vhd`.
 
 For most projects setting them in the :vhdlcode:`OsvvmSettingsPkg` for the entire project should be sufficient. These
 values can be customized for a project as described in the :ref:`OSVVM Settings User Guide <UTILITY/OsvvmSettings>`.
@@ -2184,14 +2183,14 @@ Logs are justified so they align. Default value is determined by the setting :vh
 
 .. code-block:: VHDL
 
-   SetAlertLogJustify(Enable : boolean := TRUE) ;
+   procedure SetAlertLogJustify(Enable : boolean := TRUE) ;
 
 .. _UTILITY/AlertLogPkg/OsvvmOptionsType:
 
 OsvvmOptionsType
 ================
 
-:vhdlcode:`OsvvmOptionsType` defines the values for options. User values are: :vhdlcode:`OPT_DEFAULT`,
+:vhdlcode:`OsvvmOptionsType` defines the values for options. User values are: :vhdlcode:`OPT_USE_DEFAULT`,
 :vhdlcode:`DISABLED`, :vhdlcode:`FALSE`, :vhdlcode:`ENABLED`, :vhdlcode:`TRUE`. The values :vhdlcode:`DISABLED` and
 :vhdlcode:`FALSE` are handled the same. The values :vhdlcode:`ENABLED` and :vhdlcode:`TRUE` are treated the same. The
 value :vhdlcode:`OPT_USE_DEFAULT` causes the variable to use its default value. :vhdlcode:`OsvvmOptionsType` is defined
@@ -2220,25 +2219,25 @@ deprecated and have no impact are not shown.
      FailOnDisabledErrors    : OsvvmOptionsType := OPT_INIT_PARM_DETECT;
      FailOnRequirementErrors : OsvvmOptionsType := OPT_INIT_PARM_DETECT;
      ReportHierarchy         : OsvvmOptionsType := OPT_INIT_PARM_DETECT;
-     WriteAlertErrorCount    : AlertLogOptionsType := OPT_INIT_PARM_DETECT;
+     WriteAlertErrorCount    : OsvvmOptionsType := OPT_INIT_PARM_DETECT;
      WriteAlertLevel         : OsvvmOptionsType := OPT_INIT_PARM_DETECT;
      WriteAlertName          : OsvvmOptionsType := OPT_INIT_PARM_DETECT;
      WriteAlertTime          : OsvvmOptionsType := OPT_INIT_PARM_DETECT;
-     WriteLogErrorCount      : AlertLogOptionsType := OPT_INIT_PARM_DETECT;
+     WriteLogErrorCount      : OsvvmOptionsType := OPT_INIT_PARM_DETECT;
      WriteLogLevel           : OsvvmOptionsType := OPT_INIT_PARM_DETECT;
      WriteLogName            : OsvvmOptionsType := OPT_INIT_PARM_DETECT;
      WriteLogTime            : OsvvmOptionsType := OPT_INIT_PARM_DETECT;
-     PrintPassed             : AlertLogOptionsType := OPT_INIT_PARM_DETECT;
-     PrintAffirmations       : AlertLogOptionsType := OPT_INIT_PARM_DETECT;
-     PrintDisabledAlerts     : AlertLogOptionsType := OPT_INIT_PARM_DETECT;
-     PrintRequirements       : AlertLogOptionsType := OPT_INIT_PARM_DETECT;
-     PrintIfHaveRequirements : AlertLogOptionsType := OPT_INIT_PARM_DETECT;
+     PrintPassed             : OsvvmOptionsType := OPT_INIT_PARM_DETECT;
+     PrintAffirmations       : OsvvmOptionsType := OPT_INIT_PARM_DETECT;
+     PrintDisabledAlerts     : OsvvmOptionsType := OPT_INIT_PARM_DETECT;
+     PrintRequirements       : OsvvmOptionsType := OPT_INIT_PARM_DETECT;
+     PrintIfHaveRequirements : OsvvmOptionsType := OPT_INIT_PARM_DETECT;
      DefaultPassedGoal       : integer             := integer'left ;
      WriteTimeLast           : OsvvmOptionsType    := OPT_INIT_PARM_DETECT ;
      TimeJustifyAmount       : integer             := integer'left
    ) ;
 
-:vhdlcode:`SetAlertOptions` will change as :vhdlcode:`AlertLogPkg` evolves. Use of named association is required to
+:vhdlcode:`SetAlertLogOptions` will change as :vhdlcode:`AlertLogPkg` evolves. Use of named association is required to
 ensure future compatibility. Only specify the values that need to change. Values not specified in the call will not
 change (hence the peculiar initial values on the parameters).
 
@@ -2424,16 +2423,16 @@ Report options can be retrieved with one of the Get functions below.
 
 .. code-block:: VHDL
 
-   function GetAlertLogFailOnWarning        return AlertLogOptionsType ;
-   function GetAlertLogFailOnDisabledErrors return AlertLogOptionsType ;
-   function GetAlertLogReportHierarchy      return AlertLogOptionsType ;
-   function GetAlertLogHierarchyInUse       return AlertLogOptionsType ;
-   function GetAlertLogWriteAlertLevel      return AlertLogOptionsType ;
-   function GetAlertLogWriteAlertName       return AlertLogOptionsType ;
-   function GetAlertLogWriteAlertTime       return AlertLogOptionsType ;
-   function GetAlertLogWriteLogLevel        return AlertLogOptionsType ;
-   function GetAlertLogWriteLogName         return AlertLogOptionsType ;
-   function GetAlertLogWriteLogTime         return AlertLogOptionsType ;
+   function GetAlertLogFailOnWarning        return OsvvmOptionsType ;
+   function GetAlertLogFailOnDisabledErrors return OsvvmOptionsType ;
+   function GetAlertLogReportHierarchy      return OsvvmOptionsType ;
+   function GetAlertLogHierarchyInUse       return OsvvmOptionsType ;
+   function GetAlertLogWriteAlertLevel      return OsvvmOptionsType ;
+   function GetAlertLogWriteAlertName       return OsvvmOptionsType ;
+   function GetAlertLogWriteAlertTime       return OsvvmOptionsType ;
+   function GetAlertLogWriteLogLevel        return OsvvmOptionsType ;
+   function GetAlertLogWriteLogName         return OsvvmOptionsType ;
+   function GetAlertLogWriteLogTime         return OsvvmOptionsType ;
 
 Note while the following are still supported, they just return the constant from :file:`OsvvmSettingsPkg_default.vhd`
 identified in :vhdlcode:`SetAlertLogOptions`
@@ -2606,8 +2605,8 @@ Deprecated: ReportTestSummaries
    Affirmations Passed: 66 of 66  Requirements Passed: 10 of 12
 
 If a test does not run, it will fail if (:vhdlcode:`AffirmCount` <= 0) and (:vhdlcode:`RequirementsGoal` >
-:vhdlcode:`RequirementsPassed`) and (:vhdlcode:`FailOnRequirementsVar` = TRUE). :vhdlcode:`FailOnRequirements` is set by
-:vhdlcode:`SetAlertLogOptions` and TRUE is the default. These will print as follows:
+:vhdlcode:`RequirementsPassed`) and (:vhdlcode:`FailOnRequirementErrorsVar` = TRUE). :vhdlcode:`FailOnRequirementErrors`
+is set by :vhdlcode:`SetAlertLogOptions` and TRUE is the default. These will print as follows:
 
 .. code-block:: text
 
@@ -2616,8 +2615,8 @@ If a test does not run, it will fail if (:vhdlcode:`AffirmCount` <= 0) and (:vhd
    %%  FAILED test_8    Total Error(s) = 1  Failures: 0  Errors: 0  Warnings: 0
    Affirmations Passed: 0 of 0  Requirements Passed: 0 of 1
 
-If (:vhdlcode:`AffirmCount` = 0) and either (:vhdlcode:`RequirementsGoal` = 0) or :vhdlcode:`FailOnRequirements` is
-FALSE, the test results are indeterminant. These will print as follows:
+If (:vhdlcode:`AffirmCount` = 0) and either (:vhdlcode:`RequirementsGoal` = 0) or :vhdlcode:`FailOnRequirementErrors` is
+FALSE, the test results are indeterminate. These will print as follows:
 
 .. code-block:: text
 
@@ -2631,7 +2630,7 @@ FALSE, the test results are indeterminant. These will print as follows:
 Deprecated: WriteTestSummaries
 ------------------------------
 
-:vhdlcode:`WriteTestSummaries` produces a csv file of the same information that is printed
+:vhdlcode:`WriteTestSummaries` produces a csv file of the same information that is printed by
 :vhdlcode:`ReportTestSummaries`.
 
 .. code-block:: VHDL
@@ -2668,8 +2667,8 @@ in :file:`OsvvmTestSummary.txt` after all of the tests have finished. So there i
 :vhdlcode:`WriteTestSummaries` above.
 
 First, remember that test summaries are recorded as requirements. To find what tests did not run and to make the order
-of printing match a predefined order, lets define the tests that we wanted to run as a list of test names. Then read the
-name of tests in as a specification. Hence, we will modify :file:`OsvvmTestSummary.vhd` as follows:
+of printing match a predefined order, let's define the tests that we wanted to run as a list of test names. Then read
+the name of tests in as a specification. Hence, we will modify :file:`OsvvmTestSummary.vhd` as follows:
 
 .. code-block:: VHDL
 
@@ -2680,7 +2679,7 @@ name of tests in as a specification. Hence, we will modify :file:`OsvvmTestSumma
    WriteTestSummaries("OsvvmAllTestResults.txt") ;
 
 In this case, tests that did not run will show up as having an :vhdlcode:`AffirmCount` of 0 and a
-:vhdlcode:`RequirementGoal` of 1, hence, by defaults of :vhdlcode:`ReportTestSummaries`, the test will fail.
+:vhdlcode:`RequirementsGoal` of 1, hence, by defaults of :vhdlcode:`ReportTestSummaries`, the test will fail.
 
 .. _UTILITY/AlertLogPkg/DeprecatedRequirementsReportingCSVReports:
 
@@ -2757,8 +2756,8 @@ Deprecated Names and their Replacement name
 
 From time to time, names must change to keep consistency across a large set of packages. Where possible OSVVM uses a
 soft deprecation methodology where the subprogram takes on the new name and the original name is supported via an alias.
-For example :vhdlcode:`SetTestName` was originally named :vhdlcode:`SetTestName` and :vhdlcode:`FindID` was originally
-named :vhdlcode:`FindAlertLogID`. As a result, you will find aliases in :vhdlcode:`AlertLogPkg` as follows:
+For example :vhdlcode:`SetTestName` was originally named :vhdlcode:`SetAlertLogName` and :vhdlcode:`FindID` was
+originally named :vhdlcode:`FindAlertLogID`. As a result, you will find aliases in :vhdlcode:`AlertLogPkg` as follows:
 
 .. code-block:: VHDL
 

@@ -13,7 +13,7 @@ such as in data transmission (UART, AxiStream, …).
 
 A basic usage of a scoreboard is:
 
-* On the stimulus generation side, we generate the stimulus, push the stimulus into the scoreboard, and then sent the
+* On the stimulus generation side, we generate the stimulus, push the stimulus into the scoreboard, and then send the
   transaction to the interface (:vhdlcode:`UartSend`).
 * On the stimulus check side, we receive a transaction (:vhdlcode:`CpuRead`) and use the scoreboard to check the value.
 
@@ -65,7 +65,7 @@ a fully selected name.
      use osvvm.ScoreboardPkg_int.all ;
 
      signal SB_slv  : osvvm.ScoreboardPkg_slv.ScoreboardIDType ;
-     signal SB_int  : osvvm.ScoreboardPkg_int.ScoreBoardIDType;
+     signal SB_int  : osvvm.ScoreboardPkg_int.ScoreboardIDType;
 
 .. _UTILITY/ScoreboardPkg/ConstructTheScoreboard:
 
@@ -131,7 +131,7 @@ processes, see the :ref:`FRAMEWORK/TestWriters`.
      end process ControlProc ;
 
      GenerateProc : process
-     Begin
+     begin
        WaitForBarrier(TestStart) ;
        Push(SB, X"10") ;
        UartSend(UartTxRec, X"10") ;
@@ -175,7 +175,7 @@ package is:
 
 .. code-block:: VHDL
 
-   package ScoreBoardGenericPkg is
+   package ScoreboardGenericPkg is
    generic(
      type ExpectedType ;
      type ActualType ;
@@ -193,9 +193,9 @@ functions are available in package :vhdlcode:`std.standard` which is implicitly 
 
 .. code-block:: VHDL
 
-   -- reference the package that define types and functions.
+   -- reference the package that defines types and functions.
    -- use std.standard.all ; -- implicitly included
-   package ScoreBoardPkg_int is new osvvm.ScoreBoardGenericPkg
+   package ScoreboardPkg_int is new osvvm.ScoreboardGenericPkg
      generic map (
        ExpectedType        =>  integer,
        ActualType          =>  integer,
@@ -209,7 +209,7 @@ functions are available in package :vhdlcode:`std.standard` which is implicitly 
 Predefined Instances of ScoreboardGenericPkg in OSVVM Library
 *************************************************************
 
-The OSVVM library defines scoreboard instances for :vhdlcode:`integer` (:vhdlcode:`ScoreBoardPkg_int`),
+The OSVVM library defines scoreboard instances for :vhdlcode:`integer` (:vhdlcode:`ScoreboardPkg_int`),
 :vhdlcode:`integer_vector` (:vhdlcode:`ScoreboardPkg_IntV`), :vhdlcode:`std_logic_vector`
 (:vhdlcode:`ScoreboardPkg_slv`), :vhdlcode:`unsigned` (:vhdlcode:`ScoreboardPkg_unsigned`), and :vhdlcode:`signed`
 (:vhdlcode:`ScoreboardPkg_signed`).
@@ -223,13 +223,13 @@ All the simulators we test with support package generics. However, we still have
 :file:`ScoreboardGenericPkg.vhd` to :file:`ScoreboardPkg_integer_c.vhd`. Comment out the generics. Uncomment the subtype
 and alias declarations that correspond to the generics (they have the same name). Configure these aliases exactly as
 described in the section titled
-":ref:`Using Scoreboard Package Generics <UTILITY/ScoreboardPkg/UsingScoreboardGenericPkgPackageGenerics>`".
+":ref:`Using ScoreboardGenericPkg Package Generics <UTILITY/ScoreboardPkg/UsingScoreboardGenericPkgPackageGenerics>`".
 
 The top of your resulting package should look as follows:
 
 .. code-block:: VHDL
 
-   -- reference the package that define types and functions.
+   -- reference the package that defines types and functions.
    -- use std.standard.all ; -- implicitly included
    package ScoreBoardPkg_integer is
      subtype ExpectedType is integer ;
@@ -251,7 +251,7 @@ that it supports out of order execution (via tags) and arrays of scoreboards (vi
 are implemented as an additional string parameter on push, pop, and check.
 
 Behind the simple API are some rather interesting data structures. The important thing to note is that you do not need
-to understand the data structures to be able use :vhdlcode:`ScoreboardGenericPkg`.
+to understand the data structures to be able to use :vhdlcode:`ScoreboardGenericPkg`.
 
 Caution, features not documented here are either considered experimental or have been deprecated (and may be removed in
 a future version). If you decide to use it and want it to stay around, be sure to let us know.
@@ -280,7 +280,7 @@ operations are used.
    ) return ScoreboardIDType ;
 
 :vhdlcode:`NewID` also creates an :vhdlcode:`AlertLogID` for the data structure using the value of the name parameter
-and the value of :vhdlcode:`ParentAlertLogID`.
+and the value of :vhdlcode:`ParentID`.
 
 .. _UTILITY/ScoreboardPkg/ScoreboardIDType:
 
@@ -501,14 +501,13 @@ item from the FIFO; otherwise, generate an ERROR affirmation. :vhdlcode:`FindAnd
 received values when a system can generate responses out of order or drop values without any means to detect a drop.
 
 .. code-block:: VHDL
-   :force:
 
    -- Simple Scoreboards
    procedure FindAndDelete (
      constant ID          :  in  ScoreboardIDType ;
      constant ActualData  :  in  ActualType
    ) ;
-   -- Tagged Scoreboards – tags must match
+   -- Tagged Scoreboards - tags must match
    procedure FindAndDelete (
      constant ID          :  in  ScoreboardIDType ;
      constant Tag         :  in  string ;
@@ -603,8 +602,6 @@ scripts can find the file and convert it to an HTML table in the test case repor
 :vhdlcode:`WriteScoreboardYaml` is called by :vhdlcode:`EndOfTestReports` for OSVVM defined scoreboard instances (see
 Predefined Instances of ScoreboardGenericPkg in OSVVM Library).
 
-.
-
 The declaration for :vhdlcode:`WriteScoreboardYaml` is:
 
 .. code-block:: VHDL
@@ -639,7 +636,7 @@ Get number of items pushed into the scoreboard.
 GetPopCount
 ===========
 
-Get number of items poped from the FIFO in that is part of the scoreboard.
+Get number of items popped from the FIFO that is part of the scoreboard.
 
 .. code-block:: VHDL
 
@@ -678,7 +675,7 @@ Get number of items dropped by the scoreboard.
 GetFifoCount
 ============
 
-Get number of currently stored in the FIFO that is part of the scoreboard.
+Get number of items currently stored in the FIFO that is part of the scoreboard.
 
 .. code-block:: VHDL
 
@@ -703,7 +700,7 @@ The scoreboard reports errors to the :vhdlcode:`AlertLog` data structure. Hence,
 IsInitialized
 =============
 
-Check that an Scoreboard ID is initialized.
+Check that a Scoreboard ID is initialized.
 
 .. code-block:: VHDL
 

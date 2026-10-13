@@ -80,7 +80,7 @@ details on how control is switched from :vhdlcode:`ManagerProc` to :vhdlcode:`In
 The Interrupt Handler Verification Component (VC)
 *************************************************
 
-The Interrupt handler verification component (:file:`InterruptHandler.vhd`) is a general‐purpose solution that works for
+The Interrupt handler verification component (:file:`InterruptHandler.vhd`) is a general-purpose solution that works for
 any VC that uses OSVVM’s Address Bus Model Independent Transaction Interface. It can be found in the directory
 :file:`OsvvmLibraries/Common/src`. It is compiled into the :vhdlcode:`OSVVM_Common` library.
 
@@ -108,7 +108,7 @@ The interface for the Interrupt Handler VC is shown in :ref:`Figure 3 <VC/Interr
 
 :vhdlcode:`IntReq` port is the interrupt input and is generally connected to the DUT. Here :vhdlcode:`IntReq` port is
 connected to :vhdlcode:`TestCtrl` only because there is no DUT. :vhdlcode:`TransRec` port connects to
-:vhdlcode:`ManagerRec` (driven by :vhdlcode:`ManagerProc`) . :vhdlcode:`InterruptRec` connects to
+:vhdlcode:`ManagerRec` (driven by :vhdlcode:`ManagerProc`). :vhdlcode:`InterruptRec` connects to
 :vhdlcode:`InterruptRec` (driven by :vhdlcode:`InterruptProc`). :vhdlcode:`VcRec` connects to the
 :vhdlcode:`Axi4Manager` :vhdlcode:`TransRec` port.
 
@@ -117,14 +117,14 @@ connected to :vhdlcode:`TestCtrl` only because there is no DUT. :vhdlcode:`Trans
 Component Declaration is Provided in InterruptHandlerComponentPkg
 *****************************************************************
 
-As with all OSVVM VC, you can use a simple component declaration when instaning the :vhdlcode:`InterruptHandler`. No
+As with all OSVVM VC, you can use a simple component declaration when instancing the :vhdlcode:`InterruptHandler`. No
 component declaration is needed in the test harness as a component declaration is provided in
 :file:`InterruptHandlerComponentPkg.vhd`. :vhdlcode:`InterruptHandlerComponentPkg` is compiled into the
 :vhdlcode:`osvvm_common` library by OSVVM scripts and referenced by the :vhdlcode:`OsvvmCommonContext`.
 
 :vhdlcode:`OsvvmCommonContext` is included in :vhdlcode:`Axi4Context`. As a result, you only need the reference shown in
 :ref:`Figure 4 <VC/InterruptHandler/Figure4>` to include both :vhdlcode:`InterruptHandlerComponentPkg`,
-:vhdlcode:`AddressBusRecType` (Address Bus Interface), and the component declarations for AX4 VC.
+:vhdlcode:`AddressBusRecType` (Address Bus Interface), and the component declarations for AXI4 VC.
 
 .. code-block:: VHDL
    :caption: Figure 4. Context Reference to use InterruptHandler and Axi4 VC
@@ -152,14 +152,14 @@ Mode. When in Interrupt Handling Mode, it passes transactions from :vhdlcode:`In
 :vhdlcode:`InterruptRec`.
 
 The Interrupt Handler VC remains in Interrupt Handling Mode until an :vhdlcode:`InterruptReturn` transaction is received
-on :vhdlcode:`InterruptRec`. The :vhdlcode:`InterruptReturn` must be last transaction in the :vhdlcode:`InterruptProc`
-process. Following that, the :vhdlcode:`InterruptProc` loops back to the top of the process and calls the first
-transaction, however, it stops because the :vhdlcode:`InterruptHandler` VC is no longer in Interrupt Handling mode and
-is now handling transactions from :vhdlcode:`TransRec` (:vhdlcode:`ManagerRec`).
+on :vhdlcode:`InterruptRec`. The :vhdlcode:`InterruptReturn` must be the last transaction in the
+:vhdlcode:`InterruptProc` process. Following that, the :vhdlcode:`InterruptProc` loops back to the top of the process
+and calls the first transaction, however, it stops because the :vhdlcode:`InterruptHandler` VC is no longer in Interrupt
+Handling mode and is now handling transactions from :vhdlcode:`TransRec` (:vhdlcode:`ManagerRec`).
 
 In the :vhdlcode:`InterruptHandler` VC, interrupt pending is defined to be :vhdlcode:`IntReq` is asserted (currently a
 1) and there is a transaction pending on :vhdlcode:`InterruptRec` (ie: a transaction was called in
-:vhdlcode:`InterruptProc`). Hence, if there is not :vhdlcode:`InterruptProc` to calls transactions using
+:vhdlcode:`InterruptProc`). Hence, if there is no :vhdlcode:`InterruptProc` to call transactions using
 :vhdlcode:`InterruptRec`, the :vhdlcode:`InterruptHandler` will not go into Interrupt Handling Mode.
 
 .. _VC/InterruptHandler/RestrictionsWhenUsingTheInterruptHandlerVerificationComponentVC:
@@ -188,7 +188,7 @@ start the simulator. See the :ref:`Script User Guide <UG>` for additional detail
 VCS, and Cadence Xcelium.
 
 .. code-block:: tcl
-   :caption: Figure 5. Compiling and Running DPRAM tests
+   :caption: Figure 5. Compiling and Running InterruptHandler tests
    :name: VC/InterruptHandler/Figure5
 
    cd sim

@@ -27,8 +27,8 @@ BRAM.
 
 The :vhdlcode:`DpRam` has two identical interfaces (hence Dual Port) that can both write or read from the interface. A
 block diagram for the :vhdlcode:`DpRam` is shown in :ref:`Figure 1 <FRAMEWORK/VCDevelopers/Figure1>`. It has registers
-on all input signals (:vhdlcode:`AddrX`, :vhdlcode:`DataX`, and :vhdlcode:`WriteX`) and optionally has a register on the
-output :vhdlcode:`DataOutX`.
+on all input signals (:vhdlcode:`AddrX`, :vhdlcode:`DataInX`, and :vhdlcode:`WriteX`) and optionally has a register on
+the output :vhdlcode:`DataOutX`.
 
 .. figure:: images/VCDevelopers/Figure01.png
    :width: 502px
@@ -43,8 +43,8 @@ starts by presenting the Address (:vhdlcode:`AddrX`), Data (:vhdlcode:`DataInX`)
 presenting Address (:vhdlcode:`AddrX`). On the next rising edge of clock the Address is accepted and read data
 (:vhdlcode:`DataOutX`) is available.
 
-It has registers on all input signals (:vhdlcode:`AddrX`, :vhdlcode:`DataX`, and :vhdlcode:`WriteX`) and optionally has
-a register on the output :vhdlcode:`DataOutX`.
+It has registers on all input signals (:vhdlcode:`AddrX`, :vhdlcode:`DataInX`, and :vhdlcode:`WriteX`) and optionally
+has a register on the output :vhdlcode:`DataOutX`.
 
 .. figure:: images/VCDevelopers/Figure02.png
    :width: 476px
@@ -74,7 +74,7 @@ interface. They are shown in :ref:`Figure 3 <FRAMEWORK/VCDevelopers/Figure3>`.
    :caption: Figure 3. Address Bus Model Independent Transactions (a subset)
    :name: FRAMEWORK/VCDevelopers/Figure3
 
-   Write(TRec, iAddr, iData, [MsgOn])
+   Write(TransactionRec, iAddr, iData, [StatusMsgOn])
 
    Read(TransactionRec, iAddr, oData, [StatusMsgOn])
 
@@ -93,7 +93,7 @@ transaction call blocks (does not return) until the VC is finished executing the
 for interfaces that only do one transaction at a time – such as a UART or AxiStream.
 
 A more complex VC is an asynchronous VC. In this case, the test sequencer sends a transaction to the VC, but does not
-wait for the VC to complete the transaction. This level of complexity is needed support an interface that supports
+wait for the VC to complete the transaction. This level of complexity is needed to support an interface that supports
 multiple independent operations at a time – such as an AXI4 interface where the Write Address, Write Data, Write
 Response, Read Address, and Read Data aspects of the interface are all handled independently.
 
@@ -121,8 +121,8 @@ In the OSVVM Verification Component Library all AXI (Axi4 Full, Axi4 Lite and Ax
 asynchronous transactions. For Axi4 this is a requirement of the interface. For all this means they can support either
 multiple process or single process transaction dispatch.
 
-:ref:`Part 1 <FRAMEWORK/VCDevelopers/Part1CreateASimpleBlockingVC>` shows the creation the creation of a simple blocking
-VC for the :vhdlcode:`DpRamController`.
+:ref:`Part 1 <FRAMEWORK/VCDevelopers/Part1CreateASimpleBlockingVC>` shows the creation of a simple blocking VC for the
+:vhdlcode:`DpRamController`.
 
 .. _FRAMEWORK/VCDevelopers/Part1CreateASimpleBlockingVC:
 
@@ -130,7 +130,7 @@ Part 1: Create a simple blocking VC
 ***********************************
 
 If OSVVM were to have a "Lite" approach, this would be it. The structure for the :vhdlcode:`DpRamController` blocking VC
-is shown in see :ref:`Figure 4 <FRAMEWORK/VCDevelopers/Figure4>`. This VC is an address bus VC, and hence, uses OSVVM's
+is shown in :ref:`Figure 4 <FRAMEWORK/VCDevelopers/Figure4>`. This VC is an address bus VC, and hence, uses OSVVM's
 Address Bus Model Independent Transactions.
 
 .. code-block:: VHDL
@@ -142,16 +142,16 @@ Address Bus Model Independent Transactions.
      port (. . .) ;
    end entity DpRamController ;
    architecture blocking of DpRamController is
-
-   TransctionHandler : process
+   begin
+   TransactionHandler : process
    begin
 
-      wait for Transaction(. . . ) ;
+      WaitForTransaction(. . . ) ;
       case TransRec.Operation is
          when WRITE_OP =>        -- Do Write things
          when READ_OP =>         -- Do Read Things
          when …  =>              -- Do Model Directives
-     end case
+     end case ;
    end process TransactionHandler ;
    end architecture blocking ;
 
@@ -231,7 +231,7 @@ interfaces, each output changes after a propagation delay after clock rises. The
 Declare one or more AlertLogIDs
 ===============================
 
-:vhdlcode:`AlertLogIDs` are used with self‐checking, error handling, and message filtering (see :vhdlcode:`AlertLogPkg`
+:vhdlcode:`AlertLogIDs` are used with self-checking, error handling, and message filtering (see :vhdlcode:`AlertLogPkg`
 :ref:`User Guide <UTILITY/AlertLogPkg>` for details). All OSVVM VC declare a signal :vhdlcode:`ModelID` of
 :vhdlcode:`AlertLogIDType` as the primary error handling and message filtering ID for this VC. Naming the signal
 :vhdlcode:`ModelID` is a naming convention and is not required – but does simplify copying code between VC if/when
@@ -269,7 +269,7 @@ the case target are interface actions that are specific to the interface. See
    :name: FRAMEWORK/VCDevelopers/Figure8
    :force:
 
-   TransctionHandler : process
+   TransactionHandler : process
    begin
      WaitForTransaction(
        Clk      => Clk,
@@ -301,7 +301,7 @@ and put the repetitive part of the process into a "loop – end loop;". This is 
    :name: FRAMEWORK/VCDevelopers/Figure9
    :force:
 
-   TransctionHandler : process
+   TransactionHandler : process
    begin
      -- Initialize Outputs
      Address     <= (others => 'X') ;
@@ -309,7 +309,7 @@ and put the repetitive part of the process into a "loop – end loop;". This is 
      oData       <= (others => 'X') ;
 
      loop
-       wait for Transaction(. . . ) ;
+       WaitForTransaction(. . . ) ;
        case TransRec.Operation is
          when WRITE_OP =>        -- Do Write things
          when READ_OP =>         -- Do Read Things
@@ -367,7 +367,7 @@ then disable it.
    Log( ModelID,
      "Write Operation, Address: " & to_hxstring(Address) &
      "  Data: " & to_hxstring(oData) &
-     "  Operation# " & to_string (TransRec.Rdy)
+     "  Operation# " & to_string (TransRec.Rdy),
      INFO,
      TransRec.StatusMsgOn
    ) ;
@@ -377,12 +377,12 @@ then disable it.
 Creating the Read Operation
 ===========================
 
-The read operation, shown :ref:`Figure 12 <FRAMEWORK/VCDevelopers/Figure12>`, is similar to the write operation except
-we have to wait one to two clock cycles for the data to be available. The current :vhdlcode:`DpRamController` only waits
-for one clock cycle (and hence ignores the extra optional register on the output of the :vhdlcode:`DpRam`). Read data is
-returned to the test sequencer in the :vhdlcode:`DataFromModel` field of the transaction record. This version of
-:vhdlcode:`SafeResize` optionally resizes the data value as well as converts from :vhdlcode:`std_logic_vector` to the
-type used in the record (:vhdlcode:`osvvm.ResolutionPkg.std_logic_vector_max`).
+The read operation, shown in :ref:`Figure 12 <FRAMEWORK/VCDevelopers/Figure12>`, is similar to the write operation
+except we have to wait one to two clock cycles for the data to be available. The current :vhdlcode:`DpRamController`
+only waits for one clock cycle (and hence ignores the extra optional register on the output of the :vhdlcode:`DpRam`).
+Read data is returned to the test sequencer in the :vhdlcode:`DataFromModel` field of the transaction record. This
+version of :vhdlcode:`SafeResize` optionally resizes the data value as well as converts from
+:vhdlcode:`std_logic_vector` to the type used in the record (:vhdlcode:`osvvm.ResolutionPkg.std_logic_vector_max`).
 
 .. code-block:: VHDL
    :caption: Figure 12. Read Transaction Implementation
@@ -530,5 +530,5 @@ Summary
 *******
 
 In OSVVM, a verification component is nothing more than behavioral code. The busy work steps of creating a transaction
-API and interface are taken care of by OSVVM's Model Independent. OSVVM's approach is similar enough to RTL that an
-engineer can easily do both RTL and verification tasks.
+API and interface are taken care of by OSVVM's Model Independent Transactions. OSVVM's approach is similar enough to RTL
+that an engineer can easily do both RTL and verification tasks.

@@ -5,8 +5,8 @@ PCIe Verification Component
 
 .. _VC/PCIe/TerminologyUpstreamAndDownstream:
 
-Terminology : Upstream and Downstream
-*************************************
+Terminology: Upstream and Downstream
+************************************
 
 OSVVM PCIe VC and this document use the PCIe terminology, Upstream device and Downstream device. A PCIe Upstream device
 is a PCIe component whose link is ‘upstream’, nearer the root complex (e.g. the RC itself), whilst a PCIe downstream
@@ -19,9 +19,10 @@ link is the TX link from a downstream device (and an RX link of an upstream devi
 Overview
 ********
 
-The OSVVM PCIe Verification Component(VC) facilitates the interface and functionality of PCIe GEN1 and GEN2 devices
-`[1] <https://drive.google.com/file/d/1CECftcznLwcKDADtjpHhW13-IBHTZVXx>`__ and is intended to for part of a structured
-test environment. It can support up to 16 lanes in a link, though configurable for 1, 2, 4 and 8 lane links as well.
+The OSVVM PCIe Verification Component (VC) facilitates testing the interface and functionality of PCIe GEN1 and GEN2
+devices `[1] <https://drive.google.com/file/d/1CECftcznLwcKDADtjpHhW13-IBHTZVXx>`__ and is intended to form part of a
+structured test environment. It can support up to 16 lanes in a link, though configurable for 1, 2, 4 and 8 lane links
+as well.
 
 The PCIe VC is a co-simulation component based on the pcievhost C/C++ model
 `[2] <https://github.com/wyvernSemi/pcievhost/blob/master/doc/pcieVHost.pdf>`__ and is integrated with the existing
@@ -33,7 +34,7 @@ transactions and has internal memory models for both main memory and a configura
 and the received request transactions passed to a separate test sequencer to program arbitrary sequences of responses.
 The model supports all the types of PCIe TLPs:
 
-* MRd Memory read request (32 and64 bit address)
+* MRd Memory read request (32 and 64 bit address)
 * MRdLk Memory read request-locked (32 and 64 bit address)
 * MWr Memory write request (32 and 64 bit address)
 * IORd I/O read request
@@ -43,14 +44,14 @@ The model supports all the types of PCIe TLPs:
 * CfgRd1 Configuration read type 1
 * CfgWr1 Configuration write type 1
 * Msg Message request
-* MsgD Message request with data (
+* MsgD Message request with data
 * Cpl Completion with no data. Used for all reads with error status and for I/O and configuration writes.
 * CplD Completion with data. Used for all reads with good status.
 * CplLk Completion for locked memory read with error status
-* CplDlk Completion for locked memory read with good status.
+* CplDLk Completion for locked memory read with good status.
 
 The PCIe VC has many automatic features. The internal memories, already mentioned, are the default targets for memory
-and configurations space transactions, though these can be disabled. In addition, by default, all DLL packets for flow
+and configuration space transactions, though these can be disabled. In addition, by default, all DLL packets for flow
 control, PHY Ordered Sets and PHY Training Sequences are automatically handled by the model. However, these can be
 bypassed in configuration and their pattern types generated from a sequencer program and received in another sequencer
 program. The model provides facilities to do basic link initialisation, with the DLL initialisation built into the model
@@ -95,18 +96,18 @@ instantiation within that test bench using the generics and PCIe port connection
    * Configured with :vhdlcode:`ENABLE_INIT_PHY`.
 
 There are three test benches for the PCIe VC that demonstrate the VC main configurations. The first, :vhdlcode:`TbPcie`,
-uses the VC in a "classic " manner with an "upstream" requester" and "downstream" responder driven by VHDL test
-programs. The second, :vhdlcode:`TbPcieAutoeEp` uses the VC with the downstream VC as and endpoint configured for
-auto-completion and internal memory models. The last, :vhdlcode:`TbPcieSerial` is similar to the auto-completion test
-bench but uses the serialisation wrapper VHDL for single bit lanes. The diagram below shows the "classic" testbench
-structure (:vhdlcode:`TbPcie`), but all have a similar architecture.
+uses the VC in a "classic" manner with an "upstream" requester and "downstream" responder driven by VHDL test programs.
+The second, :vhdlcode:`TbPcieAutoEp` uses the VC with the downstream VC as an endpoint configured for auto-completion
+and internal memory models. The last, :vhdlcode:`TbPcieSerial` is similar to the auto-completion test bench but uses the
+serialisation wrapper VHDL for single bit lanes. The diagram below shows the "classic" testbench structure
+(:vhdlcode:`TbPcie`), but all have a similar architecture.
 
 .. figure:: images/PCIe/Page07-1.png
    :width: 702px
 
 
 In the non-serial test benches, the DUT uses a “pass-thru” stand-in component to demonstrate connection to a real piece
-of PCIe IP from the :vhdlcode:`LinkType` signals of the model. The TBs uses generate statements to select the pass-thru
+of PCIe IP from the :vhdlcode:`LinkType` signals of the model. The TBs use generate statements to select the pass-thru
 of the required link width. A :vhdlcode:`TestCtrl_e` component, common to all the test benches, is instantiated that
 will drive the models’ model independent transaction signal(s) which, for the PCIe VC, is of type
 :vhdlcode:`AddressBusRecType`. Which test is run on the test bench is selected as a selected architecture; e.g.
@@ -135,10 +136,10 @@ Riviera—adjust for particular simulator as per the documentation).
 The PcieModel VC HDL component
 ==============================
 
-The :vhdlcode:`PcieModel` component is has a clock and reset signal inputs (:vhdlcode:`Clk` and :vhdlcode:`nReset`),
-where the clock frequency needs to be set to the base symbol rate. E.g. PCIe GEN1 has a 2.5Gb/s rate, so for 10 bit
-symbols, this is 250MSym/s and a clock rate of 250 MHz. The active low reset signal must be asserted for a minimum of 1
-cycle. The test control interface is via the :vhdlcode:`TransRec` port of type :vhdlcode:`AddressBusRecType`
+The :vhdlcode:`PcieModel` component has a clock and reset signal inputs (:vhdlcode:`Clk` and :vhdlcode:`nReset`), where
+the clock frequency needs to be set to the base symbol rate. E.g. PCIe GEN1 has a 2.5Gb/s rate, so for 10 bit symbols,
+this is 250MSym/s and a clock rate of 250 MHz. The active low reset signal must be asserted for a minimum of 1 cycle.
+The test control interface is via the :vhdlcode:`TransRec` port of type :vhdlcode:`AddressBusRecType`
 :ref:`[5] <MIT/AddressBus>`, and there are a pair of PCIe links, in output and input of type :vhdlcode:`LinkType` which
 carry the 10-bit encoded data or, if configured, the 9-bit pre-encoded PIPE data.
 
@@ -176,8 +177,8 @@ The entity declaration for the :vhdlcode:`PcieModel` VC is defined as shown belo
 Generics
 --------
 
-The model has some generics to configure the model. The :vhdlcode:`MODEL_ID_NAME` can give an identify name for reports
-and assertions or can be left at the default, where is hierarchical instantiation name will be used.
+The model has some generics to configure the model. The :vhdlcode:`MODEL_ID_NAME` can give an identifying name for
+reports and assertions or can be left at the default, where its hierarchical instantiation name will be used.
 
 As the :vhdlcode:`PcieModel` VC is a co-simulation component it requires a node number, configured through the
 :vhdlcode:`NODE_NUM` generic. The model can exist within a test environment with other co-simulation components
@@ -185,33 +186,33 @@ As the :vhdlcode:`PcieModel` VC is a co-simulation component it requires a node 
 number in order to run the particular software for that node—this is the pcievhost C model in the case of
 :vhdlcode:`PcieModel`.
 
-Unlike some other common other bus/interconnect protocols, a PCIe “subordinate”, knowns as an Endpoint, can initiate
-read and write type transactions, but not all possible transactions. It also has an associated Type 0 configurations
-space. The :vhdlcode:`ENDPOINT` generic configures the model to behave like and endpoint (though it is the same code
-inside. It enables an internal configuration space model (though this can be disabled through configuration) and has
-some effect on the link display features.
+Unlike some other common bus/interconnect protocols, a PCIe “subordinate”, known as an Endpoint, can initiate read and
+write type transactions, but not all possible transactions. It also has an associated Type 0 configuration space. The
+:vhdlcode:`ENDPOINT` generic configures the model to behave like an endpoint (though it is the same code inside). It
+enables an internal configuration space model (though this can be disabled through configuration) and has some effect on
+the link display features.
 
 The :vhdlcode:`REQ_ID` generic sets the device’s requester ID that is added to each transaction request to identify the
 source. The default value is set to 0, but a recommended setting might be the device’s :vhdlcode:`NODE_NUM` value.
 
 The :vhdlcode:`EN_TLP_REQ_DIGEST` generic enables the adding of an ECRC end-to-end cyclic redundancy check to each
 generated TLP. The inclusion of an ECRC is usually a function of whether extended PCIe capabilities are in the
-configurations space and whether enabled there. For testing of correct handling of these scenarios, this generic is
+configuration space and whether enabled there. For testing of correct handling of these scenarios, this generic is
 included. If enabled, any auto-generated completion TLPs will include an ECRC in response to a TLP request that also has
 an ECRC.
 
 By default, the VC will generate a 10-bit stream of scrambled and 8b10b encoded data. The :vhdlcode:`PIPE` generic, when
-set to :vhdlcode:`true`, bypasses the 8b10 encoding (and the corresponding received data decoding) to produce a stream
+set to :vhdlcode:`true`, bypasses the 8b10b encoding (and the corresponding received data decoding) to produce a stream
 of 9-bit pre-encoded symbols, with 8 bits of data (bits 7 down to 0) and a control symbol indicator (bit 8), matching a
 PIPE interface’s data paths. Note that a PIPE’s data path ports can also be wider than a symbol, with 16, 32 and 64 bit
 widths supported with additional control bits for each of the extra bytes. This would require some wrapper logic to
-widen and down-clock the :vhdlcode:`PcieModel` output for each lane. In addition to disabling the 8b10 encoding, the
+widen and down-clock the :vhdlcode:`PcieModel` output for each lane. In addition to disabling the 8b10b encoding, the
 scrambling can also be disabled with the :vhdlcode:`DISABLE_SCRAMBLING` boolean generic.
 
 The :vhdlcode:`ENABLE_INIT_PHY` generic is used to indicate to the running software if configured to automatically
 generate initialisation sequences, to run the physical layer link training or not. Note that the link training is
 provided by some demonstration code :file:`ltssm.c` in the PCIe/ltssm directory and is not part of the model proper but
-uses the provide API to generate training sequence ordered sets. The provide code is limited to taking a link from an
+uses the provided API to generate training sequence ordered sets. The provided code is limited to taking a link from an
 idle state all the way through the “link up” L0 state. Other low power states, or ancillary states are not supported,
 including the recovery state which is used when switching from a lower generation to a higher generation speed.
 :vhdlcode:`PcieModel` is capable of generating all the possible patterns required to fully implement the LTSSM and so
@@ -276,7 +277,7 @@ in a signal declaration they must be constrained. Address needs to be sized to m
 maximum (:vhdlcode:`PCIE_DATA_WIDTH`).
 
 The code below shows the declaration :vhdlcode:`UpstreamRec` (which connects a :vhdlcode:`PcieModel` RC to
-:vhdlcode:`TestCtrl`) and :vhdlcode:`DownstreamRec` (which connects the a :vhdlcode:`PcieModel` endpoint to
+:vhdlcode:`TestCtrl`) and :vhdlcode:`DownstreamRec` (which connects a :vhdlcode:`PcieModel` endpoint to
 :vhdlcode:`TestCtrl`).
 
 .. code-block:: VHDL
@@ -331,13 +332,13 @@ PCIe Serial Interface Wrapper Component
 
 An alternative top level :vhdlcode:`PcieModel` component is available as :vhdlcode:`PcieModelSerial`. This is the same
 as the :vhdlcode:`PcieModel` components except in two important ways. Firstly, it does not have the :vhdlcode:`PIPE`
-boolean generic as only 8b10b encode output can be serialised and, secondly it a single-ended input and output pair for
-each lane. These are organised as :vhdlcode:`std_logic_vector` :vhdlcode:`SerLinkIn` and :vhdlcode:`SerLinkOut` ports in
-place of the :vhdlcode:`LinkType` :vhdlcode:`PcieLinkIn` and :vhdlcode:`PcieLinkOut` ports of the :vhdlcode:`PcieModel`.
-The serial ports require an additional clock input, :vhdlcode:`SerClk`, running at ten times the normal :vhdlcode:`Clk`
-input. This can be phased aligned with the :vhdlcode:`Clk`, but it is not strictly necessary.
+boolean generic as only 8b10b encode output can be serialised and, secondly it has a single-ended input and output pair
+for each lane. These are organised as :vhdlcode:`std_logic_vector` :vhdlcode:`SerLinkIn` and :vhdlcode:`SerLinkOut`
+ports in place of the :vhdlcode:`LinkType` :vhdlcode:`PcieLinkIn` and :vhdlcode:`PcieLinkOut` ports of the
+:vhdlcode:`PcieModel`. The serial ports require an additional clock input, :vhdlcode:`SerClk`, running at ten times the
+normal :vhdlcode:`Clk` input. This can be phase aligned with the :vhdlcode:`Clk`, but it is not strictly necessary.
 
-The model does not require the normal differential pair of signals used for PCIe, but a DUT that does requires this can
+The model does not require the normal differential pair of signals used for PCIe, but a DUT that does require this can
 simply create inverted signals from the :vhdlcode:`SerLinkOut` bits for its negative inputs and leave its inverted
 signals outputs unconnected. The entity for :vhdlcode:`PcieModelSerial` is shown below:
 
@@ -521,7 +522,7 @@ available options:
 | :vhdlcode:`CONFIG_CPL_HDR_CR`\ †                     | yes    | credits | Initial advertised completion header       |
 |                                                      |        |         | credits (default ∞)                        |
 +------------------------------------------------------+--------+---------+--------------------------------------------+
-| :vhdlcode:`CONFIG_CPL_DATA_CR`\ †                    | yes    | credits | Initial advertised non-posted data credits |
+| :vhdlcode:`CONFIG_CPL_DATA_CR`\ †                    | yes    | credits | Initial advertised completion data credits |
 |                                                      |        |         | (default ∞)                                |
 +------------------------------------------------------+--------+---------+--------------------------------------------+
 | :vhdlcode:`CONFIG_CPL_DELAY_RATE`\ †                 | yes    | cycles  | Auto completion delay rate (default 0)     |
@@ -620,7 +621,7 @@ address space as no bits are cleared in the setting of the model options. The me
 32-bit word with :vhdlcode:`SETMEMDATA` or read using the :vhdlcode:`GETMEMDATA`. The set address then auto-increments
 by a word (i.e. 4) so that multiple contiguous memory words may be updated without updating the memory with new
 :vhdlcode:`SetModelOptions` calls. The endianness of the word accesses can be controlled with the
-:vhdlcode:`SETMEMENDIANESS` model option, usually done just once before accessing internal memory.
+:vhdlcode:`SETMEMENDIANNESS` model option, usually done just once before accessing internal memory.
 
 Note that if multiple :vhdlcode:`PcieModel` components, with internal memory enabled, are instantiated the internal
 memory is shared between all of them, emulating a system with common main memory and multiple access ports.
@@ -686,7 +687,7 @@ index. There are six valid values for this configuration:
        requests or variable sized write data payloads. Reads receive a completion (non-posted), whilst writes do not
        (posted).
    * - :vhdlcode:`IO_TRANS`
-     - This model is for I/O read and write transactions. These transactions always receive a completion, including
+     - This mode is for I/O read and write transactions. These transactions always receive a completion, including
        writes (non-posted), and are limited to 32-bit data.
    * - :vhdlcode:`CFG_SPC_TRANS`
      - This mode is for sending configuration read and write transactions. These transactions always receive a
@@ -724,13 +725,13 @@ values. The table below shows the :vhdlcode:`Params` index values for each of th
    * - :vhdlcode:`PARAM_RDLCK`
      - Memory reads, completions, part completions
      - Generates the RdLck variants of memory reads and completions (either full or part).
-   * - :vhdlcode:`PARM_CMPLRID`
+   * - :vhdlcode:`PARAM_CMPLRID`
      - Completions, part completions
      - Sets the requester ID for a [part] completion, as sent in the request that is being responded to.
    * - :vhdlcode:`PARAM_CMPLCID`
      - Completions, part completions
      - Sets the completer ID for a [part] completion. This is set for a device on configuration write transactions and
-       consists of a bus (8 bits), device (5 bits) and function number (3 bits), take make a 16 -bit CID value.
+       consists of a bus (8 bits), device (5 bits) and function number (3 bits), to make a 16-bit CID value.
    * - :vhdlcode:`PARAM_CMPLRLEN`
      - Part completions
      - Sets the remaining length field of a part completion, where this indicates the amount of data still to be
@@ -809,7 +810,7 @@ Memory Burst Writes
 -------------------
 
 For burst writes, data bytes are pushed onto the write fifo, then set up is the same as for word writes.
-:vhdlcode:`WriteBurst` is than called with an address and a byte count. The example below shows a memory write transfer
+:vhdlcode:`WriteBurst` is then called with an address and a byte count. The example below shows a memory write transfer
 of 27 bytes to a given address.
 
 .. code-block:: VHDL
@@ -831,7 +832,7 @@ performed, but the “address” argument is in two parts. The lower 16 bits def
 configuration space as a byte offset aligned to 32 bits, whilst the upper 16-bits constitute the bus, device and
 function number that the device must use as its CID for subsequent completions.
 
-As all configuration accesses get a returned completion, the error and completions statuses are fetched from the
+As all configuration accesses get a returned completion, the error and completion statuses are fetched from the
 parameters after the write transaction returns. E.g.
 
 .. code-block:: VHDL
@@ -842,18 +843,18 @@ parameters after the write transaction returns. E.g.
    PktErrStatus := Get(TransactionRec.Params, PARAM_PKT_STATUS) ;
    CplStatus    := Get(TransactionRec.Params, PARAM_CMPL_STATUS) ;
 
-As configurations accesses are all 32-bit, there are no burst transactions.
+As configuration accesses are all 32-bit, there are no burst transactions.
 
 .. _VC/PCIe/IOWrites:
 
 I/O Writes
 ----------
 
-I/O write are similar to configuration writes, in that they are limited to 32 bit accesses and get a completion. As all
+I/O writes are similar to configuration writes, in that they are limited to 32 bit accesses and get a completion. As all
 I/O accesses get a returned completion, the completion and error statuses are fetched from the parameters after the
 write transaction returns. E.g.
 
-The mode is set of I/O and a tag or auto-tag provided. The address is a true address value. E.g.
+The mode is set for I/O and a tag or auto-tag provided. The address is a true address value. E.g.
 
 .. code-block:: VHDL
 
@@ -870,7 +871,7 @@ As I/O accesses are all 32-bit, there are no burst transactions.
 Message Writes
 --------------
 
-Messages are similar to memory writes in that they don’t receive a completion. The “address” for messages have a
+Messages are similar to memory writes in that they don’t receive a completion. The “address” for messages has a
 different meaning and some messages also don’t have a payload, determined by its type. Here the “address” will be used
 to specify the message type, and this can be one of the following values:
 
@@ -883,7 +884,7 @@ to specify the message type, and this can be one of the following values:
      - :vhdlcode:`MSG_ASSERT_INTD`
    * - :vhdlcode:`MSG_DEASSERT_INTA`
      - :vhdlcode:`MSG_DEASSERT_INTB`
-     - :vhdlcode:`MSG_DEASSERT_INTB`
+     - :vhdlcode:`MSG_DEASSERT_INTC`
      - :vhdlcode:`MSG_DEASSERT_INTD`
    * - :vhdlcode:`MSG_PM_ACTIVE_STATE_NAK`
      - :vhdlcode:`MSG_PME`
@@ -903,10 +904,10 @@ The example below is for a message with no data, and :vhdlcode:`WriteAddressAsyn
 .. code-block:: VHDL
 
    Set (TransactionRec.Params, PARAM_TRANS_MODE, MSG_TRANS) ;
-   Set (TransactionRec.Params, PARAM_REQTAG,     TLP_AUTO_TAG) ;
+   Set (TransactionRec.Params, PARAM_REQTAG,     TLP_TAG_AUTO) ;
    WriteAddressAsync(TransactionRec, MSG_ERR_NON_FATAL) ;
 
-For a message requiring data the setup is the same bit the :vhdlcode:`Write` procedure is used.
+For a message requiring data the setup is the same but the :vhdlcode:`Write` procedure is used.
 
 .. code-block:: VHDL
 
@@ -984,7 +985,7 @@ and inspected. E.g.
    PktErrStatus := Get(TransactionRec.Params, PARAM_PKT_STATUS) ;
    CplStatus    := Get(TransactionRec.Params, PARAM_CMPL_STATUS) ;
 
-As configurations accesses are all 32-bit, there are no burst transactions.
+As configuration accesses are all 32-bit, there are no burst transactions.
 
 .. _VC/PCIe/IOReads:
 
@@ -992,7 +993,7 @@ I/O Reads
 ---------
 
 I/O reads are similar to configuration reads, in that they are limited to 32 bit accesses and get a completion. The mode
-is set of I/O and a tag or auto-tag provided. The address is a true address value. As all I/O accesses get a returned
+is set for I/O and a tag or auto-tag provided. The address is a true address value. As all I/O accesses get a returned
 completion, the completion and error statuses are fetched from the parameters after the read transaction returns. E.g.
 
 .. code-block:: VHDL
@@ -1016,11 +1017,11 @@ Word Completions
 ----------------
 
 Completions require a few more options. As well as setting the transaction type to :vhdlcode:`CPL_TRANS`, a requester ID
-and a completer ID must also be set. There is no auto-tag mode as the tag must be set to the received request’s tag that
-the for which completion is the response. A locked completion should also be the response to a locked memory read
-request. Since a completion is a data push, requiring no response, it is considered a posted write like memory writes,
-and so the standard :vhdlcode:`Write` procedure is used. The address for the call to :vhdlcode:`Write` needs only be the
-7 lower address bits of a memory read request, or 0 in completions for other transaction request types. E.g.
+and a completer ID must also be set. There is no auto-tag mode as the tag must be set to the received request’s tag for
+which the completion is the response. A locked completion should also be the response to a locked memory read request.
+Since a completion is a data push, requiring no response, it is considered a posted write like memory writes, and so the
+standard :vhdlcode:`Write` procedure is used. The address for the call to :vhdlcode:`Write` needs only be the 7 lower
+address bits of a memory read request, or 0 in completions for other transaction request types. E.g.
 
 .. code-block:: VHDL
 
@@ -1031,7 +1032,7 @@ and so the standard :vhdlcode:`Write` procedure is used. The address for the cal
    Set (TransactionRec.Params, PARAM_RDLCK,      0) ;
    Set (TransactionRec.Params, PARAM_CMPLSTATUS, CPL_SUCCESS) ;
 
-   Write(TransactionRec, X"63", "0badf00d") ;
+   Write(TransactionRec, X"63", X"0badf00d") ;
 
 .. _VC/PCIe/NoDataPayloadCompletions:
 
@@ -1057,13 +1058,13 @@ If a completion does not require a data payload, then the :vhdlcode:`WriteAddres
 Burst Completions
 -----------------
 
-.As well as setting the transaction type to :vhdlcode:`CPL_TRANS`, a requester ID and a completer ID must also be set.
-There is no auto-tag mode as the tag must be set to the received request’s tag that the for which completion is the
-response. A locked completion should also be the response to a locked memory read request. Since a completion is a data
-push, requiring no response, it is considered a posted write like memory writes, and so the standard
-:vhdlcode:`WriteBurst` procedure is used. The address for the call to :vhdlcode:`WriteBurst` needs only be the 7 lower
-address bits of a memory read request. Completions for other types of transaction require either no data or a single
-word payload, and so this burst method is limited to use in completing for read requests only. E.g.
+As well as setting the transaction type to :vhdlcode:`CPL_TRANS`, a requester ID and a completer ID must also be set.
+There is no auto-tag mode as the tag must be set to the received request’s tag for which the completion is the response.
+A locked completion should also be the response to a locked memory read request. Since a completion is a data push,
+requiring no response, it is considered a posted write like memory writes, and so the standard :vhdlcode:`WriteBurst`
+procedure is used. The address for the call to :vhdlcode:`WriteBurst` needs only be the 7 lower address bits of a memory
+read request. Completions for other types of transaction require either no data or a single word payload, and so this
+burst method is limited to use in completing for read requests only. E.g.
 
 .. code-block:: VHDL
 
@@ -1086,8 +1087,8 @@ Part Completions
 ================
 
 Part completions are only associated with returning a partial set of data to a burst read request, and so only needs a
-burst method to instigate. The set up is then same as for a burst completion but, in addition, must set up the remaining
-length value. E.g.
+burst method to instigate. The set up is then the same as for a burst completion but, in addition, must set up the
+remaining length value. E.g.
 
 .. code-block:: VHDL
 
@@ -1120,12 +1121,12 @@ returned in a record as shown below:
        Packet     : integer ;
        Completion : integer ;
        Tag        : TagType ;
-   end record PcieStatusRecType
+   end record PcieStatusRecType ;
 
 The Packet field returns the error status (e.g. CRC failures) and the Completion field returns the completion packets
 status, as defined in :ref:`section 5.3 <VC/PCIe/CompletionAndTransactionStatus>`. The Tag field returns the requester
 tag returned by the completion packet. When the non-posted procedures have their :vhdlcode:`iTag` argument set to
-:vhdlcode:`TLP_AUTO_TAG`, then, for blocking procedures, the returned tag should be that used by the internal PCIe
+:vhdlcode:`TLP_TAG_AUTO`, then, for blocking procedures, the returned tag should be that used by the internal PCIe
 model. If a tag was set on the call to the blocking procedure then, in normal circumstances, the returned tag should be
 that supplied. For non-blocking procedures, where out-of-order completions are possible, the returned tag references the
 request that was originally sent, so cross-referencing can be done to match completions with the original request.
@@ -1136,8 +1137,8 @@ Memory Transactions
 ===================
 
 These procedures generate memory TLPs, with the write procedures being posted and thus implied non-blocking. The read
-TLPs are non-posted transactions, and the procedures are blocking except the :vhdlcode:`PcieReadAddress` procedures. The
-procedures have both burst and “word” variants, with “word variants for 8-bit, 16-bit or 32-bit word transactions.
+TLPs are non-posted transactions, and the procedures are blocking except the :vhdlcode:`PcieMemReadAddress` procedures.
+The procedures have both burst and “word” variants, with “word” variants for 8-bit, 16-bit or 32-bit word transactions.
 
 .. code-block:: VHDL
 
@@ -1282,7 +1283,7 @@ are non-posted, these procedures are blocking.
 I/O Transactions
 ================
 
-These procedures generate single 32-bit read and write TLPs to a I/O space. As both the read and write TLPs are
+These procedures generate single 32-bit read and write TLPs to an I/O space. As both the read and write TLPs are
 non-posted, these procedures are blocking.
 
 .. code-block:: VHDL
@@ -1458,7 +1459,7 @@ Receiving Transaction Requests
 
 If a PCIe VC does not have its internal memories enabled, all received transactions are passed over the transaction
 interface for processing by a receiving downstream test process. Processing of received transactions is achieved in two
-steps. The first step is to wait for a transaction or test if is a transaction is available. When a packet is available,
+steps. The first step is to wait for a transaction or test if a transaction is available. When a packet is available,
 its basic status is returned along with the type of transaction. This allows to ensure the packet is good, and to fetch
 the appropriate data in the second step. The second step is to get the detailed data from the received packet for
 processing and testing, if the first step was successful.
@@ -1567,7 +1568,7 @@ is transaction type dependent. The table below shows the parameter offset defini
      - The received transaction’s requester ID
    * - :vhdlcode:`PARAM_REQ_DIGEST`
      - all
-     - The received transaction’s digest flag (> 0 indicated ECRC present)
+     - The received transaction’s digest flag (> 0 indicates ECRC present)
    * - :vhdlcode:`PARAM_REQ_POISONED`
      - all
      - The received transaction’s poisoned status.
@@ -1582,7 +1583,7 @@ is transaction type dependent. The table below shows the parameter offset defini
      - The received transaction’s first byte enable bits
    * - :vhdlcode:`PARAM_REQ_LBE`
      - not :vhdlcode:`TL_MSG*`
-     - The received transaction’s last by enable bits
+     - The received transaction’s last byte enable bits
    * - :vhdlcode:`PARAM_REQ_MSG_CODE`
      - :vhdlcode:`TL_MSG*`
      - The received message transaction’s code
@@ -1599,10 +1600,10 @@ is transaction type dependent. The table below shows the parameter offset defini
      - :vhdlcode:`TL_CFG*`
      - The received configuration space transaction’s register byte offset (word aligned).
    * - :vhdlcode:`PARAM_REQ_LENGTH`
-     - :vhdlcode:`TL_MEMWR*`, :vhdlcode:`TL_IOWR`, :vhdlcode:`TL_CFGWR`, :vhdlcode:`TLMSGD`
+     - :vhdlcode:`TL_MEMWR*`, :vhdlcode:`TL_IOWR`, :vhdlcode:`TL_CFGWR`, :vhdlcode:`TL_MSGD`
      - The received write transaction’s payload word length
    * - :vhdlcode:`PARAM_REQ_BYTE_LEN`
-     - :vhdlcode:`TL_MEMWR*`, :vhdlcode:`TL_IOWR`, :vhdlcode:`TL_CFGWR`, :vhdlcode:`TLMSGD`
+     - :vhdlcode:`TL_MEMWR*`, :vhdlcode:`TL_IOWR`, :vhdlcode:`TL_CFGWR`, :vhdlcode:`TL_MSGD`
      - The received write transaction’s number of active bytes in the payload
 
 .. _VC/PCIe/PCIeExtractWrapperProcedures:
@@ -1797,7 +1798,7 @@ used in isolation or together. If a lower level (starting from PHY) is used with
 output is indented for ease of interpretation.
 
 By default, the :vhdlcode:`PcieModel` displays only received data. If two models were being used back-to-back then all
-traffic would be display over a given link. If the model is being used in solitude to drive a DUT, then bit 8 can turn
+traffic would be displayed over a given link. If the model is being used in solitude to drive a DUT, then bit 8 can turn
 on the display of traffic that is being transmitted by the model as well as that being received, so all traffic on the
 link is displayed for this case. As the model can be configured as an endpoint (downstream) or root-complex (upstream)
 device bits 9 and 10 enable display individually for models configured as RCs or EPs (as defined by the
@@ -1806,9 +1807,9 @@ device bits 9 and 10 enable display individually for models configured as RCs or
 Finally, the model displays colour output by default, but this can be disabled by bit 11 being set. Though extremely
 useful to have colour output for discriminating between up- and down-link traffic, the data that is logged for the
 simulation or displayed on some simulator’s console, does not decode the escape sequences and pollutes the output with
-literal additional characters. Not that the colour display can also be disabled via the
-:vhdlcode:`CONFIG_DISABLE_DISPLINK_COLOUR` model option, which will override the settings in the
-:file:`ContDisps.hex` file.
+literal additional characters. Note that the colour display can also be disabled via the
+:vhdlcode:`CONFIG_DISABLE_DISPLINK_COLOUR` model option, which will override the settings in the :file:`ContDisps.hex`
+file.
 
 .. _VC/PCIe/ExampleOutput:
 
@@ -1888,7 +1889,7 @@ LTSSM
 
 All ordered set types, including training sequence ordered sets, can be generated from a test program via the API as
 detailed in this document. Included with the model, but not part of it, are the :file:`ltssm.c` and :file:`ltssm.h`
-files located in the :file:`Pcie/ltssm` directory. This will generate training sequences to automatically take a link
+files located in the :file:`PCIe/ltssm` directory. This will generate training sequences to automatically take a link
 from electrical idle to the L0 “link up” state. It is incomplete, however, and does not support the low power states
 (L1, L2 and L0s) or any of the ancillary states (Disabled, Hot Reset, Loopback or Recovery). The hooks are present in
 the code to add this functionality, and the source code is available to extend as necessary. Or the test code itself can
@@ -1900,15 +1901,15 @@ By default, the model does not instigate a PHY link training sequence, but this 
 
    SetModelOptions(UpstreamRec, INITPHY, NULLOPTVALUE) ;
 
-The model will still function without the link training which can be skipped, if the DUT has some test model to also
-skip this step, to save on simulation time where link training is not the focus of the test.
+The model will still function without the link training which can be skipped, if the DUT has some test mode to also skip
+this step, to save on simulation time where link training is not the focus of the test.
 
 The LTSSM can be configured via :vhdlcode:`SetModelOptions`. The control symbols in the training sequences can be set
 using the following options:
 
 * :vhdlcode:`CONFIG_LTSSM_LINKNUM`
 * :vhdlcode:`CONFIG_LTSSM_N_FTS`
-* :vhdlcode:`CONFIG_LTSSM_TS_CTRL`
+* :vhdlcode:`CONFIG_LTSSM_TS_CTL`
 
 These program the values at the positions 1, 3 and 5 respectively to set the link number, the number of fast training
 sequence from L0s to L0, and the CTL control symbol value for generated Training Sequence ordered sets.
@@ -1958,11 +1959,11 @@ of “credits”, a set of model options for setting each of the six types is av
 * :vhdlcode:`CONFIG_NONPOST_HDR_CR`
 * :vhdlcode:`CONFIG_NONPOST_DATA_CR`
 * :vhdlcode:`CONFIG_CPL_HDR_CR`
-* :vhdlcode:`CONFIG_CPL_HDR_CR`
+* :vhdlcode:`CONFIG_CPL_DATA_CR`
 
 E.g. :vhdlcode:`SetModelOptions(TransactionRec, CONFIG_POST_DATA_CR, 1024) ;`
 
-The rate at which DLL headers and data packets are consumed can be separately configure using the
+The rate at which DLL headers and data packets are consumed can be separately configured using the
 :vhdlcode:`CONFIG_FC_HDR_RATE` and :vhdlcode:`CONFIG_FC_DATA_RATE` model options, both of which have a 4 cycle default
 value. This allows for emulating latency in response with update DLLPs. E.g:
 
@@ -1986,7 +1987,7 @@ space, and no flow control. E.g.:
 
 .. code-block:: VHDL
 
-   SetModelOptions(TransactionRec, DISABLE_FLOW_CONTROL, NULLOPTVALUE) ;
+   SetModelOptions(TransactionRec, CONFIG_DISABLE_FC, NULLOPTVALUE) ;
 
 Built into the model is code to initialise flow control for VC0, though the model does not require this step to
 function, but then the flow control must be disabled before any transactions generated. To initiate VC0 flow control
@@ -1994,7 +1995,7 @@ initialisation execute:
 
 .. code-block:: VHDL
 
-   SetModelOptions(TransactionRec, INIT_DLL, NULLOPTVALUE) ;
+   SetModelOptions(TransactionRec, INITDLL, NULLOPTVALUE) ;
 
 This must be done after any PHY link initialisation but before any transactions are generated.
 
@@ -2009,13 +2010,13 @@ multiple packets before acknowledging them in a single ACK. E.g.:
 
 .. code-block:: VHDL
 
-   SetModelOptions(TransactionRec, ENABLE_ACK, 3) ;
+   SetModelOptions(TransactionRec, CONFIG_ENABLE_ACK, 3) ;
 
 This can be updated throughout a simulation. Automatic generation of ACKs can be also disabled:
 
 .. code-block:: VHDL
 
-   SetModelOptions(TransactionRec, DISABLE_ACK, NULLOPTVALUE) ;
+   SetModelOptions(TransactionRec, CONFIG_DISABLE_ACK, NULLOPTVALUE) ;
 
 .. _VC/PCIe/InternalMemoryModelsAndAutomaticCompletions:
 
@@ -2039,7 +2040,7 @@ Internal memory can be disabled through a model option:
 
 .. code-block:: VHDL
 
-   SetModelOptions(TransactionRec, DISABLE_MEM, NULLOPTVALUE) ;
+   SetModelOptions(TransactionRec, CONFIG_DISABLE_MEM, NULLOPTVALUE) ;
 
 .. _VC/PCIe/ConfigurationSpace:
 
@@ -2049,12 +2050,12 @@ Configuration Space
 Built into the model is a 4K word Type 0 configuration space. By default, this acts just like a memory and can be
 written and read using configuration space writes and reads if the model is configured as an endpoint (via the
 :vhdlcode:`ENDPOINT` generic) and internal memory is enabled. When active, completions are automatically generated for
-both writes and reads (as configurations accesses are non-posted). If configuration writes or reads are sent to the
-model when not an endpoint the model will automatically generate an unsupported request completion, unless disabled (via
-the :vhdlcode:`CONFIG_DISABLE_UR_CPL` model option). Just as for the main memory model, the internal configuration space
-can be disabled with the model :vhdlcode:`DISABLE_MEM` option.
+both writes and reads (as configuration accesses are non-posted). If configuration writes or reads are sent to the model
+when not an endpoint the model will automatically generate an unsupported request completion, unless disabled (via the
+:vhdlcode:`CONFIG_DISABLE_UR_CPL` model option). Just as for the main memory model, the internal configuration space can
+be disabled with the model :vhdlcode:`CONFIG_DISABLE_MEM` option.
 
-The internal configurations space, when active, can be programmed to contain valid Type 0 configuration space values and
+The internal configuration space, when active, can be programmed to contain valid Type 0 configuration space values and
 to include a mask for each word to indicate if a bit in the register word is read-only or not, with a mask bit of 1
 indicating read-only. To program a configuration space register three model options are available. The option
 :vhdlcode:`SETCFGSPCOFFSET` is used first to set which register is active for an update—a byte offset aligned to
@@ -2064,9 +2065,9 @@ prefetchable space of 4Kbytes:
 
 .. code-block:: VHDL
 
-   SetModelOptions(TransactionRec, CFGSPCOFFSET, 16#10#) ;
-   SetModelOptions(TransactionRec, CFGSPC,       16#00000008#) ;
-   SetModelOptions(TransactionRec, CFGSPCMASK,   16#00000fff#) ;
+   SetModelOptions(TransactionRec, SETCFGSPCOFFSET, 16#10#) ;
+   SetModelOptions(TransactionRec, SETCFGSPC,       16#00000008#) ;
+   SetModelOptions(TransactionRec, SETCFGSPCMASK,   16#00000fff#) ;
 
 .. _VC/PCIe/AutomaticEPConfigurationSpaceSettings:
 
@@ -2148,7 +2149,7 @@ If a :vhdlcode:`PcieModel` is configured as an EP and the :vhdlcode:`runAutoEp()
 +---------------------------+-----------------------------+------------+-----------+--------+
 | slot capabilities 2                                     | 00000000h  | ffffffffh | 74h    |
 +---------------------------+-----------------------------+------------+-----------+--------+
-| slot status 2             | slot control                | 00000000h  | ffffffffh | 78h    |
+| slot status 2             | slot control 2              | 00000000h  | ffffffffh | 78h    |
 +---------------------------+-----------------------------+------------+-----------+--------+
 | MSI capabilities structure                                                                |
 +---------------------------+--------------+--------------+------------+-----------+--------+
@@ -2234,7 +2235,7 @@ look like the following:
        while(true) pcie->sendIdle(10000);
    }
 
-This program does not use the transaction interface by drives the PCIe link directly. If the model is configured as an
+This program does not use the transaction interface but drives the PCIe link directly. If the model is configured as an
 endpoint with memory enabled, then the code just needs to configure the model and run any PHY and/or DLL
 initialisations. It can then bypass the need to make calls to the API methods to generate transactions and simply act as
 a target for an upstream device, automatically responding to TLP requests. The code mustn’t return, and so it simply
@@ -2427,7 +2428,7 @@ interface for processing by user test code using the :vhdlcode:`PcieInterfacePkg
 process these TLPs.
 
 The model also has code to display formatted link traffic information to the output. This is coded in :file:`displink.c`
-which is passed information from both input and output functions. It reads an external :file:`ContDisp.hex` file to
+which is passed information from both input and output functions. It reads an external :file:`ContDisps.hex` file to
 give the user the ability to control what data to show and where in the simulation to display this.
 
 .. _VC/PCIe/LimitationsOfTheModel:
@@ -2443,9 +2444,9 @@ together for ease of reference.
 Transaction Layer Packets
 =========================
 
-All TLPs can be generated using all three methods of writing tests: classic VHDL, OSVVM CoSim program or
-co-simulation running directly on the model. Only the latter has access all the PCIe C model’s API. The model itself has
-various assumptions and limitations:
+All TLPs can be generated using all three methods of writing tests: classic VHDL, OSVVM CoSim program or co-simulation
+running directly on the model. Only the latter has access to all the PCIe C model’s API. The model itself has various
+assumptions and limitations:
 
 * Only a single VC (VC0) is assumed. Generated packets’ traffic class field (TC) are always 0, but all TC values can be
   processed.
@@ -2465,7 +2466,7 @@ all the packets can be generated from the running program. For the other approac
 * InitFC[1|2]_xxx packets can’t be directly generated
 
    * The :vhdlcode:`PcieInitDll` procedure initiates a DLL initialisation and the sizes of the flow control buffers can
-     be configured using :vhdlcode:`SetModelOption` calls
+     be configured using :vhdlcode:`SetModelOptions` calls
 
 * Update_xxx packets can’t be directly generated
 
@@ -2491,7 +2492,7 @@ approach, all the OSs and TSs can be generated from the running program. For the
 
 * Training Sequences can’t be directly generated, but a limited LTSSM is provided with the model
   (see :ref:`below <VC/PCIe/LTSSMFunctionality>`)
-* Electrical Idle OS (IDL) and fast training sequence OS (TS) can’t be directly generated.
+* Electrical Idle OS (IDL) and fast training sequence OS (FTS) can’t be directly generated.
 * Skip ordered sets (SKP) can't be directly generated
 
    * The model can be configured to generate them at a given cyclic period (or disable them)
@@ -2523,13 +2524,13 @@ The list below summarises what is yet to be implemented in the :file:`ltssm.c` c
    * Hot Reset
    * Disabled
 
-* There currently no means to switch GEN speeds through the Recover state
+* There is currently no means to switch GEN speeds through the Recovery state
 
    * Hooks are in place to do so
    * The model can generate fast training sequences (FTS)
 
 Users can expand upon this code or substitute their own. Whatever code is in the :file:`PCIe/ltssm` directory will be
-compiled and linked with the other PCIE co-simulation code. If the :vhdlcode:`PcieInitLink` procedure is called, this
+compiled and linked with the other PCIe co-simulation code. If the :vhdlcode:`PcieInitLink` procedure is called, this
 makes its way to the PCIe models C code which is expecting to call a C function with the following prototype:
 
 .. code-block:: c++

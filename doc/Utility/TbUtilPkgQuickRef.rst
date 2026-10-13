@@ -19,7 +19,7 @@ ZeroOneHot, OneHot
 
    If ZeroOneHot((SA & SB & SC & SD)) then
 
-:vhdlcode:`OneHot` returns true when the :vhdlcode:`std_logic_vector` input either has a single one.
+:vhdlcode:`OneHot` returns true when the :vhdlcode:`std_logic_vector` input has a single one.
 
 .. code-block:: VHDL
 
@@ -44,7 +44,7 @@ Request a transaction from the client side (:vhdlcode:`TestCtrl`).
    procedure DoTransaction(
      ModelRec : inout ModelRecType ;
      DataIn   : in DataType
-   )_ is
+   ) is
    begin
      ModelRec.Data <= DataIn ;
      RequestTransaction(
@@ -82,7 +82,7 @@ One process toggles a signal using the :vhdlcode:`toggle` procedure, the other p
 Toggle
 ======
 
-Toggle a signal between 0 and 1. Signal type dcan be either :vhdlcode:`bit` or :vhdlcode:`std_ulogic`.
+Toggle a signal between 0 and 1. Signal type can be either :vhdlcode:`bit` or :vhdlcode:`std_ulogic`.
 
 .. code-block:: VHDL
 

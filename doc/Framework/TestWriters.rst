@@ -22,7 +22,7 @@ filtering, and add test wide reporting.
 Why VHDL? Why OSVVM?
 ********************
 
-According the 2020 Wilson Research Group Functional Verification Study,
+According to the 2020 Wilson Research Group Functional Verification Study,
 
 * 64% of FPGA design worldwide uses VHDL
 * 50% of FPGA verification worldwide uses VHDL
@@ -99,7 +99,7 @@ and I2C).
    Figure 2. OSVVM Testbench Framework
 
 
-For more details, including to OSVVM reference testbenches, see :ref:`VC/Axi4` and :ref:`VC/AxiStream`
+For more details, including to OSVVM reference testbenches, see :ref:`VC/Axi4` and :ref:`VC/AxiStream`.
 
 .. _FRAMEWORK/TestWriters/TestCtrlTheOSVVMTestSequencer:
 
@@ -201,7 +201,7 @@ and checking (:vhdlcode:`AffirmIfEqual`) it on another interface. The receiving 
      Send (TRec, X"11") ;
      . . .
 
-   end process TxProc
+   end process TxProc ;
 
 .. code-block:: VHDL
 
@@ -267,7 +267,7 @@ by the different interfaces is shown in :ref:`Table 1 <FRAMEWORK/TestWriters/Tab
    * - .. code-block:: VHDL
 
           Send(TransactionRec, X"DDDD") ;
-          Get(Transactionrec, DataOut) ;
+          Get(TransactionRec, DataOut) ;
           Check(TransactionRec, X"DDDD") ;
    * - Common Directive Transactions
    * - .. code-block:: VHDL
@@ -295,19 +295,19 @@ The OSVVM package, :vhdlcode:`RandomPkg`, provides a library of randomization ut
 :ref:`Figure 8 <FRAMEWORK/TestWriters/Figure8>`.
 
 .. code-block:: VHDL
-   :caption: Figure 8. Subset OSVVM's Random library
+   :caption: Figure 8. Subset of OSVVM's Random library
    :name: FRAMEWORK/TestWriters/Figure8
 
    -- Random Range:  randomly pick a value within a range
-   Data_slv8 := RV.RandSlv(Min => 0, Max => 15, 8) ;
+   Data_slv8 := RV.RandSlv(Min => 0, Max => 15, Size => 8) ;
 
    -- Random Set: randomly pick a value within a set
    Data1 := RV.RandInt( (1,2,3,5,7,11) ) ;
 
    -- Weighted distribution:  randomly pick a value between 0 and N-1
    -- where N is number of values in the argument
-   -- the likelyhood of each value = value / (sum of all values)
-   Data2 := RV.DistInt( (70, 10, 10, 5, 5) ;
+   -- the likelihood of each value = value / (sum of all values)
+   Data2 := RV.DistInt( (70, 10, 10, 5, 5) ) ;
 
 An OSVVM constrained random test consists of randomization plus code patterns plus transaction calls. For example, the
 code in :ref:`Figure 9 <FRAMEWORK/TestWriters/Figure9>` generates a UART test with normal transactions 70% of the time,
@@ -383,7 +383,7 @@ the transmit side did. Scoreboards can also be used to simplify checking in dire
    :name: FRAMEWORK/TestWriters/Figure11
 
    use work.ScoreboardPkg_uart.all ;
-   signal SB : work.Scoreboardpkg_uart.ScoreboardIDType;
+   signal SB : work.ScoreboardPkg_uart.ScoreboardIDType;
    . . .
    SB <= NewID("SB") ; -- Add to Control Process
 
@@ -442,7 +442,7 @@ adds functional coverage. First the coverage object (:vhdlcode:`RxCov`) is decla
 ":vhdlcode:`AddBins (RxCov, GenBin(N))`" is called to construct the functional coverage model. The value "N" corresponds
 to the integer representation of the UART status bits for Break, Stop, Parity, and Data Available. The calls to
 :vhdlcode:`AddBins` all complete at time 0, before any stimulus is generated or checked. Next, after the received
-stimulus has been retrieved (using :vhdlcode:`Get`), :vhdlcode:`Icover(RxCov, RxErrorMode)` is called to record the
+stimulus has been retrieved (using :vhdlcode:`Get`), :vhdlcode:`ICover(RxCov, RxErrorMode)` is called to record the
 coverage. At the end of the test, :vhdlcode:`WriteBin(RxCov)` prints the coverage results.
 
 .. code-block:: VHDL
@@ -546,7 +546,7 @@ usage of log and its output.
    %% Log   ALWAYS   In Testbench, Test 1 Starting at 1770 ns
 
 Logs are enabled or disabled using :vhdlcode:`SetLogEnable`. :ref:`Figure 16 <FRAMEWORK/TestWriters/Figure16>` shows
-"PASSED" being enabled for the enitre testbench and "INFO" being enabled only for :vhdlcode:`UartRx`. Generally this is
+"PASSED" being enabled for the entire testbench and "INFO" being enabled only for :vhdlcode:`UartRx`. Generally this is
 done in :vhdlcode:`ControlProc` at test initialization.
 
 .. code-block:: VHDL
@@ -554,7 +554,7 @@ done in :vhdlcode:`ControlProc` at test initialization.
    :name: FRAMEWORK/TestWriters/Figure16
 
    SetLogEnable(PASSED, TRUE) ;      -- Turn on PASSED for all VC
-   SetLogEnable(RxID, INFO, TRUE) ;  -- Turn on INFO for CpuID
+   SetLogEnable(RxID, INFO, TRUE) ;  -- Turn on INFO for RxID
 
 See the :ref:`UTILITY/AlertLogPkg` and :ref:`UTILITY/AlertLogPkgQuickRef` for more information about OSVVM's Alert
 capability (:vhdlcode:`Log`, :vhdlcode:`SetLogEnable`).
@@ -570,7 +570,7 @@ shown in :ref:`Figure 17 <FRAMEWORK/TestWriters/Figure17>`. Finalization starts 
 their corresponding :vhdlcode:`WaitForBarrier` (normal completion) or 5 ms passes. The 5 ms is a test timeout (watch
 dog) that activates if one of the test processes did not complete properly. The sequence of calls to :vhdlcode:`AlertIf`
 check for proper test finish conditions. :vhdlcode:`ReportAlerts` prints test results (see
-:ref:`Test Wide Reporting <FRAMEWORK/TestWriters/TestReporting>`).
+:ref:`Test Reporting <FRAMEWORK/TestWriters/TestReporting>`).
 
 .. code-block:: VHDL
    :caption: Figure 17. Test Finalization
@@ -596,12 +596,12 @@ synchronization capability (:vhdlcode:`WaitForBarrier`, :vhdlcode:`WaitForClock`
 Test Reporting
 **************
 
-At the end of the test, :vhdlcode:`EndOfTestReports` is called to create a text, YAML, HTML, and JUnit XML test reports.
+At the end of the test, :vhdlcode:`EndOfTestReports` is called to create text, YAML, HTML, and JUnit XML test reports.
 :vhdlcode:`EndOfTestReports` calls
 
 * :vhdlcode:`ReportAlerts` to generate a test completion report with PASSED/FAILED,
 * :vhdlcode:`WriteAlertSummaryYaml` to add an alert summary to the build report,
-* :vhdlcode:`WriteAlertYaml` to generate a detailed tests alert report, and
+* :vhdlcode:`WriteAlertYaml` to generate a detailed test alert report, and
 * :vhdlcode:`WriteCovYaml` to generate a detailed coverage report.
 
 For more details on :vhdlcode:`EndOfTestReports` see :vhdlcode:`AlertLogPkg` and :vhdlcode:`ReportPkg`
@@ -662,8 +662,8 @@ Alert Reports – YAML and HTML
 The alert report is the first half of the detailed test report. The call to :vhdlcode:`WriteAlertYaml` produces a
 detailed report of alerts as a YAML data structure. After a simulation completes, the :tclcode:`simulate` procedure
 calls :tclcode:`Simulate2Html` which in turn calls :tclcode:`Alert2Html` to convert this YAML data structure into the
-first part of the detailed test report show in in :ref:`Figure 20 <FRAMEWORK/TestWriters/Figure20>`. The detailed test
-report is in the file :file:`./reports/“test-name”.html`.
+first part of the detailed test report shown in :ref:`Figure 20 <FRAMEWORK/TestWriters/Figure20>`. The detailed test
+report is in the file :file:`./reports/"test-name".html`.
 
 .. figure:: images/TestWriters/Figure20.png
    :width: 626px
@@ -677,8 +677,8 @@ report is in the file :file:`./reports/“test-name”.html`.
 Coverage Reports - YAML and HTML
 ================================
 
-The alert report is the first half of the detailed test report. The call to :vhdlcode:`WriteCovYaml` produces a detailed
-report of the coverage models declared in a test as a YAML data structure. After a simulation completes, the
+The coverage report is the second half of the detailed test report. The call to :vhdlcode:`WriteCovYaml` produces a
+detailed report of the coverage models declared in a test as a YAML data structure. After a simulation completes, the
 :tclcode:`simulate` procedure calls :tclcode:`Simulate2Html` which in turn calls :tclcode:`Cov2Html` to convert this
 YAML data structure into the second part of the detailed test report shown in
 :ref:`Figure 21 <FRAMEWORK/TestWriters/Figure21>`. The detailed test report is in the file
@@ -697,9 +697,9 @@ Build Summary Report – YAML, HTML, and JUnit XML
 ================================================
 
 The call to :vhdlcode:`WriteAlertSummaryYaml` The OSVVM scripts as well as each OSVVM test case writes to the file
-:file:`OsvvmRun.yml` as a build is running. When build finishes, this file is renamed to :file:`“build-name”.yml`, and
-it is converted to both HTML and a JUnit XML file. A portion of the HTML based Test Suite report is shown in in
-:ref:`Figure 22 <FRAMEWORK/TestWriters/Figure22>`. The build summary report is in the file :file:`./ “build-name”.html`.
+:file:`OsvvmRun.yml` as a build is running. When build finishes, this file is renamed to :file:`"build-name".yml`, and
+it is converted to both HTML and a JUnit XML file. A portion of the HTML based Test Suite report is shown in
+:ref:`Figure 22 <FRAMEWORK/TestWriters/Figure22>`. The build summary report is in the file :file:`./"build-name".html`.
 
 .. figure:: images/TestWriters/Figure22.png
    :width: 624px

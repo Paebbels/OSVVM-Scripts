@@ -84,7 +84,7 @@ initialized.
 
 The :vhdlcode:`InitSeed` method supports either :vhdlcode:`string`, :vhdlcode:`integer`, :vhdlcode:`time`, or
 :vhdlcode:`integer_vector` parameters and uses a hash function to convert these values to the internal seed
-representation. Its overloading is as follows:
+representation.
 
 The overloading for the :vhdlcode:`InitSeed` is as follows.
 
@@ -103,7 +103,7 @@ The overloading for the :vhdlcode:`InitSeed` is as follows.
      IV                : integer_vector ;
      UseNewSeedMethods : boolean := RANDOM_USE_NEW_SEED_METHODS);
 
-The preferred way to give each seed a unique value is pass the string value, :vhdlcode:`RV'instance_name`. Be sure to
+The preferred way to give each seed a unique value is to pass the string value, :vhdlcode:`RV'instance_name`. Be sure to
 name the process when using this method.
 
 .. code-block:: VHDL
@@ -127,7 +127,7 @@ Basic Randomization
 The basic randomization generates a value that is either within some range or within a set of values. Optionally a set
 of exclude values can be specified. The set of values and exclude values are all of type :vhdlcode:`integer_vector`
 (VHDL-2008). The examples below show the basic randomization overloading. When a value of :vhdlcode:`integer_vector` is
-specifed, the extra set of parentheses denote that it is an aggregate value.
+specified, the extra set of parentheses denote that it is an aggregate value.
 
 .. code-block:: VHDL
 
@@ -144,10 +144,10 @@ specifed, the extra set of parentheses denote that it is an aggregate value.
      DataInt := RV.RandInt(1, 9, (2,4,6,8)) ;
      . . .
      -- Generate a value in set 1,3,5,7,9
-     DataInt := RV.RandInt( (1,3,7,9) ) ;  -- note two sets of parens required
+     DataInt := RV.RandInt( (1,3,5,7,9) ) ;  -- note two sets of parens required
      . . .
      -- Generate a value in set 1,3,5,7,9 except exclude values 3,7
-     DataInt := RV.RandInt((1,3,7,9), (3,7) ) ;
+     DataInt := RV.RandInt((1,3,5,7,9), (3,7) ) ;
 
 The overloading for the :vhdlcode:`RandInt` functions is as follows.
 
@@ -218,7 +218,7 @@ same overloading as :vhdlcode:`RandInt`. These are shown below:
    impure function RandTime
       (Min, Max : time ; Exclude : time_vector ; Unit : time := ns) return time ;
    impure function RandTime
-      (Min, Max : time ; Exclude : time_vector ; Unit : time) return time ;
+      (Min, Max : time ; Exclude : time ; Unit : time) return time ;
    impure function RandTime (A : time_vector) return time ;
    impure function RandTime (A, Exclude : time_vector) return time ;
    impure function RandTime (A : time_vector; Exclude : time) return time ;
@@ -277,11 +277,11 @@ The following illustrates the capability supported for :vhdlcode:`integer_vector
      -- Generate 15 integer values in range 1 to 9 except exclude values 2,4,6,8
     IntV := RV.RandIntV(1, 9, (2,4,6,8), 15) ;
      . . .
-     -- Generate 5 integer values value in set 1,3,5,7,9
-     IntV(1 to 5) := RV.RandIntV( (1,3,7,9), 5 ) ;
+     -- Generate 5 integer values in set 1,3,5,7,9
+     IntV(1 to 5) := RV.RandIntV( (1,3,5,7,9), 5 ) ;
      . . .
      -- Generate 15 integer values in set 1,3,5,7,9 except exclude values 3,7
-     IntV := RV.RandIntV((1,3,7,9), (3,7), 15) ;
+     IntV := RV.RandIntV((1,3,5,7,9), (3,7), 15) ;
 
      -- Generate 10 integer values in the range 0 to 99, do not repeat the last value
      IntV(1 to 10) := RV.RandIntV(0, 99, 1, 10) ;
@@ -291,11 +291,11 @@ The following illustrates the capability supported for :vhdlcode:`integer_vector
     IntV:= RV.RandIntV(1, 9, (2,4,6,8), 3, 15) ;
      . . .
      -- Generate 5 integer values in the set 1,3,5,7,9, do not repeat the last value
-     IntV(1 to 5) := RV.RandIntV( (1,3,7,9), 1, 5 ) ;
+     IntV(1 to 5) := RV.RandIntV( (1,3,5,7,9), 1, 5 ) ;
      . . .
      -- Generate 15 integer values in set 1,3,5,7,9 except exclude values 3,7
      -- Do not repeat last value
-     IntV := RV.RandIntV((1,3,7,9), (3,7), 1, 15) ;
+     IntV := RV.RandIntV((1,3,5,7,9), (3,7), 1, 15) ;
 
 The overloading for :vhdlcode:`integer_vector`, :vhdlcode:`real_vector`, or :vhdlcode:`time_vector` are as follows.
 
@@ -318,7 +318,7 @@ The overloading for :vhdlcode:`integer_vector`, :vhdlcode:`real_vector`, or :vhd
    integer_vector ;
    impure function RandIntV (A, Exclude : integer_vector ; Size : natural) return
    integer_vector ;
-   -- Range, Exclude, and Unique
+   -- Set, Exclude, and Unique
    impure function RandIntV (A : integer_vector ; Unique : natural ; Size : natural)
    return integer_vector ;
    impure function RandIntV (A, Exclude : integer_vector ; Unique : natural ; Size :
@@ -347,10 +347,10 @@ Overloading for :vhdlcode:`time_vector`:
    return time_vector;
    impure function RandTimeV (A, Exclude : time_vector; Size : natural) return
    time_vector ;
-   impure function RandTimeV (A, Exclude : time; Size : natural) return time_vector ;
+   impure function RandTimeV (A : time_vector; Exclude : time; Size : natural) return time_vector ;
    impure function RandTimeV (A, Exclude : time_vector; Unique : natural; Size :
    natural) return time_vector ;
-   impure function RandTimeV (A, Exclude : time; Unique : natural; Size : natural)
+   impure function RandTimeV (A : time_vector; Exclude : time; Unique : natural; Size : natural)
    return time_vector ;
 
 Overloading :vhdlcode:`real_vector`
@@ -375,7 +375,7 @@ Overloading :vhdlcode:`real_vector`
 Weighted Randomization
 **********************
 
-A weighted distribution randomly generates each of set of values a specified percentage of the time.
+A weighted distribution randomly generates each of a set of values a specified percentage of the time.
 :vhdlcode:`RandomPType` provides a weighted distribution that specifies a value and its weight (:vhdlcode:`DistValInt`)
 and one that only specifies weights (:vhdlcode:`DistInt`).
 
@@ -447,9 +447,8 @@ The Salt is set with a call to :vhdlcode:`SetRandomSalt`. The example below uses
 be more appropriate to use a generic.
 
 .. code-block:: VHDL
-   :force:
 
-   SetRandomSalt ("2022.1031") ; -- Today’s salt
+   SetRandomSalt ("2022.1031") ; -- Today's salt
 
 :vhdlcode:`SetRandomSalt` supports either a string or an integer parameter:
 
@@ -551,7 +550,7 @@ The following code segment uses an exclude list to keep from repeating the four 
 .. code-block:: VHDL
 
    RandProc : process
-     variable RV : RandomPtype ;
+     variable RV : RandomPType ;
      variable DataInt : integer ;
      variable Prev4DataInt : integer_vector(3 downto 0) := (others => integer'low) ;
    begin
@@ -575,7 +574,7 @@ powerful. Since all of the code is sequential, randomized sequences are readily 
 sequences.
 
 A simple demonstration of randomizing is the following test which uses heuristics (guesses) at length of bursts of data
-and delays between bursts of data to randomization traffic being sent to a FIFO.
+and delays between bursts of data to randomize traffic being sent to a FIFO.
 
 .. code-block:: VHDL
 
@@ -592,7 +591,7 @@ and delays between bursts of data to randomization traffic being sent to a FIFO.
      if BurstLen <= 3 then
        BurstDelay := RV.RandInt(1, 6) ;  -- small burst, small delay
      else
-       BurstDelay := RV.RandInt(3, 10) ; -- bigger burst, bugger delay
+       BurstDelay := RV.RandInt(3, 10) ; -- bigger burst, bigger delay
      end if ;
      wait for BurstDelay * tperiod_Clk - tpd ;
      wait until Clk = '1' ;
@@ -610,7 +609,7 @@ improve the previous test is to increase or decrease the burst length and delay 
 while full or read attempts while empty we have seen. To explore how to generate the coverage, see the
 :ref:`CoveragePkg documentation <UTILITY/CoveragePkg>`.
 
-For a design for which has numerous conditions we need to generate, we can do coverage on the input stimulus and then
+For a design which has numerous conditions we need to generate, we can do coverage on the input stimulus and then
 randomly select one of the uncovered conditions as the next transaction to be generated.
 
 Solutions for the two previous coverage driven randomization problems are provided in SynthWorks' VHDL Testbenches and
@@ -723,7 +722,7 @@ The package also provides experimental mechanisms for changing the distributions
 Sorting integer_vector
 **********************
 
-The package :vhdlcode:`SortListPkg_int` provides a :vhdlcode:`Sort` and :vhdlcode:`RevSort` functions for sorting type
+The package :vhdlcode:`SortListPkg_int` provides :vhdlcode:`Sort` and :vhdlcode:`RevSort` functions for sorting type
 :vhdlcode:`integer_vector`. The following example uses :vhdlcode:`RandIntV` and :vhdlcode:`Sort` to create a random set
 of 10 integer values between 0 and 255 that increase in value and do not repeat.
 

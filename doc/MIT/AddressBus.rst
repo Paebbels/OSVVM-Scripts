@@ -132,7 +132,7 @@ then run the demo. Code from the demo is shown in examples in the respective sec
 
 OSVVM is available on GitHub at https://github.com/OSVVM as a git repository or at https://osvvm.org/downloads as a ZIP
 file. Retrieve OSVVM from GitHub using git as shown in :ref:`Figure 1 <MIT/AddressBus/Figure1>`. Note that the
-"—recursive" option is required since the OSVVM repositories are submodules of OsvvmLibraries. Submodules greatly
+``--recursive`` option is required since the OSVVM repositories are submodules of OsvvmLibraries. Submodules greatly
 simplify development and deployment of the libraries.
 
 .. code-block:: shell
@@ -176,15 +176,15 @@ An interface transaction results in interface signaling to the DUT. An interface
 (such as :vhdlcode:`Write` or :vhdlcode:`Read`) or non-blocking (such as :vhdlcode:`WriteAsync` and
 :vhdlcode:`TryReadData`).
 
-A blocking transaction is an interface transaction that does not does not return (complete) until the interface
-operation requested by the transaction has completed.
+A blocking transaction is an interface transaction that does not return (complete) until the interface operation
+requested by the transaction has completed.
 
-An asynchronous transaction is nonblocking interface transaction that returns before the transaction has completed -
+An asynchronous transaction is a nonblocking interface transaction that returns before the transaction has completed -
 typically immediately and before the transaction has started. An asynchronous transaction has "Async" as part of its
 name.
 
-A Try transaction is nonblocking interface transaction that checks to see if transaction information is available, such
-as read data, and if it is returns it. A Try transaction has "Try" as part of its name.
+A Try transaction is a nonblocking interface transaction that checks to see if transaction information is available,
+such as read data, and if it is returns it. A Try transaction has "Try" as part of its name.
 
 An interface independent transaction can be implemented by any interface. An interface independent transaction contains
 all the information needed for an interface operation.
@@ -357,7 +357,7 @@ Interface Independent Burst Transactions
 ========================================
 
 Some interfaces support bursting, and some do not. Hence, support for burst transactions is optional. For an interface
-that does not support bursting, a burst may logically supported and implemented as multiple single cycle operations.
+that does not support bursting, a burst may logically be supported and implemented as multiple single cycle operations.
 
 .. _MIT/AddressBus/WriteBurst:
 
@@ -412,7 +412,8 @@ ReadBurst
 Example
 -------
 
-The following code does 16-word bursts. FIFO interaction is done separately with push and :vhdlcode:`CheckExpected`.
+The following code does 16-word bursts. FIFO interaction is done separately with :vhdlcode:`Push` and
+:vhdlcode:`CheckExpected`.
 
 .. code-block:: VHDL
 
@@ -493,7 +494,7 @@ The following code does 13-word bursts using a vector pattern.
 Burst with an Incrementing Pattern
 ----------------------------------
 
-Burst transactions that the first word as a :vhdlcode:`std_logic_vector` and additional words that are one larger in
+Burst transactions that use the first word as a :vhdlcode:`std_logic_vector` and additional words that are one larger in
 value.
 
 .. code-block:: VHDL
@@ -544,8 +545,8 @@ The following code does 12-word bursts with an incrementing pattern.
 Burst with a Random Pattern
 ---------------------------
 
-Burst transactions that the first word as a :vhdlcode:`std_logic_vector` and additional words that are one larger in
-value.
+Burst transactions that use the first word as a :vhdlcode:`std_logic_vector` and additional words that are randomly
+generated using the first word as the randomization seed.
 
 .. code-block:: VHDL
 
@@ -594,8 +595,7 @@ The following code does 13-word bursts with a random pattern.
 Burst with an Intelligent Coverage Random Pattern
 -------------------------------------------------
 
-Burst transactions that the first word as a :vhdlcode:`std_logic_vector` and additional words that are one larger in
-value.
+Burst transactions whose words are randomly generated using the coverage model.
 
 .. code-block:: VHDL
 
@@ -656,7 +656,7 @@ FIFO Fill and Check Patterns and Composite Bursts
 =================================================
 
 FIFO fill patterns can be used in conjunction with :vhdlcode:`WriteBurst` to build burst transactions that are a
-composite of Vector, Increment, and Random patterns. Likewise FIFO check patterns can be used with :vhdlcode:`GetBurst`
+composite of Vector, Increment, and Random patterns. Likewise FIFO check patterns can be used with :vhdlcode:`ReadBurst`
 in a similar fashion.
 
 FIFO fill and check patterns are implemented in :file:`FifoFillPkg_slv.vhd` (in the :vhdlcode:`osvvm_common` library).
@@ -1125,7 +1125,7 @@ Subordinate Transactions
 ************************
 
 Subordinate transactions supply the necessary transaction information so a subordinate verification component can
-respond an address bus cycle. These verification components primarily implement register addressable devices. As a
+respond to an address bus cycle. These verification components primarily implement register addressable devices. As a
 result, they do not support bursting.
 
 OSVVM supports bursting in memory-based verification components. These verification components allow a manager to
@@ -1268,7 +1268,7 @@ Write Transactions
    -- being transferred.
    ------------------------------------------------------------
      signal   TransactionRec : InOut AddressBusRecType ;
-     constant oAddr          : In    std_logic_vector ;
+     constant iAddr          : In    std_logic_vector ;
      variable oData          : Out   std_logic_vector ;
      variable Available      : Out   boolean ;
      constant StatusMsgOn    : In    boolean := false
@@ -1452,9 +1452,9 @@ BurstMode Control Directives
 ============================
 
 The burst FIFOs hold bursts of data that is to be sent to or was received from the interface. The burst FIFO can be
-configured in the modes defined for :vhdlcode:`StreamFifoBurstModeType`. Currently these modes defined as a subtype of
-integer. The intention of using integers is to facilitate model specific extensions without the need to define separate
-transactions.
+configured in the modes defined for :vhdlcode:`AddressBusFifoBurstModeType`. Currently these modes are defined as a
+subtype of integer. The intention of using integers is to facilitate model specific extensions without the need to
+define separate transactions.
 
 .. code-block:: VHDL
 
@@ -1558,15 +1558,15 @@ as directives, they can be used to create extended transaction support.
 
 .. _MIT/AddressBus/VerificationComponentsAndStreamModelIndependentTransactions:
 
-Verification Components and Stream Model Independent Transactions
-*****************************************************************
+Verification Components and Address Bus Model Independent Transactions
+**********************************************************************
 
 .. _MIT/AddressBus/AddressBusOperationType:
 
 AddressBusOperationType
 =======================
 
-:vhdlcode:`AddressBusOperationType` is an enumerated type that indicates to the verification component type of
+:vhdlcode:`AddressBusOperationType` is an enumerated type that indicates to the verification component the type of
 transaction that is being dispatched. Being an enumerated type, it allows the determination of the operation in the
 simulator’s waveform window. The tables in the following sections show the :vhdlcode:`AddressBusOperationType` value
 with the corresponding transactions in the Manager or Subordinate VC.
@@ -1862,7 +1862,7 @@ Initializing Burst FIFOs
 ------------------------
 
 The burst FIFOs need to be initialized. A good place to do this is in the transaction dispatcher of the verification
-components. :ref:`Figure 4 <MIT/AddressBus/Figure4>` shows the declaration of a :vhdlcode:`BurstFifo`.
+components. :ref:`Figure 4 <MIT/AddressBus/Figure4>` shows the initialization of a :vhdlcode:`BurstFifo`.
 
 .. code-block:: VHDL
    :caption: Figure 4. BurstFifo Initialization

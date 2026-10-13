@@ -32,7 +32,7 @@ NamePType
 Set
 ***
 
-The procedure :vhdlcode:`set` sets a name inside of the protected type. If name already exists, first deallocate it.
+The procedure :vhdlcode:`Set` sets a name inside of the protected type. If name already exists, first deallocate it.
 
 .. code-block:: VHDL
 
@@ -43,7 +43,7 @@ The procedure :vhdlcode:`set` sets a name inside of the protected type. If name 
 Get
 ***
 
-The function :vhdlcode:`get` returns the name that is held inside of the protected type.
+The function :vhdlcode:`Get` returns the name that is held inside of the protected type.
 
 .. code-block:: VHDL
 
