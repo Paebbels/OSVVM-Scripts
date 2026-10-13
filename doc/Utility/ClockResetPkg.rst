@@ -85,7 +85,7 @@ active edge value – its default is '1' (rising edge).
 Checking the Clock Period
 *************************
 
-The procedure :vhdlcode:`CheckClockPeriod` check that the clock period matches the :vhdlcode:`Period` parameter. It
+The procedure :vhdlcode:`CheckClockPeriod` checks that the clock period matches the :vhdlcode:`Period` parameter. It
 checks the first :vhdlcode:`HowMany` clocks.
 
 .. code-block:: VHDL
