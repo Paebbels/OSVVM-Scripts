@@ -72,7 +72,7 @@ interface. They are shown in :ref:`Figure 3 <FRAMEWORK/VCDevelopers/Figure3>`.
    :caption: Figure 3. Address Bus Model Independent Transactions (a subset)
    :name: FRAMEWORK/VCDevelopers/Figure3
 
-    Write(TRec, iAddr, iData, [MsgOn])
+   Write(TRec, iAddr, iData, [MsgOn])
 
    Read(TransactionRec, iAddr, oData, [StatusMsgOn])
 
@@ -161,8 +161,8 @@ Package References
 
 :ref:`Figure 5 <FRAMEWORK/VCDevelopers/Figure5>` shows the package references for the :vhdlcode:`DpRamController`. The
 library :vhdlcode:`osvvm_common` and its context reference supports usage of OSVVM's Model Independent Transactions. The
-library osvvm and its context reference supports usage of the OSVVM Utility library. The IEEE library and its package
-references support general VHDL modeling.
+library :vhdlcode:`osvvm` and its context reference supports usage of the OSVVM Utility library. The IEEE library and
+its package references support general VHDL modeling.
 
 .. code-block:: VHDL
    :caption: Figure 5. Package References
@@ -188,7 +188,7 @@ DpRamController Entity Interface
 The :vhdlcode:`DpRamController` entity interface has the DUT interface and a transaction record interface. This is shown
 in :ref:`Figure 6 <FRAMEWORK/VCDevelopers/Figure6>`. The transaction record tells the VC what to do. For clocked
 interfaces, each output changes after a propagation delay after clock rises. There is one generic of the form
-tpd_Clk\_<output> to specify a delay for each output.
+:vhdlcode:`tpd_Clk_<output>` to specify a delay for each output.
 
 .. code-block:: VHDL
    :caption: Figure 6. DpRamController Entity Interface
@@ -321,12 +321,12 @@ Creating the Write Operation
 ============================
 
 The Write Operation implements the interface behavior for a write cycle. When :vhdlcode:`WaitForTransaction` exits, the
-VC will be aligned to the rising edge of clock. Address and :vhdlcode:`oData` will be driven aligned to clock with a
-propagation delay specified by the output timing generics (tpd_Clk\_<output>). See
+VC will be aligned to the rising edge of clock. :vhdlcode:`Address` and :vhdlcode:`oData` will be driven aligned to
+clock with a propagation delay specified by the output timing generics (:vhdlcode:`tpd_Clk_<output>`). See
 :ref:`Figure 10 <FRAMEWORK/VCDevelopers/Figure10>`.
 
-The Address for the write operation is in the Address field of the transaction record. :vhdlcode:`SafeResize` is used to
-optionally resize the value as well as convert from the type used in the record
+The Address for the write operation is in the :vhdlcode:`Address` field of the transaction record.
+:vhdlcode:`SafeResize` is used to optionally resize the value as well as convert from the type used in the record
 (:vhdlcode:`osvvm.ResolutionPkg.std_logic_vector_max`) to :vhdlcode:`std_logic_vector`. Write data is in the
 :vhdlcode:`DataToModel` field of the transaction record.
 
@@ -353,8 +353,8 @@ that they can be filtered – meaning enabled or disabled by the test sequencer.
 information about what the VC is currently doing – such as this one which is at the point where the write operation is
 acted upon by the :vhdlcode:`DpRam`. The details of the log are shown in
 :ref:`Figure 11 <FRAMEWORK/VCDevelopers/Figure11>`. For details on Alert, Affirm, and Log please see the
-:vhdlcode:`AlertLogPkg` Users Guide. The final parameter to Log below is the transaction enable for the log. This allows
-the Log to be enabled for a single transaction without having to enable and then disable it.
+:vhdlcode:`AlertLogPkg` Users Guide. The final parameter to :vhdlcode:`Log` below is the transaction enable for the log.
+This allows the Log to be enabled for a single transaction without having to enable and then disable it.
 
 .. code-block:: VHDL
    :caption: Figure 11. Details of the Call to Log.
