@@ -11,7 +11,7 @@ Glossary
      :acs:`ID` of a :term:`requirement`, an affirmation counts for that requirement. The counts are in the AlertLog
      report (see :ref:`YAML/AlertLog`).
 
-     See also: :osvvmdoc:`AlertLogPkg user guide <AlertLogPkg_user_guide>`
+     See also: :ref:`AlertLogPkg user guide <UTILITY/AlertLogPkg>`
 
    Alert
      An *alert* is a message of a testbench, which counts as a problem: ``Alert`` of OSVVM's ``AlertLogPkg`` raises
@@ -19,7 +19,7 @@ Glossary
      error count other than 0 fails. The alert counts are in the AlertLog report (see :ref:`YAML/AlertLog` and
      :ref:`RPT/HTML/TestCase/Alerts`).
 
-     See also: :osvvmdoc:`AlertLogPkg user guide <AlertLogPkg_user_guide>`
+     See also: :ref:`AlertLogPkg user guide <UTILITY/AlertLogPkg>`
 
    Analyze
    Analysis
@@ -77,7 +77,7 @@ Glossary
      written into a :acs:`YAML` file per :term:`test case` (see :ref:`YAML/FunctionalCoverage` and
      :ref:`RPT/HTML/TestCase/Coverage`).
 
-     See also: :osvvmdoc:`CoveragePkg user guide <CoveragePkg_user_guide>`
+     See also: :ref:`CoveragePkg user guide <UTILITY/CoveragePkg>`
 
    Generic
      A *generic* is a parameter of a :acs:`VHDL` design unit. :ref:`RUFF/osvvm/generic` sets a top-level generic for
@@ -115,7 +115,7 @@ Glossary
      items; a :term:`test case` writes these counts into a :acs:`YAML` file per scoreboard package (see
      :ref:`YAML/ScoreBoard` and :ref:`RPT/HTML/TestCase/Scoreboards`).
 
-     See also: :osvvmdoc:`ScoreboardPkg user guide <ScoreboardPkg_user_guide>`
+     See also: :ref:`ScoreboardPkg user guide <UTILITY/ScoreboardPkg>`
 
    Settings File
      A *settings file* is a :acs:`Tcl` file, which sets OSVVM's variables. OSVVM loads its defaults
@@ -149,7 +149,7 @@ Glossary
      :term:`utility library` and :term:`verification components <verification component>`; a
      :term:`test case` simulates it.
 
-     See also: :osvvmdoc:`OSVVM test writer's user guide <OSVVM_test_writers_user_guide>`
+     See also: :ref:`OSVVM test writer's user guide <FRAMEWORK/TestWriters>`
 
    Transcript
      A *transcript* is the text output of a simulation. OSVVM writes the output of a whole :term:`build` into its log
@@ -172,8 +172,7 @@ Glossary
      which a :term:`testbench` controls with transactions. Each OSVVM verification component comes with its regression
      tests (see :ref:`UG/Scripts`).
 
-     See also: :osvvmdoc:`OSVVM verification component developer's guide
-     <OSVVM_verification_component_developers_guide>`
+     See also: :ref:`OSVVM verification component developer's guide <FRAMEWORK/VCDevelopers>`
 
    Working Directory
      The *working directory* is the directory of the running :term:`build script`. OSVVM's commands resolve relative

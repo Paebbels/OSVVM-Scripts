@@ -91,8 +91,7 @@ Abbreviations
       (like :acs:`UART`). A test case written with them works with every :term:`verification component` implementing
       the interface.
 
-      See also: :osvvmdoc:`Address bus MIT user guide <Address_Bus_Model_Independent_Transactions_user_guide>`,
-      :osvvmdoc:`Stream MIT user guide <Stream_Model_Independent_Transactions_user_guide>`
+      See also: :ref:`MIT`, :ref:`Address bus MIT <MIT/AddressBus>`, :ref:`Stream MIT <MIT/Stream>`
 
    OSVVM
       :long: Open Source VHDL Verification Methodology
