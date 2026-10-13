@@ -14,3 +14,11 @@
 .. role:: vhdlcode(code)
    :language: VHDL
    :class: highlight
+
+.. role:: cppcode(code)
+   :language: cpp
+   :class: highlight
+
+.. role:: ccode(code)
+   :language: c
+   :class: highlight
