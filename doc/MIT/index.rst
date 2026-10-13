@@ -14,3 +14,4 @@ Please support OSVVM by purchasing your VHDL training from SynthWorks.
    :maxdepth: 2
 
    AddressBus
+   Stream

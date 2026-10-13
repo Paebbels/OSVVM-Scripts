@@ -69,8 +69,16 @@ License
    :hidden:
 
    UserGuide/index
-   MIT/index
    Reports/index
+
+.. toctree::
+   :caption: OSVVM Libraries
+   :hidden:
+
+   Framework/index
+   Utility/index
+   MIT/index
+   VC/index
 
 .. raw:: latex
 
