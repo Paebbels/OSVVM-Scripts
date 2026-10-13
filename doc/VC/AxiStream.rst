@@ -15,10 +15,11 @@ are intended to be part of a structured test environment.
 The AxiStream verification components implement the complete AxiStream interface capability. They support bursting
 capability via :vhdlcode:`BurstFifos` in :vhdlcode:`StreamRecType` as well as through direct and algorithmic control of
 TLast during single word transfers. They support setting of TStrb and TKeep for either single word transfers or burst
-transfers. Within a burst transfer, they support sparse data streams (ie: TKeep=0 and/or TStrb=0). They support setting
-of TID, TDest, and TUser. For single word transfers, these can either be set from defaults in the VC or supplied as
-values to the transaction call. For Bursting, TID and TDest are intended to maintain their value throughout the entire
-transfer, and TUser can be set either for the entire transfer or on a word by word basis.
+transfers. Within a burst transfer, they support sparse data streams (ie: :vhdlcode:`TKeep=0` and/or
+:vhdlcode:`TStrb=0`). They support setting of TID, TDest, and TUser. For single word transfers, these can either be set
+from defaults in the VC or supplied as values to the transaction call. For Bursting, TID and TDest are intended to
+maintain their value throughout the entire transfer, and TUser can be set either for the entire transfer or on a word by
+word basis.
 
 For the test case programming API (used in a test sequencer), the AxiStream VCs support the OSVVM Stream Model
 Independent Transactions. Using this interface ensures uniformity and consistency with other OSVVM VCs and improves
@@ -63,16 +64,17 @@ Writing tests is all about creating waveforms at an interface. In a basic test a
 wiggles interface waveforms. This is tedious and error prone.
 
 In OSVVM, signal wiggling is replaced by transactions. A transaction is an abstract representation of an interface
-waveform (such as Send) or a directive to the VC (such as wait for clock). A transaction is initiated using a procedure
-call. In a VC based approach, the procedure call collects the transaction information and passes it to the AxiStream VC
-via a transaction interface (a record). The AxiStream VC then decodes this information and creates the corresponding
-interface waveforms.
+waveform (such as :vhdlcode:`Send`) or a directive to the VC (such as wait for clock). A transaction is initiated using
+a procedure call. In a VC based approach, the procedure call collects the transaction information and passes it to the
+AxiStream VC via a transaction interface (a record). The AxiStream VC then decodes this information and creates the
+corresponding interface waveforms.
 
 Using transactions simplifies creating tests and increases their readability. :ref:`Figure 2 <VC/AxiStream/Figure2>`
-shows calls to the Send and :vhdlcode:`WaitForClock` transactions and the corresponding waveforms produced by the
-:vhdlcode:`AxiStreamTransmitter` verification component. Note this waveform implies that during the cycle in which data
-values A1, A3, A4, and A6 were sent, the AxiStream receiver was ready to receive TData and during the cycle in which
-data values A2 and A4 were sent, the AxiStream receiver was not ready to receive TData until a clock cycle later.
+shows calls to the :vhdlcode:`Send` and :vhdlcode:`WaitForClock` transactions and the corresponding waveforms produced
+by the :vhdlcode:`AxiStreamTransmitter` verification component. Note this waveform implies that during the cycle in
+which data values A1, A3, A4, and A6 were sent, the AxiStream receiver was ready to receive TData and during the cycle
+in which data values A2 and A4 were sent, the AxiStream receiver was not ready to receive TData until a clock cycle
+later.
 
 .. figure:: images/AxiStream/Figure02.png
    :width: 542px
@@ -92,7 +94,7 @@ implements the transaction interface as a record.
 Stream Transaction Interface, :vhdlcode:`StreamRecType`, is used to connect the verification component to
 :vhdlcode:`TestCtrl`. :vhdlcode:`StreamRecType`, shown in :ref:`Figure 3 <VC/AxiStream/Figure3>`, is defined in the
 Stream Model Independent Transaction package, :file:`StreamTransactionPkg.vhd`, which is in the directory
-:vhdlcode:`OsvvmLbraries`/Common/Src.
+:file:`OsvvmLbraries/Common/Src`.
 
 .. code-block:: VHDL
    :caption: Figure 3. StreamRecType
@@ -205,12 +207,13 @@ simplify development and deployment of the libraries.
 
    git clone --recursive https://github.com/OSVVM/OsvvmLibraries.git
 
-Prior to starting the OSVVM scripting environment, create a directory named sim in which to run your simulations. Start
-your simulator and go to the sim directory. Once there, use the steps in :ref:`Figure 7 <VC/AxiStream/Figure7>` to build
-the OSVVM Libraries (utility and verification component). These directions are supported in Mentor QuestaSim/ModelSim or
-Aldec RivieraPRO. Aldec's ActiveHDL, Synopsys' VCS, and Cadence's Xcelium are also supported but require a few extra
-steps. For these steps and additional details of the OSVVM scripting environment see
-:osvvmdoc:`Script_user_guide.pdf <Script_user_guide>` (in :file:`OsvvmLibraries/Documentation`).
+Prior to starting the OSVVM scripting environment, create a directory named :file:`sim` in which to run your
+simulations. Start your simulator and go to the :file:`sim` directory. Once there, use the steps in
+:ref:`Figure 7 <VC/AxiStream/Figure7>` to build the OSVVM Libraries (utility and verification component). These
+directions are supported in Mentor QuestaSim/ModelSim or Aldec RivieraPRO. Aldec's ActiveHDL, Synopsys' VCS, and
+Cadence's Xcelium are also supported but require a few extra steps. For these steps and additional details of the OSVVM
+scripting environment see :osvvmdoc:`Script_user_guide.pdf <Script_user_guide>` (in
+:file:`OsvvmLibraries/Documentation`).
 
 .. code-block:: tcl
    :caption: Figure 7. Building OSVVM and running the Demo
@@ -254,7 +257,7 @@ similar to what is discussed here for AxiStream.
 Prior to doing this step, do the steps in section 3, Demo Preparation.
 
 Use the steps in :ref:`Figure 8 <VC/AxiStream/Figure8>` to compile and run the tests for the Axi4 verification
-components. If you have not exited the simulator, you only need to do the "build" step.
+components. If you have not exited the simulator, you only need to do the ":tclcode:`build`" step.
 
 .. code-block:: tcl
    :caption: Figure 8. Compiling and Running OSVVM
@@ -498,9 +501,9 @@ values for TID, TDest, TUser, and TLast. In :vhdlcode:`AxiStreamTransmitter`, th
 :vhdlcode:`INIT_DEST`, and :vhdlcode:`INIT_USER` are specified, they must be the same size as their corresponding
 interface signals.
 
-The remaining generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. Tpd_Clk\_\* specifies the
-delay for each interface output. See the file :file:`AxiStreamTransmitter.vhd` and :file:`AxiStreamReceiver.vhd` for the
-details of the generics.
+The remaining generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. :vhdlcode:`Tpd_Clk_*`
+specifies the delay for each interface output. See the file :file:`AxiStreamTransmitter.vhd` and
+:file:`AxiStreamReceiver.vhd` for the details of the generics.
 
 .. _VC/AxiStream/TbStreamVirtualTransactionInterface:
 
@@ -529,7 +532,7 @@ similar to what is discussed here for AxiStream.
 Prior to doing this step, do the steps in section 3, Demo Preparation.
 
 Use the steps in :ref:`Figure 14 <VC/AxiStream/Figure14>` to compile and run the tests for the Axi4 verification. If you
-have not exited the simulator, you only need to do the "build" step.
+have not exited the simulator, you only need to do the ":tclcode:`build`" step.
 
 .. code-block:: tcl
    :caption: Figure 14. Compiling and Running OSVVM
@@ -786,9 +789,9 @@ values for TID, TDest, TUser, and TLast. In :vhdlcode:`AxiStreamTransmitter`, th
 :vhdlcode:`INIT_DEST`, and :vhdlcode:`INIT_USER` are specified, they must be the same size as their corresponding
 interface signals.
 
-The remaining generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. Tpd_Clk\_\* specifies the
-delay for each interface output. See the file :file:`AxiStreamTransmitter.vhd` and :file:`AxiStreamReceiver.vhd` for the
-details of the generics.
+The remaining generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. :vhdlcode:`Tpd_Clk_*`
+specifies the delay for each interface output. See the file :file:`AxiStreamTransmitter.vhd` and
+:file:`AxiStreamReceiver.vhd` for the details of the generics.
 
 .. _VC/AxiStream/WritingTestsUsingTheAxiStreamVC:
 
@@ -801,9 +804,10 @@ particular aspect of the design. Hence, an entire test is visible in a single fi
 
 The :vhdlcode:`TestCtrl` architecture consists of a control process plus one process per independent interface, see
 :ref:`Figure 20 <VC/AxiStream/Figure20>`. The control process is used for test initialization and finalization. Each
-test process creates interface waveform sequences by calling the transaction procedures (Send, :vhdlcode:`SendBurst`,
-Get, :vhdlcode:`GetBurst`, Check, :vhdlcode:`CheckBurst` …). This test architecture is based on the test
-:file:`TbStream_SendGet1.vhd` in the directory :file:`OsvvmLibraries/AXI4/AxiStream/testbench`.
+test process creates interface waveform sequences by calling the transaction procedures (:vhdlcode:`Send`,
+:vhdlcode:`SendBurst`, :vhdlcode:`Get`, :vhdlcode:`GetBurst`, :vhdlcode:`Check`, :vhdlcode:`CheckBurst` …). This test
+architecture is based on the test :file:`TbStream_SendGet1.vhd` in the directory
+:file:`OsvvmLibraries/AXI4/AxiStream/testbench`.
 
 For more details on writing tests, see the OSVVM Test Writers User Guide. For examples of using specific Stream
 transactions, see the Stream Model Independent Transactions User Guide.
@@ -903,11 +907,12 @@ The parameter TRec is an abbreviation for the :vhdlcode:`TransactionRec` paramet
 an abbreviation for the :vhdlcode:`StatusMsgOn` parameter.
 
 Here the Param (input) parameter specifies the values ID & Dest & User & Last (in that order). If less than
-:vhdlcode:`ID'length` + Dest'lengh + :vhdlcode:`User'length` + 1 values are specified, the left-most values will be
-filled with a '-'. As an input, a value of '-' indicates the corresponding field is not specified and will use the
-default value :vhdlcode:`DEFAULT_ID`, :vhdlcode:`DEFAULT_DEST`, :vhdlcode:`DEFAULT_USER`, and :vhdlcode:`DEFAULT_LAST`
-(see AxiStream Parameters). For :vhdlcode:`SendBurst` and :vhdlcode:`SendBurstAsync` when the :vhdlcode:`BurstMode` is
-:vhdlcode:`STREAM_BURST_WORD_PARAM_MODE` the value in the :vhdlcode:`BurstFifo` specifies (Data & User).
+:vhdlcode:`ID'length` + :vhdlcode:`Dest'lengh` + :vhdlcode:`User'length` + 1 values are specified, the left-most values
+will be filled with a '-'. As an input, a value of '-' indicates the corresponding field is not specified and will use
+the default value :vhdlcode:`DEFAULT_ID`, :vhdlcode:`DEFAULT_DEST`, :vhdlcode:`DEFAULT_USER`, and
+:vhdlcode:`DEFAULT_LAST` (see AxiStream Parameters). For :vhdlcode:`SendBurst` and :vhdlcode:`SendBurstAsync` when the
+:vhdlcode:`BurstMode` is :vhdlcode:`STREAM_BURST_WORD_PARAM_MODE` the value in the :vhdlcode:`BurstFifo` specifies (Data
+& User).
 
 :vhdlcode:`NumFifoWords` (input) specifies the number of words in the :vhdlcode:`BurstFifo`. Note that when in the mode,
 :vhdlcode:`STREAM_BURST_BYTE_MODE`, this will be the number of bytes in the transfer, otherwise it is the number of
@@ -970,14 +975,14 @@ Independent Transactions User Guide.
 The parameter TRec is an abbreviation for the :vhdlcode:`TransactionRec` parameter. The parameter :vhdlcode:`MsgOn` is
 an abbreviation for the :vhdlcode:`StatusMsgOn` parameter.
 
-Here the Param parameter specifies the values ID & Dest & User & Last (in that order). For Get, :vhdlcode:`TryGet`,
-:vhdlcode:`GetBurst`, :vhdlcode:`TryGetBurst` the Param parameter returns the values that were received by TID, TDest,
-TUser, and TLast.
+Here the Param parameter specifies the values ID & Dest & User & Last (in that order). For :vhdlcode:`Get`,
+:vhdlcode:`TryGet`, :vhdlcode:`GetBurst`, :vhdlcode:`TryGetBurst` the Param parameter returns the values that were
+received by TID, TDest, TUser, and TLast.
 
-For Check, :vhdlcode:`TryCheck`, :vhdlcode:`CheckBurst` and :vhdlcode:`TryCheckBurst`, Param parameter is an input. If
-less than :vhdlcode:`ID'length` + Dest'lengh + :vhdlcode:`User'length` + 1 values are specified, the left-most values
-will be filled with a '-'. As an input, a value of '-' indicates the corresponding field is not specified and will use
-the default value :vhdlcode:`DEFAULT_ID`, :vhdlcode:`DEFAULT_DEST`, :vhdlcode:`DEFAULT_USER`, and
+For :vhdlcode:`Check`, :vhdlcode:`TryCheck`, :vhdlcode:`CheckBurst` and :vhdlcode:`TryCheckBurst`, Param parameter is an
+input. If less than :vhdlcode:`ID'length` + :vhdlcode:`Dest'lengh` + :vhdlcode:`User'length` + 1 values are specified,
+the left-most values will be filled with a '-'. As an input, a value of '-' indicates the corresponding field is not
+specified and will use the default value :vhdlcode:`DEFAULT_ID`, :vhdlcode:`DEFAULT_DEST`, :vhdlcode:`DEFAULT_USER`, and
 :vhdlcode:`DEFAULT_LAST` (see AxiStream Parameters). For :vhdlcode:`CheckBurst` or :vhdlcode:`TryCheckBurst` when the
 :vhdlcode:`BurstMode` is :vhdlcode:`STREAM_BURST_WORD_PARAM_MODE` the value in the :vhdlcode:`BurstFifo` specifies (Data
 & User).
@@ -1137,19 +1142,24 @@ Options common to AxiStreamTransmitter and AxiStreamReceiver
    :header-rows: 0
    :widths: 194 508
 
-   * - :vhdlcode:`DEFAULT_ID` :vhdlcode:`std_logic_vector`
-     - Default value for TID if not specified in a send or check. Initial value = :vhdlcode:`INIT_ID` (generic) if set,
-       otherwise 0
-   * - :vhdlcode:`DEFAULT_DEST` :vhdlcode:`std_logic_vector`
-     - Default value for TDest if not specified in a send or check. Initial value = :vhdlcode:`INIT_DEST` (generic) if
-       set, otherwise 0.
-   * - :vhdlcode:`DEFAULT_USER` :vhdlcode:`std_logic_vector`
-     - Default value for TUser if not specified in a send or check. Initial value = :vhdlcode:`INIT_USER` (generic) if
-       set, otherwise 0
-   * - :vhdlcode:`DEFAULT_LAST` integer
-     - Default value for TLast if not specified in a send or check. If value <= 1, then TLast =
-       ??(:vhdlcode:`DEFAULT_LAST`\ =1). If value > 1, then TLast = ??(:vhdlcode:`NumOperations` mod
-       :vhdlcode:`DEFAULT_LAST` = 0). Initial value = :vhdlcode:`INIT_LAST` (generic) which defaults to 0.
+   * - | :vhdlcode:`DEFAULT_ID`
+       | :vhdlcode:`std_logic_vector`
+     - | Default value for TID if not specified in a send or check.
+       | Initial value = :vhdlcode:`INIT_ID` (generic) if set, otherwise 0
+   * - | :vhdlcode:`DEFAULT_DEST`
+       | :vhdlcode:`std_logic_vector`
+     - | Default value for TDest if not specified in a send or check.
+       | Initial value = :vhdlcode:`INIT_DEST` (generic) if set, otherwise 0.
+   * - | :vhdlcode:`DEFAULT_USER`
+       | :vhdlcode:`std_logic_vector`
+     - | Default value for TUser if not specified in a send or check.
+       | Initial value = :vhdlcode:`INIT_USER` (generic) if set, otherwise 0
+   * - | :vhdlcode:`DEFAULT_LAST`
+       | integer
+     - | Default value for TLast if not specified in a send or check.
+       | If value <= 1, then TLast = :vhdlcode:`??(DEFAULT_LAST=1)`.
+       | If value > 1, then TLast = :vhdlcode:`??(NumOperations mod DEFAULT_LAST = 0)`.
+       | Initial value = :vhdlcode:`INIT_LAST` (generic) which defaults to 0.
 
 The following set defaults for TID, TDest, and TUser. Note that the :vhdlcode:`std_logic_vector` value must match the
 size of the corresponding interface object.
@@ -1182,12 +1192,15 @@ fixed delay) or randomized.
    :header-rows: 0
    :widths: 324 378
 
-   * - :vhdlcode:`TRANSMIT_VALID_DELAY_CYCLES` Integer. Initialized to 0
+   * - | :vhdlcode:`TRANSMIT_VALID_DELAY_CYCLES`
+       | Integer. Initialized to 0
      - Specifies the number of cycles before a transaction starts once the :vhdlcode:`AxiStreamTransmitter` receives
        the transaction.
-   * - :vhdlcode:`TRANSMIT_VALID_BURST_DELAY_CYCLES` Integer. Initialized to 0
+   * - | :vhdlcode:`TRANSMIT_VALID_BURST_DELAY_CYCLES`
+       | Integer. Initialized to 0
      - Specifies the number of cycles between each word during a burst cycle.
-   * - :vhdlcode:`TRANSMIT_READY_TIME_OUT` Integer. Initialized to :vhdlcode:`integer'right`
+   * - | :vhdlcode:`TRANSMIT_READY_TIME_OUT`
+       | Integer. Initialized to :vhdlcode:`integer'right`
      - Generates FAILURE if TValid is asserted for more specified number of clocks without TReady. Disable by setting
        to Integer’right.
 
@@ -1243,18 +1256,21 @@ The delay coverage model can be changed using :vhdlcode:`SetDelayCoverageID`.
    :header-rows: 0
    :widths: 324 378
 
-   * - :vhdlcode:`RECEIVE_READY_BEFORE_VALID` Boolean. Initialized to TRUE.
+   * - | :vhdlcode:`RECEIVE_READY_BEFORE_VALID`
+       | Boolean. Initialized to TRUE.
      - If TRUE generate TReady even if TValid is not asserted.
-   * - :vhdlcode:`RECEIVE_READY_DELAY_CYCLES` Integer. Initialized to 0.
-     - Number of clock cycles to delay assertion of TReady. If :vhdlcode:`READY_BEFORE_VALID` is TRUE, then number of
-       clocks from previous cycle ending. If :vhdlcode:`READY_BEFORE_VALID` is FALSE, then the number of clocks after
-       RValid.
-   * - :vhdlcode:`DROP_UNDRIVEN` Boolean. Initialized to FALSE.
+   * - | :vhdlcode:`RECEIVE_READY_DELAY_CYCLES`
+       | Integer. Initialized to 0.
+     - | Number of clock cycles to delay assertion of TReady.
+       | If :vhdlcode:`READY_BEFORE_VALID` is TRUE, then number of clocks from previous cycle ending.
+       | If :vhdlcode:`READY_BEFORE_VALID` is FALSE, then the number of clocks after RValid.
+   * - | :vhdlcode:`DROP_UNDRIVEN`
+       | Boolean. Initialized to FALSE.
      - If TRUE, then undriven values in a burst stream are not copied to a BYTE wide burst FIFO. Has no impact if the
        :vhdlcode:`BurstFifo` is word oriented (default).
    * - :vhdlcode:`RECEIVE_READY_WAIT_FOR_GET`
-     - If TRUE, do not drive ready until a Get, :vhdlcode:`GetBurst`, :vhdlcode:`TryGet`, or :vhdlcode:`TryGetBurst` is
-       called.
+     - If TRUE, do not drive ready until a :vhdlcode:`Get`, :vhdlcode:`GetBurst`, :vhdlcode:`TryGet`, or
+       :vhdlcode:`TryGetBurst` is called.
 
 When :vhdlcode:`RECEIVE_READY_BEFORE_VALID` is TRUE, then :vhdlcode:`RECEIVE_READY_DELAY_CYCLES` is a relative to when
 the last transfer completed. :ref:`Figure 21 <VC/AxiStream/Figure21>` shows :vhdlcode:`RECEIVE_READY_DELAY_CYCLES` = 2
@@ -1343,12 +1359,13 @@ data. A value of '0' indicates it is a filler value. A TKeep value of '1' indica
 filler value that may not be dropped. A value of '0' indicates the value may be dropped by the interface.
 
 Rather than supplying this sort of information as a value in the transaction call, the OSVVM
-:vhdlcode:`AxiStreamTransmitter` VC uses a data value of X"UU" to indicate the data byte is to have TStrb = '0' and
-TKeep = '0' and a data value of X"WW" to indicate the data byte is to have TStrb = '0' and TKeep = '1'. This applies to
-values supplied either via the Send transaction or via the :vhdlcode:`BurstFifo` for a :vhdlcode:`SendBurst`
-transaction.
+:vhdlcode:`AxiStreamTransmitter` VC uses a data value of :vhdlcode:`X"UU"` to indicate the data byte is to have
+:vhdlcode:`TStrb = '0'` and :vhdlcode:`TKeep = '0'` and a data value of :vhdlcode:`X"WW"` to indicate the data byte is
+to have :vhdlcode:`TStrb = '0'` and :vhdlcode:`TKeep = '1'`. This applies to values supplied either via the
+:vhdlcode:`Send` transaction or via the :vhdlcode:`BurstFifo` for a :vhdlcode:`SendBurst` transaction.
 
-Similarly, in the :vhdlcode:`AxiStreamReceiver` VC, when TKeep = '0', then the corresponding data byte will be X"UU" and
-if TKeep = '1' and TStrb = '0', then the corresponding data byte will be X"WW". If the transaction is a
-:vhdlcode:`GetBurst`, and the :vhdlcode:`BurstFIFO` is configured to receive bytes, and the :vhdlcode:`DropUndriven` VC
-parameter is TRUE, and the received byte is X"UU", then it will be dropped (ie not put into the :vhdlcode:`BurstFIFO`).
+Similarly, in the :vhdlcode:`AxiStreamReceiver` VC, when :vhdlcode:`TKeep = '0'`, then the corresponding data byte will
+be :vhdlcode:`X"UU"` and if :vhdlcode:`TKeep = '1'` and :vhdlcode:`TStrb = '0'`, then the corresponding data byte will
+be :vhdlcode:`X"WW"`. If the transaction is a :vhdlcode:`GetBurst`, and the :vhdlcode:`BurstFIFO` is configured to
+receive bytes, and the :vhdlcode:`DropUndriven` VC parameter is TRUE, and the received byte is :vhdlcode:`X"UU"`, then
+it will be dropped (ie not put into the :vhdlcode:`BurstFIFO`).
