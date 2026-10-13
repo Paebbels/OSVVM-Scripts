@@ -221,8 +221,8 @@ PrintLine
 =========
 
 :vhdlcode:`Print` prints the string using the transcript capability. Like :vhdlcode:`Alert` and :vhdlcode:`Log`,
-:vhdlcode:`PrintLine` prefixes the line with :vhdlcode:`OSVVM_PRINT_PREFIX`. In addition, like :vhdlcode:`Log`, print
-allows message filtering using :vhdlcode:`Level` and :vhdlcode:`AlertLogID`. Unlike :vhdlcode:`Log`,
+:vhdlcode:`PrintLine` prefixes the line with :vhdlcode:`OSVVM_PRINT_PREFIX`. In addition, like :vhdlcode:`Log`,
+:vhdlcode:`print` allows message filtering using :vhdlcode:`Level` and :vhdlcode:`AlertLogID`. Unlike :vhdlcode:`Log`,
 :vhdlcode:`PrintLine` does not print the time, "log", or the Log level.
 
 .. code-block:: VHDL
@@ -296,7 +296,7 @@ Compiling and Using OSVVM Utility Library
 *****************************************
 
 Compilation order for OSVVM Utility Library is in :file:`CHANGELOG.md` and :file:`osvvm.pro`. To run :file:`osvvm.pro`
-see the Script User Guide.
+see the :ref:`Script User Guide <UG>`.
 
 OSVVM Utility library is released under the Apache open source license. It is free (both to download and use - there are
 no license fees). You can download it from osvvm.org or from our development area on GitHub
