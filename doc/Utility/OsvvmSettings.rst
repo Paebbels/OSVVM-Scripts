@@ -159,18 +159,18 @@ Shared Settings for All Packages
      - Default time units for printing
      - 1 ns
    * - :vhdlcode:`OSVVM_DIGITS_FOR_TIME_FRACTION`
-     - Digits to print in a time fraction – see format
+     - Digits to print in a time fraction – see :ref:`format <UTILITY/TextUtilPkg/Format>`
      - 3
    * - :vhdlcode:`OSVVM_MAX_DIGITS_FOR_FIXED_POINT_REAL`
-     - | Digits to print in fixed point – see format
+     - | Digits to print in fixed point – see :ref:`format <UTILITY/TextUtilPkg/Format>`
        | Switches to exponent notation after this
      - 8
    * - :vhdlcode:`OSVVM_DIGITS_FOR_REAL_FRACTION`
-     - Fraction digits for real – see format
+     - Fraction digits for real – see :ref:`format <UTILITY/TextUtilPkg/Format>`
      - 4
    * - :vhdlcode:`OSVVM_MAX_TIME_DECIMAL_DIGITS`
-     - Size of string used in format for time. Max number of 10**digits in 2**62 – 1 = 19 digits plus 1 for decimal
-       point plus 2 for margin.
+     - Size of string used in :vhdlcode:`format` for time. Max number of 10**digits in 2**62 – 1 = 19 digits plus 1 for
+       decimal point plus 2 for margin.
      - 22
 
 .. _UTILITY/OsvvmSettings/SettingsForRequirementsTracking:
@@ -582,8 +582,9 @@ OsvvmSettingsLocal.tcl
 **********************
 
 :file:`OsvvmSettingsLocal.tcl` is used to configure script settings. A template is provided in the
-:file:`OsvvmSettingsLocal_Example.tcl` in directory :file:`OsvvmLibraries/Scripts`. See the next section Settings
-Directory for where you should put :file:`OsvvmSettingsLocal.tcl`.
+:file:`OsvvmSettingsLocal_Example.tcl` in directory :file:`OsvvmLibraries/Scripts`. See the next section
+:ref:`Settings Directory <UTILITY/OsvvmSettings/OSVVMSettingsDirectoryForVHDLAndScriptSettings>` for where you should
+put :file:`OsvvmSettingsLocal.tcl`.
 
 .. _UTILITY/OsvvmSettings/StructureOfOsvvmSettingsLocalTcl:
 
