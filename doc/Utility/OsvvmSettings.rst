@@ -96,13 +96,13 @@ If for some reason, these values are not appropriate, you may override them by c
 OsvvmSettingsPkg
 ****************
 
-:vhdlcode:`OsvvmSettingsPkg` defines constants that used by the OSVVM Utility Library. Mostly these constants are used
-to allow changes in behavior to be made to the OSVVM utilities while supporting alternate settings to maintain backward
-compatibility.
+:vhdlcode:`OsvvmSettingsPkg` defines constants that are used by the OSVVM Utility Library. Mostly these constants are
+used to allow changes in behavior to be made to the OSVVM utilities while supporting alternate settings to maintain
+backward compatibility.
 
 These settings are important as improving the quality of the random seed hash functions will change the results produced
-by all tests cases that use randomization. Having these change late in a project when test cases are stable and
-producing required coverage would be bad. Having these change at the beginning of a new project has no impact at all.
+by all test cases that use randomization. Having these change late in a project when test cases are stable and producing
+required coverage would be bad. Having these change at the beginning of a new project has no impact at all.
 
 Note many of these settings are formulated using :vhdlcode:`OSVVM_SETTINGS_REVISION`, a constant from
 :vhdlcode:`OsvvmScriptSettingsPkg`. :vhdlcode:`OSVVM_SETTINGS_REVISION` in turn is generated from the Tcl variable
@@ -419,7 +419,7 @@ Alert/Log Detailed Printing Control
        of :vhdlcode:`ALERT_LOG_WRAP` setting
      - :vhdlcode:`'>'`
    * - :vhdlcode:`ALERT_LOG_INDENTED_LENGTH`
-     - Number of characters to indent for an indented wrap line. 21 is aligns with printing Alert/Log
+     - Number of characters to indent for an indented wrap line. 21 aligns with printing Alert/Log
      - 21
    * - :vhdlcode:`ALERT_LOG_JUSTIFY_ENABLE`
      - | Align printing of the message at the end of the Alert/Log
@@ -445,7 +445,7 @@ Alert/Log Detailed Printing Control
      - FALSE
    * - :vhdlcode:`ALERT_LOG_WRITE_TIME_FIRST`
      - | In Alert/Log print time first
-       | For releases 2024 and later or if :vhdlcode:`ALSERT_LOG_WRAP` is true
+       | For releases 2024 and later or if :vhdlcode:`ALERT_LOG_WRAP` is true
        | Otherwise
      - | TRUE
        | FALSE
@@ -537,7 +537,7 @@ previous settings, one can do the following in their :file:`OsvvmSettingsPkg_loc
    ALERT_LOG_SPACES_BEFORE_ID_NAME: "  "
 
 Only the settings that need to be changed are needed in the file. The value to the right of the ": " should be a legal
-VHDL value that is appropriate a constant of its type.
+VHDL value that is appropriate for a constant of its type.
 
 To apply the settings, the scripts read :file:`OsvvmSettingsPkg_default.vset` to establish the default settings.
 Then :file:`${SettingsDirectory}/OsvvmSettingsPkg_local.vset` is read to override the default settings.
@@ -582,7 +582,7 @@ OsvvmSettingsLocal.tcl
 **********************
 
 :file:`OsvvmSettingsLocal.tcl` is used to configure script settings. A template is provided in the
-:file:`OsvvmSettingsLocal_Example.tcl` in directory :file:`OsvvmLibraries/Scripts`. See the next section
+:file:`OsvvmSettingsLocal_example.tcl` in directory :file:`OsvvmLibraries/Scripts`. See the section
 :ref:`Settings Directory <UTILITY/OsvvmSettings/OSVVMSettingsDirectoryForVHDLAndScriptSettings>` for where you should
 put :file:`OsvvmSettingsLocal.tcl`.
 
@@ -761,7 +761,7 @@ What Should Generate TCL Errors
 Stop Build on Number of Analyze and Simulate Errors
 ===================================================
 
-Stop build when :tclcode:`AnalyzeErrorStopCount` and :tclcode:`SimulteErrorStopCount` errors have occurred. If the
+Stop build when :tclcode:`AnalyzeErrorStopCount` and :tclcode:`SimulateErrorStopCount` errors have occurred. If the
 value is 0, then do not stop. Do not stop is appropriate for regression runs.
 
 .. code-block:: tcl
