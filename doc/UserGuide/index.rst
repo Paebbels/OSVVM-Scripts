@@ -1,7 +1,7 @@
 .. _UG:
 
-User Guide
-##########
+OSVVM Scripting Guide
+#####################
 
 OSVVM-Scripts is an :acs:`API` layer on top of :acs:`Tcl`. It runs the same :term:`project scripts <build script>` on
 many simulators: it compiles (:term:`analyzes <analysis>`) :acs:`VHDL` and Verilog files into

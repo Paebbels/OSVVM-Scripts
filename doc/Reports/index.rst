@@ -1,7 +1,7 @@
 .. _RPT:
 
-Reports
-#######
+Regression Testing and Reports
+##############################
 
 Good reports simplify debug and help find problems quickly. This is important, as according to the
 `2020 Wilson Research Group Functional Verification Study`_ verification engineers spend 46 % of their time debugging.
