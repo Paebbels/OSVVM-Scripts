@@ -290,7 +290,7 @@ specified as the first value in the calls to push, check, and pop, such as shown
 
    if Empty(SB, "MyTag")  then   …
 
-For Check (and :vhdlcode:`Pop`), the item checked (or returned) is the oldest item with the matching tag.
+For :vhdlcode:`Check` (and :vhdlcode:`Pop`), the item checked (or returned) is the oldest item with the matching tag.
 
 .. code-block:: VHDL
 
