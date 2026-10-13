@@ -169,9 +169,10 @@ Memory API Reference
 The intent of the API is to make creation of efficient memory models easy. Further more, to make the creation of shared
 memories that are in separate components easy.
 
-Behind the simple API are some rather interesting data structures. There is a brief discussion of the data structures at
-the end of this document. The important thing to note is that you do not need to understand the data structures to be
-able use :vhdlcode:`MemoryPkg` to create efficient memories.
+Behind the simple API are some rather interesting data structures. There is a
+:ref:`brief discussion of the data structures <UTILITY/MemoryPkg/DataStructure>` at the end of this document. The
+important thing to note is that you do not need to understand the data structures to be able use :vhdlcode:`MemoryPkg`
+to create efficient memories.
 
 .. _UTILITY/MemoryPkg/NewIDAndSupportingTypes:
 
@@ -231,7 +232,7 @@ When :vhdlcode:`DISABLED`, an :vhdlcode:`AlertLogID` does not print in :vhdlcode
 to what is essential. When :vhdlcode:`ENABLED`, an :vhdlcode:`AlertLogID` prints in :vhdlcode:`ReportAlerts` and
 :vhdlcode:`WriteAlertYaml`.
 
-None of these settings impact printing in Alert or Log.
+None of these settings impact printing in :vhdlcode:`Alert` or :vhdlcode:`Log`.
 
 :vhdlcode:`DISABLED` is intended to be used for data structures that are not used for self-checking and may produce
 errors on parameter checks. These errors are not lost as they are still accumulated in the parent ID.
@@ -245,8 +246,9 @@ AlertLogPrintParentType
 
    type AlertLogPrintParentType is (PRINT_NAME, PRINT_NAME_AND_PARENT) ;
 
-When :vhdlcode:`PRINT_NAME`, Alert and Log print the name of the :vhdlcode:`AlertLogID`. When
-:vhdlcode:`PRINT_NAME_AND_PARENT`, Alert and Log print the parent ID name, the ID separator, and then the ID name.
+When :vhdlcode:`PRINT_NAME`, :vhdlcode:`Alert` and :vhdlcode:`Log` print the name of the :vhdlcode:`AlertLogID`. When
+:vhdlcode:`PRINT_NAME_AND_PARENT`, :vhdlcode:`Alert` and :vhdlcode:`Log` print the parent ID name, the ID separator, and
+then the ID name.
 
 .. _UTILITY/MemoryPkg/NameSearchType:
 
@@ -560,7 +562,8 @@ Selecting the Instance of MemoryPkg
 ***********************************
 
 By default, :vhdlcode:`MemoryPkg` use the UX01 policy. If the Tcl setting variable :tclcode:`$::osvvm::UseMemoryPkg01`
-is true then policy 01 is used. See OSVVM Settings User guide for how to change this setting.
+is true then policy 01 is used. See :ref:`OSVVM Settings User guide <UTILITY/OsvvmSettings>` for how to change this
+setting.
 
 .. _UTILITY/MemoryPkg/ABetterWayOfCallingNewIDNotYet:
 
@@ -639,7 +642,7 @@ Reference all packages in the OSVVM Utility library by using the context declara
    library OSVVM ;
      context osvvm.OsvvmContext ;
 
-Compilation order for OSVVM Utility Library is in :osvvmdoc:`OSVVM_release_notes.pdf <OSVVM_release_notes>`. Rather than
+Compilation order for OSVVM Utility Library is in :osvvmdoc:`OSVVM_release_notes.pdf <osvvm_release_notes>`. Rather than
 learning this, we recommend using the OSVVM compilation scripts.
 
 OSVVM Utility library is released under the Apache open source license. It is free (both to download and use - there are
