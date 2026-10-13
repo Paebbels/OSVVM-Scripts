@@ -49,8 +49,8 @@ Randomly generate a value in a range, here 1 to 15.
 
    DataInt := RV.RandInt(1, 15) ;
 
-Overloading for :vhdlcode:`std_logic_vector`, unsigned and signed require a size parameter (last). Overloading for real
-produces an open range.
+Overloading for :vhdlcode:`std_logic_vector`, :vhdlcode:`unsigned` and :vhdlcode:`signed` require a size parameter
+(last). Overloading for :vhdlcode:`real` produces an open range.
 
 .. code-block:: VHDL
 
@@ -59,7 +59,7 @@ produces an open range.
    DataUv8  := RV.RandUnsigned(1, 15, 8) ;
    DataSv8  := RV.RandSigned(-8, 7, 8) ;
 
-Overloading for time requires specification of time units.
+Overloading for :vhdlcode:`time` requires specification of time units.
 
 .. code-block:: VHDL
 
@@ -77,8 +77,8 @@ Randomly generate a value within a range (here 1 to 15) and exclude specified va
 
    dInt := RV.RandInt(1, 15, (3, 5, 7));
 
-Exclude values are supported for :vhdlcode:`std_logic_vector`, unsigned, and signed, and are not supported for type time
-or real.
+Exclude values are supported for :vhdlcode:`std_logic_vector`, :vhdlcode:`unsigned`, and :vhdlcode:`signed`, and are not
+supported for type :vhdlcode:`time` or :vhdlcode:`real`.
 
 .. code-block:: VHDL
 
@@ -95,8 +95,8 @@ Randomly generate a set (:vhdlcode:`integer_vector`), here 1, 3, 5, 7, and 9.
 
    dInt := RV.RandInt( (1,3,5,7,9) ) ;
 
-Overloading for :vhdlcode:`std_logic_vector`, unsigned and signed require a size parameter (last). Also supported for
-type time and real.
+Overloading for :vhdlcode:`std_logic_vector`, :vhdlcode:`unsigned` and :vhdlcode:`signed` require a size parameter
+(last). Also supported for type :vhdlcode:`time` and :vhdlcode:`real`.
 
 .. code-block:: VHDL
 
@@ -116,17 +116,18 @@ Randomly generate a set (:vhdlcode:`integer_vector`), here 1, 3, 5, 7, and 9 and
 
    dInt := RV.RandInt((1,3,5,7,9), (3,7)) ;
 
-Overloading for :vhdlcode:`std_logic_vector`, unsigned and signed require a size parameter (last). Also supported for
-type time and real.
+Overloading for :vhdlcode:`std_logic_vector`, :vhdlcode:`unsigned` and :vhdlcode:`signed` require a size parameter
+(last). Also supported for type :vhdlcode:`time` and :vhdlcode:`real`.
 
 .. _UTILITY/RandomPkgQuickRef/LargerThanIntegerRanges:
 
 Larger than Integer Ranges
 **************************
 
-For :vhdlcode:`std_logic_vector`, unsigned, and signed, the following forms of functions generate values larger than 32
-bits. In the first example, 40 is the size of the vector. It the next examples, :vhdlcode:`MIN_VAL_40` and
-:vhdlcode:`MAX_VAL_40` are a 40 bit :vhdlcode:`std_logic_vectors` that specify the minimum and maximum values.
+For :vhdlcode:`std_logic_vector`, :vhdlcode:`unsigned`, and :vhdlcode:`signed`, the following forms of functions
+generate values larger than 32 bits. In the first example, 40 is the size of the vector. It the next examples,
+:vhdlcode:`MIN_VAL_40` and :vhdlcode:`MAX_VAL_40` are a 40 bit :vhdlcode:`std_logic_vectors` that specify the minimum
+and maximum values.
 
 .. code-block:: VHDL
 
@@ -158,7 +159,6 @@ Simple Weighted Randomization
 *****************************
 
 Specify N weights as an :vhdlcode:`integer_vector` (weights 7, 2, and 1) and randomly select a value in the range of the
-
 weight parameter (for a literal, 0 to N-1 – here 0 to 2). The probability of each value being generated is the weight
 divide by the sum of weights. Here the probability of 0 is (7/10) or 70%, 1 is (2/10) or 20%, and 2 is 10 %. Generally
 it is easiest if the weights sum up to either 10 or 100.
@@ -175,8 +175,8 @@ support an exclude vector.
 Normal, aka Gaussian Distribution
 *********************************
 
-A function normal receives a Mean (here 1.0) and Standard Deviation (here 0.025) and returns a random value with a
-normal or Gaussian distribution.
+A function :vhdlcode:`normal` receives a Mean (here 1.0) and Standard Deviation (here 0.025) and returns a random value
+with a normal or Gaussian distribution.
 
 .. code-block:: VHDL
 
@@ -189,7 +189,8 @@ re-randomized.
 
    dReal := RV.normal(1.0, 0.025, 0.9, 1.1);
 
-Normal is also overloaded to have integer return and minimum and maximum parameters as shown below.
+:vhdlcode:`Normal` is also overloaded to have :vhdlcode:`integer` return and minimum and maximum parameters as shown
+below.
 
 .. code-block:: VHDL
 
@@ -212,14 +213,14 @@ values. Set it with :vhdlcode:`SetRandomSalt`
 Other Distributions
 *******************
 
-See :vhdlcode:`RandomPkg` Users Guide for details.
+See RandomPkg Users Guide for details.
 
 .. _UTILITY/RandomPkgQuickRef/RandomizeVectorsOfIntegerRealTime:
 
 Randomize vectors of Integer, Real, Time
 ****************************************
 
-See :vhdlcode:`RandomPkg` Users Guide for details.
+See RandomPkg Users Guide for details.
 
 .. _UTILITY/RandomPkgQuickRef/Packages:
 
