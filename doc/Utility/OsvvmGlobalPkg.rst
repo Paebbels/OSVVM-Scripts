@@ -8,23 +8,9 @@ OsvvmGlobalPkg
 OsvvmGlobalPkg Overview
 ***********************
 
-Release 2024.03 deprecated most of the functionality in this package. At this point,
-
-.. list-table::
-   :header-rows: 1
-
-   * - only
-     - :vhdlcode:`OsvvmOptionsType`,
-     - :vhdlcode:`IsEnabled`,
-     - and
-     - :vhdlcode:`to_OsvvmOptionsType`
-     - remain.
-   * - :vhdlcode:`OsvvmOptionsType` is used with :vhdlcode:`SetAlertLogOptions` and
-     -
-     -
-     -
-     -
-     -
+Release 2024.03 deprecated most of the functionality in this package. At this point, only
+:vhdlcode:`OsvvmOptionsType`, :vhdlcode:`IsEnabled`, and :vhdlcode:`to_OsvvmOptionsType` remain.
+:vhdlcode:`OsvvmOptionsType` is used with :vhdlcode:`SetAlertLogOptions` and
 
 .. _UTILITY/OsvvmGlobalPkg/PackageUserSubprogramReference:
 
@@ -79,41 +65,9 @@ Deprecated and Removed Items
 Migrating SetOsvvmGlobalOptions to Constants in OsvvmSettingsPkg
 ================================================================
 
-With OSVVM release 2024.03, the procedure :vhdlcode:`SetOsvvmGlobalOptions` was deprecated
-
-.. list-table::
-   :header-rows: 1
-
-   * - and :file:`OsvvmSettingsPkg_default.vhd`. If you want to change the setting, copy
-     - removed.
-     - These
-     - settings
-     - are
-     - now
-     - done
-     - by
-     - constants
-     - in
-   * - :file:`OsvvmSettingsPkg_default.vhd` to :file:`OsvvmSettingsPkg_local.vhd` and make the changes
-     -
-     -
-     -
-     -
-     -
-     -
-     -
-     -
-     -
-   * - you desire.
-     -
-     -
-     -
-     -
-     -
-     -
-     -
-     -
-     -
+With OSVVM release 2024.03, the procedure :vhdlcode:`SetOsvvmGlobalOptions` was deprecated and removed. These settings
+are now done by constants in :file:`OsvvmSettingsPkg_default.vhd`. If you want to change the setting, copy
+:file:`OsvvmSettingsPkg_default.vhd` to :file:`OsvvmSettingsPkg_local.vhd` and make the changes you desire.
 
 The following table shows the parameter of :vhdlcode:`SetOsvvmGlobalOptions` and its corresponding constant in
 :vhdlcode:`OsvvmSettingsPkg`.
@@ -153,7 +107,7 @@ Reference all packages in the OSVVM Utility library by using the context declara
    library OSVVM ;
      context osvvm.OsvvmContext ;
 
-Compilation order for OSVVM Utility Library is in :osvvmdoc:`OSVVM_release_notes.pdf <OSVVM_release_notes>`. Rather than
+Compilation order for OSVVM Utility Library is in :osvvmdoc:`OSVVM_release_notes.pdf <osvvm_release_notes>`. Rather than
 learning this, we recommend using the OSVVM compilation scripts.
 
 OSVVM Utility library is released under the Apache open source license. It is free (both to download and use - there are
