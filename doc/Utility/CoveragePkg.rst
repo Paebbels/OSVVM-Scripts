@@ -51,7 +51,7 @@ most simulators should be able to support it.
 
 Please note while the packages are Apache open source, this document’s copyright is similar to the creative commons
 license CC BY-ND 4.0. You may use and distribute exact copies of this document. However, without written permission, the
-copyright does not permit you to use these materials (in particular examples) to develop your own training – lets be
+copyright does not permit you to use these materials (in particular examples) to develop your own training – let's be
 fair we have to earn a living.
 
 .. _UTILITY/CoveragePkg/GettingCoveragePkg:
@@ -152,7 +152,7 @@ Why You Need Functional Coverage, even with Directed Testing
 You might think, "I have written a directed test for each item in the test plan, I am done right?"
 
 As design size grows, the complexity increases. A test that completely validates one version of the design, may not
-validate the design after revisions. For example, if the size a of FIFO increases, the test may no longer provide enough
+validate the design after revisions. For example, if the size of a FIFO increases, the test may no longer provide enough
 stimulus values to fill it completely and cause a FIFO Full condition. If new features are added, a test may need to
 change its configuration register values to enable the appropriate mode.
 
@@ -381,7 +381,7 @@ Putting the entire example together, we end up with the following.
      signal Cov1 : CoverageIDType ;  -- Coverage ID
    begin
      TestProc : process
-     Begin
+     begin
        -- Construct the coverage model
        Cov1 <= NewID("Cov1") ;
        wait for 0 ns ; -- Update Cov1
@@ -421,7 +421,7 @@ concerned about what values are applied to the adder. We are not intending to ad
    :width: 448px
 
 
-Cross coverage for SRC1 crossed SRC2 with can be visualized as a matrix of 8 x 8 bins.
+Cross coverage for SRC1 crossed SRC2 can be visualized as a matrix of 8 x 8 bins.
 
 .. figure:: images/CoveragePkg/Page13-2.png
    :width: 448px
@@ -452,7 +452,7 @@ current count, bin type (count, illegal, ignore), and weight).
 
 .. _UTILITY/CoveragePkg/AccumualteCoverageCrossCoverage:
 
-Accumualte Coverage: Cross Coverage
+Accumulate Coverage: Cross Coverage
 ===================================
 
 The accumulate step now requires a value for SRC1 and SRC2. The overloaded :vhdlcode:`ICover` for cross coverage uses an
@@ -524,7 +524,7 @@ general to generate N cases, it takes "N \* log N" randomizations. The "log N" r
 significantly adds to simulation run times. Ideally we would like to run only N test cases.
 
 Running the previous ALU testbench, we get the following coverage matrix when the code completes. Note that some test
-cases were generated 10 time before all were done at least 1 time. It took 315 randomizations to generate all 64 unique
+cases were generated 10 times before all were done at least 1 time. It took 315 randomizations to generate all 64 unique
 pairs. This is slightly less than 5X more iterations than the 64 in the ideal case. This correlates well with theory as
 315 ≈ 64 \* log(64). By changing the seed value, the exact number of randomizations may increase or decrease but this
 would be a silly way to try to reduce the number of iterations a test runs.
@@ -584,8 +584,8 @@ Instead of using the separate integers, :vhdlcode:`Src1` and :vhdlcode:`Src2`, i
    Src := GetRandPoint(ACov) ;      -- Intelligent Coverage Randomization
 
 The process is not always this easy. Sometimes the value out of :vhdlcode:`GetRandPoint` will need to be further shaped
-by the stimulus generation process. This is particularly true randomizing an output value of a design and generating the
-desired input sequence to generate it.
+by the stimulus generation process. This is particularly true when randomizing an output value of a design and
+generating the desired input sequence to generate it.
 
 The Intelligent Coverage methodology works with your current testbench approach. You can adopt this methodology
 incrementally. Add functional coverage today to make sure you are executing all of your test plan. For the tests that
@@ -625,7 +625,7 @@ considered covered. The Intelligent Coverage randomization by default will use t
 weights.
 
 To demonstrate this flexibility, let's consider a contrived example based on the ALU. In this example, each SRC1 crossed
-with any SRC2 has a different coverage goal. In addition, it is an illegal for SRC1 to equal SRC2. The coverage goal for
+with any SRC2 has a different coverage goal. In addition, it is illegal for SRC1 to equal SRC2. The coverage goal for
 each bin is specified in the table below.
 
 .. list-table::
@@ -706,12 +706,12 @@ Note that the remainder of this document covers further details of the coverage 
 Coverage API Reference
 **********************
 
-The intent of the API is to make the creation of a coverage models easy. It is interesting to note that using the
-Coverage API is as concise as the language features of SystemVerilog. Going beyond that OSVVM has coverage introspection
+The intent of the API is to make the creation of coverage models easy. It is interesting to note that using the Coverage
+API is as concise as the language features of SystemVerilog. Going beyond that OSVVM has coverage introspection
 capability, such as intelligent coverage randomization, that is not available in SystemVerilog.
 
 Behind the simple API are some rather interesting data structures. The important thing to note is that you do not need
-to understand the data structures to be able use :vhdlcode:`CoveragePkg`.
+to understand the data structures to be able to use :vhdlcode:`CoveragePkg`.
 
 Caution, features not documented here are either considered experimental or have been deprecated (and may be removed in
 a future version). If you decide to use it and want it to stay around, be sure to let us know.
@@ -759,7 +759,7 @@ requirement. It must be called before any other coverage operations are used.
 
 .. code-block:: VHDL
 
-   impure function NewID (
+   impure function NewReqID (
      Name                : String ;
      ParentID            : AlertLogIDType          := OSVVM_COVERAGE_ALERTLOG_ID ;
      ReportMode          : AlertLogReportModeType  := ENABLED ;
@@ -831,8 +831,8 @@ NameSearchType
 
 When :vhdlcode:`NewID` is called, first a search of existing IDs is done. If there is a match, that ID is returned, if
 there is not, a new one is created. Matching is determined by the ID, :vhdlcode:`ParentID`, and :vhdlcode:`Search`
-parameters. If the :vhdlcode:`Search` parameter is :vhdlcode:`PRIVATE`, no searching is done and a new ID is created. If
-the :vhdlcode:`Search` parameter is :vhdlcode:`NAME`, then any ID whose name matches is returned. If the
+parameters. If the :vhdlcode:`Search` parameter is :vhdlcode:`PRIVATE_NAME`, no searching is done and a new ID is
+created. If the :vhdlcode:`Search` parameter is :vhdlcode:`NAME`, then any ID whose name matches is returned. If the
 :vhdlcode:`Search` parameter is :vhdlcode:`NAME_AND_PARENT`, then any ID whose name and :vhdlcode:`ParentID` match or
 :vhdlcode:`NAME` and stored :vhdlcode:`Search` parameter is :vhdlcode:`NAME` is returned.
 
@@ -867,7 +867,7 @@ Creating Count Bins - GenBin
 ============================
 
 The following are three variations of :vhdlcode:`GenBin`. The ones with :vhdlcode:`AtLeast` and :vhdlcode:`Weight`
-parameters are mainly intended to for use with constants.
+parameters are mainly intended for use with constants.
 
 .. code-block:: VHDL
 
@@ -876,7 +876,7 @@ parameters are mainly intended to for use with constants.
    function GenBin(A : integer) return CovBinType ;
 
 The version of :vhdlcode:`GenBin` shown below has three parameters: min value, max value, and number of bins. The call,
-:vhdlcode:`GenBin(1, 3, 3)`, breaks the range 1 to 3 into the 3 separate bins with ranges1 to 1, 2 to 2, 3 to 3.
+:vhdlcode:`GenBin(1, 3, 3)`, breaks the range 1 to 3 into the 3 separate bins with ranges 1 to 1, 2 to 2, 3 to 3.
 
 .. code-block:: VHDL
 
@@ -891,7 +891,7 @@ the call :vhdlcode:`GenBin(1,3,20)`, will still create the three bins: 1 to 1, 2
    AddBins(CovBin2, GenBin(1, 3, 20) ) ; -- bins 1 to 1, 2 to 2, and 3 to 3
 
 If there are more values (between max and min) than bins and the range does not divide evenly among bins, then each bin
-with have on average (max - min + 1)/bins. Later bins will have one more value than earlier bins. The exact formula used
+will have on average (max - min + 1)/bins. Later bins will have one more value than earlier bins. The exact formula used
 is (number of values remaining)/(number of bins remaining). As a result, the call :vhdlcode:`GenBin(1, 14, 4)` creates
 four bins with ranges 1 to 3, 4 to 6, 7 to 10, and 11 to 14.
 
@@ -1080,7 +1080,7 @@ sizes or delays.
 
 .. code-block:: VHDL
 
-   procedure Deallocate(ID : CoverageIDType) ;
+   procedure DeallocateBins (CoverID : CoverageIDType) ;
 
 .. _UTILITY/CoveragePkg/ControllingReportingForIllegalBinsSetIllegalMode:
 
@@ -1150,7 +1150,7 @@ accumulated internally. Once a minimum number of values are received, they are c
 
 .. code-block:: VHDL
 
-   procedure TCover (CoverID : CoverageIDType; A : integer) ;
+   procedure TCover (ID : CoverageIDType; A : integer) ;
 
 .. _UTILITY/CoveragePkg/ConversionsToIntegerAndIntegerVector:
 
@@ -1210,7 +1210,7 @@ To support conversions from a point value back to a :vhdlcode:`std_logic`, Boole
 Basic Randomization
 *******************
 
-Randomization is handled by either :vhdlcode:`GetRandPoint` and :vhdlcode:`GetRandBinVal`. The randomization is coverage
+Randomization is handled by either :vhdlcode:`GetRandPoint` or :vhdlcode:`GetRandBinVal`. The randomization is coverage
 target based. Once a count bin has reached its coverage goal it is no longer selected for randomization. The
 randomization results can be modified by using coverage goals, randomization weights, coverage targets, and
 randomization thresholds. These topics are discussed later in this document.
@@ -1469,7 +1469,7 @@ If the :vhdlcode:`LogLevel` parameter is specified (such as DEBUG) and that Leve
 
 .. _UTILITY/CoveragePkg/PrintingMessageHeadingsPrintToCovFIle:
 
-Printing Message Headings - PrintToCovFIle
+Printing Message Headings - PrintToCovFile
 ------------------------------------------
 
 :vhdlcode:`PrintToCovFile` prints a string value to the same file used by :vhdlcode:`WriteBin` and
@@ -1561,7 +1561,7 @@ always print. Next is the PassFail message. It will print "PASSED" if the count 
 :vhdlcode:`WritePassFail` field. The value printed when it passes or fails is controlled by the :vhdlcode:`PassName` and
 :vhdlcode:`FailName` fields. Printing of bin information may be redundant when a bin is named. This information can be
 disabled using the :vhdlcode:`WriteBinInfo` field. Printing of the Count (current coverage) and :vhdlcode:`AtLeast`
-(coverage goal) can be disabled with the :vhdlcode:`WriteCount` field. Nominally illegal bins are only printed when the
+(coverage goal) can be disabled with the :vhdlcode:`WriteCount` field. Nominally illegal bins are only printed when they
 have failed (something landed in that bin). The parameter, :vhdlcode:`WriteAnyIllegal`, can be used to enable printing
 of all illegal bins (including the ones with no values and hence pass).
 
@@ -1707,7 +1707,7 @@ Setting Bin Names
 =================
 
 Each bin can be named. The bin name is specified as the first parameter to :vhdlcode:`AddBins` and :vhdlcode:`AddCross`.
-This means to use names, one must specify each bin individually (bin by bin). The intent behind bin names it to
+This means to use names, one must specify each bin individually (bin by bin). The intent behind bin names is to
 correlate a requirement with a bin name and furthermore associate this with a pass or fail indication of the
 requirement.
 
@@ -1854,7 +1854,7 @@ Coverage Targets
 For some tests, the :vhdlcode:`AtLeast` parameters will be used to set an initial coverage distribution. Later it may be
 desirable to use the same coverage distribution, but run it for much longer. Use of a coverage target allows the
 coverage goal to be scaled (increased or decreased) without having to change anything else in the coverage model. Hence,
-the effective coverage goal for a bin is the product of bin's :vhdlcode:`AtLeast` least value and the coverage model's
+the effective coverage goal for a bin is the product of bin's :vhdlcode:`AtLeast` value and the coverage model's
 coverage target value (specifically, :vhdlcode:`AtLeast` \* :vhdlcode:`CovTarget` / 100.0).
 
 .. _UTILITY/CoveragePkg/SettingACoverageTargetSetCovTarget:
@@ -1973,7 +1973,7 @@ Count Bins Overlapping with an Illegal or Ignore Bin
 Count bins overlapping with a previous ignore or illegal bin are problematic. When the count bin is selected for
 randomization, it may generate an illegal value due to the overlap.
 
-This may be addressed in a future version. For now it is up to the user understand overlap and to avoid this.
+This may be addressed in a future version. For now it is up to the user to understand overlap and to avoid this.
 
 .. _UTILITY/CoveragePkg/MultipleMatchesWithICoverSetCountMode:
 
@@ -2047,8 +2047,8 @@ separately should be unnecessary.
    procedure InitSeed (ID : CoverageIDType; I : integer;
        UseNewSeedMethods : boolean := COVERAGE_USE_NEW_SEED_METHODS) ;
 
-:vhdlcode:`COVERAGE_USE_NEW_SEED_METHODS` is set to TRUE in 2024.03. If are trying to reproduce an older test that used
-the previous version of :vhdlcode:`CoveragePkg`, set :vhdlcode:`UseNewSeedMethods` to FALSE, otherwise, leave it as
+:vhdlcode:`COVERAGE_USE_NEW_SEED_METHODS` is set to TRUE in 2024.03. If you are trying to reproduce an older test that
+used the previous version of :vhdlcode:`CoveragePkg`, set :vhdlcode:`UseNewSeedMethods` to FALSE, otherwise, leave it as
 TRUE.
 
 .. code-block:: VHDL
@@ -2127,7 +2127,7 @@ A bin index is a reference to a location in the coverage data structure. These a
 
 :vhdlcode:`GetNumBins` returns the number of bins in the coverage model.
 
-:vhdlcode:`GetLastIndex` returns the index that was last used for either used for stimulus generation (in the case of
+:vhdlcode:`GetLastIndex` returns the index that was last used for either stimulus generation (in the case of
 :vhdlcode:`GetRandIndex`, :vhdlcode:`GetIncIndex`, :vhdlcode:`GetMinIndex`, :vhdlcode:`GetMaxIndex`, or
 :vhdlcode:`GetNextIndex`) or coverage collection (in the case of :vhdlcode:`ICover`).
 
@@ -2141,13 +2141,13 @@ A bin index is a reference to a location in the coverage data structure. These a
 coverage of a bin.
 
 :vhdlcode:`GetNextBinVal` selects the bin using the internal setting of the mode. The mode can be :vhdlcode:`RANDOM`,
-:vhdlcode:`INCREMENT`, or :vhdlcode:`MIN` (for :vhdlcode:`GetRandBinVal`, :vhdlcode:`GetIncBinVal`, or
+:vhdlcode:`INCREMENT`, or :vhdlcode:`MODE_MINIMUM` (for :vhdlcode:`GetRandBinVal`, :vhdlcode:`GetIncBinVal`, or
 :vhdlcode:`GetMinBinVal`). The mode can be set with :vhdlcode:`SetNextPointMode`. Alternately a mode value can be
 specified on the call to :vhdlcode:`GetNextBinVal`.
 
 .. code-block:: VHDL
 
-   procedure SetNextPointMode (A : NextPointModeType) ;
+   procedure SetNextPointMode (ID : CoverageIDType; A : NextPointModeType) ;
 
 .. _UTILITY/CoveragePkg/GettingCoveragePointValues:
 
@@ -2182,13 +2182,13 @@ the assignment).
    impure function GetNextPoint (ID : CoverageIDType) return integer ;
    impure function GetNextPoint (ID : CoverageIDType) return integer_vector ;
 
-:vhdlcode:`GetRandPoint` randomly selects a value in the bin value determined by :vhdlcode:`GenRandIndex`.
+:vhdlcode:`GetRandPoint` randomly selects a value in the bin value determined by :vhdlcode:`GetRandIndex`.
 
 :vhdlcode:`GetPoint` returns a point within the bin indexed by the specified :vhdlcode:`BinIndex`.
 
-:vhdlcode:`GetIncPoint` randomly selects a value in the bin value determined by :vhdlcode:`GenIncIndex`.
+:vhdlcode:`GetIncPoint` randomly selects a value in the bin value determined by :vhdlcode:`GetIncIndex`.
 
-:vhdlcode:`GetMinPoint` randomly selects a value in the bin value determined by :vhdlcode:`GenMinIndex`.
+:vhdlcode:`GetMinPoint` randomly selects a value in the bin value determined by :vhdlcode:`GetMinIndex`.
 
 :vhdlcode:`GetMaxPoint` randomly selects a value in the bin value determined by :vhdlcode:`GetMaxIndex`.
 
@@ -2226,17 +2226,17 @@ The following that return coverage bin value using type :vhdlcode:`RangeArrayTyp
 
 The function :vhdlcode:`GetBinVal` returns the bin value indexed by the specified :vhdlcode:`BinIndex`.
 
-:vhdlcode:`GetRandBinVal` returns the bin value determined by :vhdlcode:`GenRandIndex`.
+:vhdlcode:`GetRandBinVal` returns the bin value determined by :vhdlcode:`GetRandIndex`.
 
 :vhdlcode:`GetLastBinVal` returns the bin value determined by :vhdlcode:`GetLastIndex`.
 
-:vhdlcode:`GetIncBinVal` returns the bin value determined by :vhdlcode:`GenIncIndex`.
+:vhdlcode:`GetIncBinVal` returns the bin value determined by :vhdlcode:`GetIncIndex`.
 
-:vhdlcode:`GetMinBinVal` returns the bin value determined by :vhdlcode:`GenMinIndex`.
+:vhdlcode:`GetMinBinVal` returns the bin value determined by :vhdlcode:`GetMinIndex`.
 
 :vhdlcode:`GetMaxBinVal` returns the bin value determined by :vhdlcode:`GetMaxIndex`.
 
-:vhdlcode:`GetNextBinVal` returns the bin value determined by :vhdlcode:`GetMaxIndex`.
+:vhdlcode:`GetNextBinVal` returns the bin value determined by :vhdlcode:`GetNextIndex`.
 
 .. _UTILITY/CoveragePkg/BasicBinInformation:
 
@@ -2414,7 +2414,7 @@ object assigned to them, it is easiest to leave :vhdlcode:`CovBinType` unconstra
 
    constant REG_ADDR : CovBinType := GenBin(0, 7) ;
 
-Once created the constant can be used in for further composition, such as shown below. Just like normal constants, this
+Once created the constant can be used for further composition, such as shown below. Just like normal constants, this
 increases both the readability and maintainability of the code.
 
 .. code-block:: VHDL
@@ -2438,14 +2438,14 @@ with coverage goal of 5, and 32 to 63 with coverage goal of 10.
 
 .. _UTILITY/CoveragePkg/WritingAnCrossCoverageModelAsAConstantCovMatrixType:
 
-Writing an Cross Coverage Model as a Constant - CovMatrix?Type
-==============================================================
+Writing a Cross Coverage Model as a Constant - CovMatrix?Type
+=============================================================
 
 To capture a cross coverage model in a constant requires some additional types and functions. The following methodology
-is based the language prior to VHDL-2008 and requires a separate type definition for each size of cross coverage model.
-Currently up to a cross product of 9 separate items are supported by the following type. In VHDL- 2008 where composites
-are allowed to have unconstrained elements, this will be reduced to a single type (and cross products of greater than 9
-can be easily supported).
+is based on the language prior to VHDL-2008 and requires a separate type definition for each size of cross coverage
+model. Currently up to a cross product of 9 separate items are supported by the following type. In VHDL-2008 where
+composites are allowed to have unconstrained elements, this will be reduced to a single type (and cross products of
+greater than 9 can be easily supported).
 
 .. code-block:: VHDL
 
@@ -2493,7 +2493,7 @@ Now we can write our constant for our simple ALU coverage model.
 
    constant ALU_COV_MODEL : CovMatrix2Type := GenCross(REG_ADDR, REG_ADDR);
 
-Use one of the versions of :vhdlcode:`AddCross` shown below add the constant to the coverage data structure.
+Use one of the versions of :vhdlcode:`AddCross` shown below to add the constant to the coverage data structure.
 
 .. code-block:: VHDL
 
@@ -2566,7 +2566,7 @@ just reuse the coverage model itself, then either a constant or a subprogram can
 CoveragePkg vs. Language Syntax
 *******************************
 
-The basic level of item (point) coverage that can be captured with :vhdlcode:`CoveragePkg` is similar to when can be
+The basic level of item (point) coverage that can be captured with :vhdlcode:`CoveragePkg` is similar to what can be
 captured with IEEE 1647, 'e'. :vhdlcode:`CoveragePkg` and 'e' allow an item bin to consist of either a single value or a
 single range. SystemVerilog extends this to allow a value, a range, or a collection of values and ranges. While this
 additional capability of SystemVerilog is interesting, it did not seem to offer any compelling advantage that would
@@ -2617,7 +2617,7 @@ While code coverage is generally a useful metric, there are some cases where it 
 To help understand the issue, consider the following process. If :vhdlcode:`SelA`, :vhdlcode:`SelB`, and
 :vhdlcode:`SelC` all are 1 when :vhdlcode:`Clk` rises, then all of the lines of code execute and the code coverage is
 100%. However, only the assignment, ":vhdlcode:`Y <= A`" has an observable impact on the output. The assignments,
-":vhdlcode:`Y <= C`" and :vhdlcode:`Y <= B`" are not observable, and hence, are not validated.
+":vhdlcode:`Y <= C`" and ":vhdlcode:`Y <= B`" are not observable, and hence, are not validated.
 
 .. code-block:: VHDL
 
