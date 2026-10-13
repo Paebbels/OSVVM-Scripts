@@ -369,7 +369,7 @@ Compiling TextUtilPkg and Friends
 *********************************
 
 Compilation order for OSVVM Utility Library is in :file:`CHANGELOG.md` and :file:`osvvm.pro`. To run :file:`osvvm.pro`
-see the Script User Guide.
+see the :ref:`Script User Guide <UG>`.
 
 OSVVM Utility library is released under the Apache open source license. It is free (both to download and use - there are
 no license fees). You can download it from osvvm.org or from our development area on GitHub
