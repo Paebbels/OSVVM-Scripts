@@ -257,8 +257,8 @@ Delete: Remove values at a specified Index
 Indexing, Index Operations, and Iterators
 *****************************************
 
-:vhdlcode:`Get` and set can access vector values at an index location. Assuming the vector currently contains 8 8-bit
-values, then a for loop can be used to iterate across all values in the vector.
+:vhdlcode:`Get` and :vhdlcode:`set` can access vector values at an index location. Assuming the vector currently
+contains 8 8-bit values, then a for loop can be used to iterate across all values in the vector.
 
 .. code-block:: VHDL
 
@@ -625,7 +625,7 @@ Reference all packages in the OSVVM Utility library by using the context declara
    library OSVVM ;
      context osvvm.OsvvmContext ;
 
-Compilation order for OSVVM Utility Library is in :osvvmdoc:`OSVVM_release_notes.pdf <OSVVM_release_notes>`. Rather than
+Compilation order for OSVVM Utility Library is in :osvvmdoc:`OSVVM_release_notes.pdf <osvvm_release_notes>`. Rather than
 learning this, we recommend using the OSVVM compilation scripts.
 
 OSVVM Utility library is released under the Apache open source license. It is free (both to download and use - there are
