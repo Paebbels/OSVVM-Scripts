@@ -9,7 +9,7 @@ About OSVVM
 ***********
 
 OSVVM is an advanced verification methodology that defines a VHDL verification framework, verification utility library,
-verification component library, scripting API, and co‐simulation capability that simplifies your FPGA or ASIC
+verification component library, scripting API, and co-simulation capability that simplifies your FPGA or ASIC
 verification project from start to finish. Using these libraries you can create a simple, readable, and powerful
 testbench that is suitable for either a simple FPGA block (aka a unit level test) or a complex ASIC (a full chip and/or
 system test).
@@ -17,15 +17,15 @@ system test).
 OSVVM is developed by the same VHDL experts who have helped develop VHDL standards. We have used our expert VHDL skills
 to create advanced verification capabilities that provide:
 
-* A structured transaction‐based verification framework using verification components.
+* A structured transaction-based verification framework using verification components.
 * An accelerated approach for developing verification components that uses the transaction interface and API defined in
   our transaction support library.
 * Improved reuse and reduced project schedules.
 * Improved readability and reviewability by the whole team including hardware, software, and system engineers.
 * Buzz word verification features including Constrained Random, Functional Coverage, Scoreboards, FIFOs, Memory Models,
-  error logging and reporting, and message filtering that are simple to use and work like built‐in language features.
-* Co‐simulation of C++ models in a hardware simulator environment.
-* A scripting API that runs any simulator using the same script. OSVVM scripting supports GHDL, NVC, Aldec Riviera‐PRO
+  error logging and reporting, and message filtering that are simple to use and work like built-in language features.
+* Co-simulation of C++ models in a hardware simulator environment.
+* A scripting API that runs any simulator using the same script. OSVVM scripting supports GHDL, NVC, Aldec Riviera-PRO
   and ActiveHDL, Siemens Questa and ModelSim, Synopsys VCS, and Cadence Xcelium.
 * Unmatched test reporting with HTML based test suite reports, test case reports, and logs that facilitate debug and
   test artifact collection.
@@ -55,11 +55,11 @@ Important benefits of OSVVM:
 
 * **Verification utility library that**
 
-   * Simplifies Self‐checking, Error handling, and Message Filtering
+   * Simplifies Self-checking, Error handling, and Message Filtering
    * Implements Constrained Random, Functional Coverage, Scoreboards, FIFOs, Memory Models
-   * Is simple to use and works like built‐in language features
+   * Is simple to use and works like built-in language features
 
-* **Co‐Simulation capability that supports**
+* **Co-Simulation capability that supports**
 
    * Running C++ models and code on simulated hardware
 
@@ -90,7 +90,7 @@ Important benefits of OSVVM:
 
 * **One Script to Run Simulators**
 
-   * Same script supports GHDL, Aldec Riviera‐PRO and ActiveHDL, Siemens QuestaSim and ModelSim, Synopsys VCS, and
+   * Same script supports GHDL, Aldec Riviera-PRO and ActiveHDL, Siemens QuestaSim and ModelSim, Synopsys VCS, and
      Cadence Xcelium
 
 * **It is free open source.**
@@ -98,7 +98,7 @@ Important benefits of OSVVM:
    * It upgrades an ordinary VHDL license with full featured verification capabilities.
 
 SynthWorks has been using OSVVM for 25+ years in our training classes and consulting work. During that time, we have
-innovated new capabilities and evolved our existing ones to increase re‐use and reduce effort and time spent.
+innovated new capabilities and evolved our existing ones to increase re-use and reduce effort and time spent.
 
 .. _FRAMEWORK/Overview/GettingStartedWithOSVVM:
 
@@ -115,11 +115,11 @@ Download OSVVM
 OSVVM is available as either a git repository OsvvmLibraries or a zip file from OSVVM Downloads Page.
 
 On GitHub, all OSVVM libraries are a submodule of the repository OsvvmLibraries. Download all OSVVM libraries using git
-clone with the "‐‐recursive" flag:
+clone with the ``--recursive`` flag:
 
 .. code-block:: shell
 
-   $ git clone ‐‐recursive https://GitHub.com/OSVVM/OsvvmLibraries
+   $ git clone --recursive https://GitHub.com/OSVVM/OsvvmLibraries
 
 .. _FRAMEWORK/Overview/RunningTheDemos:
 
@@ -128,7 +128,7 @@ Running the Demos
 
 A great way to get oriented with OSVVM is to run the demos.
 
-If you are using Aldec's Rivera‐PRO or Siemen's QuestaSim/ModelSim do the following.
+If you are using Aldec's Riviera-PRO or Siemens' QuestaSim/ModelSim do the following.
 
 * Step 1: Create a directory named :file:`sim` that is in the same directory that contains the :file:`OsvvmLibraries`
   directory.
@@ -144,8 +144,8 @@ If you are using Aldec's Rivera‐PRO or Siemen's QuestaSim/ModelSim do the foll
 These will produce some reports, such as :file:`OsvvmLibraries_RunDemoTests.html`. We will discuss these in the next
 section, :ref:`OSVVM Reports <FRAMEWORK/Overview/OSVVMSReports>`.
 
-If you are using GHDL, Aldec Active‐HDL, Synopsys VCS, or Cadence Xcelium, see the :ref:`OSVVM Script User Guide <UG>`
-for details on running the scripts in these tool. The start up aspect for each of these is slightly different, however,
+If you are using GHDL, Aldec Active-HDL, Synopsys VCS, or Cadence Xcelium, see the :ref:`OSVVM Script User Guide <UG>`
+for details on running the scripts in these tools. The start up aspect for each of these is slightly different, however,
 once you get the simulator into OSVVM script mode, running the scripts is the same.
 
 .. _FRAMEWORK/Overview/OSVVMSReports:
@@ -245,7 +245,7 @@ JUnit XML Build Summary Report
 ==============================
 
 The JUnit XML Build Summary Report works with continuous integration (CI/CD). The CI/CD tools use this to understand if
-the test is passing or not. They also have facilities for displaying the report ‐ however, the OSVVM HTML format
+the test is passing or not. They also have facilities for displaying the report - however, the OSVVM HTML format
 provides a superset of information.
 
 OSVVM runs regressions on GitHub.
@@ -255,17 +255,17 @@ OSVVM runs regressions on GitHub.
 HTML Test Case Detailed Report
 ==============================
 
-For each test case that is run (simulated), a Test Case Detailed Report is produced that contains consists of the
-following information:
+For each test case that is run (simulated), a Test Case Detailed Report is produced that contains the following
+information:
 
 * Test Information Link Table
 * Alert Report
 * Functional Coverage Report(s)
 * Scoreboard Report(s)
-* Link to Test Case Transcript (opened with Transcript Open)
+* Link to Test Case Transcript (opened with :vhdlcode:`TranscriptOpen`)
 * Link to this test case in HTML based simulator transcript
 
-After running one of the regressions, open one of the HTML files in the directory :file:`./reports/<test‐suite‐name>`.
+After running one of the regressions, open one of the HTML files in the directory :file:`./reports/<test-suite-name>`.
 
 Note that any place in the report there is a triangle preceding text, pressing on the triangle will rotate it and either
 hide or reveal additional information.
@@ -333,7 +333,7 @@ case.
 Test Case Transcript
 ====================
 
-OSVVM's transcript utility facilitates collecting all test output to into a single file, shown below.
+OSVVM's transcript utility facilitates collecting all test output into a single file, shown below.
 
 .. figure:: images/Overview/Page09-9.png
    :width: 562px
@@ -368,16 +368,16 @@ verification components, test cases, and/or the test harness. SystemVerilog + UV
 several organizations that propose that you use their "Lite" or "Easy" approach.
 
 OSVVM is simple enough to use on small blocks and powerful enough to use on large, complex chips or systems. This allows
-us to use the same style of framework for RTL, Core, and Chip level verification ‐ which in turn facilitates re‐use of
+us to use the same style of framework for RTL, Core, and Chip level verification - which in turn facilitates re-use of
 verification components and test cases. OSVVM has added the abstractions needed to make our verification component based
 approach as easy as the "Lite" approach of other methodologies.
 
 SynthWorks has been using this framework for 25+ years in our training classes and consulting work. During that time, we
-have innovated new capabilities and evolved our existing ones to increase re‐use and reduce effort spent.
+have innovated new capabilities and evolved our existing ones to increase re-use and reduce effort spent.
 
 When we examine OSVVM's framework in detail, we see that it has many similar elements to SystemVerilog + UVM. However,
 one thing not present is OO language constructs. Instead OSVVM uses ordinary VHDL constructs, such as structural and
-behavioral code. This makes it readily accessible to both verfication and RTL engineers.
+behavioral code. This makes it readily accessible to both verification and RTL engineers.
 
 .. _FRAMEWORK/Overview/StructuredTestbenchFramework/GoingFurther:
 
@@ -418,17 +418,17 @@ package in which they are implemented.
 * Utilities for testbench process synchronization generation (:vhdlcode:`TbUtilPkg`)
 * Utilities for clock and reset generation (:vhdlcode:`TbUtilPkg`)
 * Transcript files (:vhdlcode:`TranscriptPkg`)
-* Error logging and reporting ‐ Alerts and Affirmations (:vhdlcode:`AlertLogPkg`)
-* Message filtering ‐ Logs (:vhdlcode:`AlertLogPkg`)
+* Error logging and reporting - Alerts and Affirmations (:vhdlcode:`AlertLogPkg`)
+* Message filtering - Logs (:vhdlcode:`AlertLogPkg`)
 * Scoreboards and FIFOs (data structures for verification) (:vhdlcode:`ScoreboardGenericPkg`)
 * HTML and JUnit XML test reporting (:vhdlcode:`ReportPkg`, :vhdlcode:`AlertLogPkg`, :vhdlcode:`CoveragePkg`,
   :vhdlcode:`ScoreboardGenericPkg`)
 * Memory models (:vhdlcode:`MemoryPkg`)
-* Transaction‐Level Modeling Support (:vhdlcode:`TbUtilPkg`, :vhdlcode:`ResolutionPkg`)
+* Transaction-Level Modeling Support (:vhdlcode:`TbUtilPkg`, :vhdlcode:`ResolutionPkg`)
 
 Through the years, the packages have been updated many times. Now, all of the packages that create data structures
 (:vhdlcode:`AlertLogPkg`, :vhdlcode:`CoveragePkg`, :vhdlcode:`ScoreboardGenericPkg`, and :vhdlcode:`MemoryPkg`) use
-singleton data structures. Usage of singletons simplifies API to an ordinary call interface ‐ ie: no more shared
+singleton data structures. Usage of singletons simplifies API to an ordinary call interface - ie: no more shared
 variables and protected types.
 
 .. _FRAMEWORK/Overview/VHDLUtilityLibrary/GoingFurther:
@@ -445,7 +445,7 @@ Read the following documents for more information on OSVVM's VHDL Utility Librar
    * - Document
      - User Guide
      - Quick Reference
-   * - OSVVM Test Writer's User Guide ‐ a general overview to usage
+   * - OSVVM Test Writer's User Guide - a general overview to usage
      - :ref:`FRAMEWORK/TestWriters`
      - None
    * - :vhdlcode:`AlertLogPkg`
@@ -478,13 +478,13 @@ Read the following documents for more information on OSVVM's VHDL Utility Librar
 Scripting Library
 *****************
 
-The goal of OSVVM's scripting is to have "One Script to Run them All" ‐ where all is any simulator.
+The goal of OSVVM's scripting is to have "One Script to Run them All" - where all is any simulator.
 
 Current supported simulators are
 
 * GHDL (Free Open Source simulator),
-* Aldec's Active‐HDL and Riviera‐PRO,
-* Siemen's ModelSim and QuestaSim,
+* Aldec's Active-HDL and Riviera-PRO,
+* Siemens' ModelSim and QuestaSim,
 * Synopsys' VCS, and
 * Cadence's Xcelium.
 
@@ -508,7 +508,7 @@ Read the following documents for more information on OSVVM's Scripting.
    * - OSVVM Script User Guide
      - :ref:`UG`
    * - OSVVM Script library
-     - OSVVM‐Scripts
+     - OSVVM-Scripts
 
 .. _FRAMEWORK/Overview/OSVVMVerificationComponentLibrary:
 
@@ -541,4 +541,4 @@ OSVVM's growing verification component library is tabulated below.
      - DpRam
 
 Note all of the OSVVM verification components use the model independent transaction interfaces which are defined in
-OSVVM‐Common. It is required to be in the directory :file:`OsvvmLibraries/Common`.
+OSVVM-Common. It is required to be in the directory :file:`OsvvmLibraries/Common`.
