@@ -136,7 +136,7 @@ Overloaded versions of RequestTransaction and WaitForTransaction
 ================================================================
 
 Overloading of :vhdlcode:`RequestTransaction` and :vhdlcode:`WaitForTransaction` also supports :vhdlcode:`std_logic` or
-bit in place of both :vhdlcode:`RdyType` and :vhdlcode:`AckType`.
+:vhdlcode:`bit` in place of both :vhdlcode:`RdyType` and :vhdlcode:`AckType`.
 
 .. _UTILITY/TbUtilPkg/ToggleHandshaking:
 
@@ -449,7 +449,7 @@ Compiling and Using OSVVM Utility Library
 *****************************************
 
 Compilation order for OSVVM Utility Library is in :file:`CHANGELOG.md` and :file:`osvvm.pro`. To run :file:`osvvm.pro`
-see the Script User Guide.
+see the :ref:`Script User Guide <UG>`.
 
 OSVVM Utility library is released under the Apache open source license. It is free (both to download and use - there are
 no license fees). You can download it from osvvm.org or from our development area on GitHub
