@@ -101,11 +101,11 @@ For either point or cross coverage, bins are added to the model using :vhdlcode:
      name     : string
    );
 
-The types :vhdlcode:`VendorCovHandleType` and :vhdlcode:`VendorCovRangeArrayType` are explained in Type Definitions of
-this document. :vhdlcode:`Action` is 1 for a count bin, 0 for an ignore bin, and -1 for an illegal bin. The
-:vhdlcode:`atleast` parameter is the coverage goal. Note that the coverage goal can be different for different bins -
-this makes an OSVVM coverage bin more similar to a SystemVerilog/UCIS coverage group. :vhdlcode:`Name` is the string
-name of this bin.
+The types :vhdlcode:`VendorCovHandleType` and :vhdlcode:`VendorCovRangeArrayType` are explained in
+:ref:`Type Definitions <UTILITY/VendorCovApiPkg/TypeDefinitions>` of this document. :vhdlcode:`Action` is 1 for a count
+bin, 0 for an ignore bin, and -1 for an illegal bin. The :vhdlcode:`atleast` parameter is the coverage goal. Note that
+the coverage goal can be different for different bins - this makes an OSVVM coverage bin more similar to a
+SystemVerilog/UCIS coverage group. :vhdlcode:`Name` is the string name of this bin.
 
 .. _UTILITY/VendorCovApiPkg/IncrementingTheCoverage:
 
