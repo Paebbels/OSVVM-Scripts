@@ -24,7 +24,7 @@ returns the value from parameter :vhdlcode:`B`. :vhdlcode:`AType` can be :vhdlco
 
    function IfElse(Expr : boolean ; A, B : AType) return AType ;
 
-The targeted use of :vhdlcode:`IfElse` is in an constant expression, such as shown below.
+The targeted use of :vhdlcode:`IfElse` is in a constant expression, such as shown below.
 
 .. code-block:: VHDL
 
