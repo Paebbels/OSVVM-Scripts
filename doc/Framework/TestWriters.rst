@@ -194,23 +194,27 @@ and checking (:vhdlcode:`AffirmIfEqual`) it on another interface. The receiving 
    :name: FRAMEWORK/TestWriters/Figure5
 
    TxProc : process
-                                      RxProc : process
 
-                                        variable RxD : ByteType;
    begin
-                                      begin
      Send (TRec, X"10") ;
-                                        Get(RRec, RxD) ;
 
-                                        AffirmIfEqual(TBID, RxD, X"10");
 
      Send (TRec, X"11") ;
-                                        Check(RRec, X"11") ;
      . . .
-                                        . . .
 
-                                      end process RxProc ;
    end process TxProc
+
+.. code-block:: VHDL
+
+   RxProc : process
+     variable RxD : ByteType;
+   begin
+     Get(RRec, RxD) ;
+     AffirmIfEqual(TBID, RxD, X"10");
+
+     Check(RRec, X"11") ;
+     . . .
+   end process RxProc ;
 
 The :vhdlcode:`AffirmIfEqual` checks its two parameters. It produces a log "PASSED" message if they are equal and alert
 "ERROR" message otherwise. These are shown in :ref:`Figure 6 <FRAMEWORK/TestWriters/Figure6>`.
@@ -249,32 +253,29 @@ and simplify readability by introducing our Model Independent Transactions.
 Model Independent Transactions observe that many interfaces can be classified as either an address bus interface (AXI,
 Wishbone, Avalon, X86) or a stream interface (AxiStream, UART, …). For interfaces that fall into one of these
 categories, OSVVM has defined a set of transactions the interface can support. The basic set of transactions supported
-by the different interfaces is shown in Table 1 below.
+by the different interfaces is shown in :ref:`Table 1 <FRAMEWORK/TestWriters/Table1>` below.
 
-Table 1. OSVVM Standard Transactions
+.. list-table:: Table 1. OSVVM Standard Transactions
+   :name: FRAMEWORK/TestWriters/Table1
+   :header-rows: 0
 
-Address Bus Model Independent Transactions
+   * - Address Bus Model Independent Transactions
+   * - .. code-block:: VHDL
 
-.. code-block:: VHDL
+          Write(TransactionRec, X"AAAA", X"DDDD") ;
+          Read (TransactionRec, X"AAAA", DataOut) ;
+          ReadCheck(TransactionRec, X"AAAA", X"DDDD") ;
+   * - Stream Model Independent Transactions
+   * - .. code-block:: VHDL
 
-   Write(TransactionRec, X"AAAA", X"DDDD") ;
-   Read (TransactionRec, X"AAAA", DataOut) ;
-   ReadCheck(TransactionRec, X"AAAA", X"DDDD") ;
+          Send(TransactionRec, X"DDDD") ;
+          Get(Transactionrec, DataOut) ;
+          Check(TransactionRec, X"DDDD") ;
+   * - Common Directive Transactions
+   * - .. code-block:: VHDL
 
-Stream Model Independent Transactions
-
-.. code-block:: VHDL
-
-   Send(TransactionRec, X"DDDD") ;
-   Get(Transactionrec, DataOut) ;
-   Check(TransactionRec, X"DDDD") ;
-
-Common Directive Transactions
-
-.. code-block:: VHDL
-
-   GetTransactionCount(TransactionRec, Count) ;
-   SetModelOptions(TransactionRec, Option, OptVal) ;
+          GetTransactionCount(TransactionRec, Count) ;
+          SetModelOptions(TransactionRec, Option, OptVal) ;
 
 The transaction, :vhdlcode:`SetModelOptions`, facilitates configuring the VC to support different modes.
 
@@ -283,8 +284,8 @@ of switching the verification component that is instantiated in the test harness
 can be easily adapted for a Wishbone Subordinate VC.
 
 For more details, see the
-:osvvmdoc:`Address_Bus_Model_Independent_Transactions_User_Guide.pdf <Address_Bus_Model_Independent_Transactions_User_Guide>`
-and :osvvmdoc:`Stream_Model_Independent_Transactions_User_Guide.pdf <Stream_Model_Independent_Transactions_User_Guide>`.
+:osvvmdoc:`Address_Bus_Model_Independent_Transactions_User_Guide.pdf <Address_Bus_Model_Independent_Transactions_user_guide>`
+and :osvvmdoc:`Stream_Model_Independent_Transactions_User_Guide.pdf <Stream_Model_Independent_Transactions_user_guide>`.
 Also see :osvvmdoc:`Axi4_VC_user_guide.pdf <Axi4_VC_user_guide>` and
 :osvvmdoc:`AxiStream_user_guide.pdf <AxiStream_user_guide>`.
 
@@ -391,21 +392,36 @@ the transmit side did. Scoreboards can also be used to simplify checking in dire
    . . .
    SB <= NewID("SB") ; -- Add to Control Process
 
-   TxProc : process                               RxProc : process
-     variable RV   : RandomPType;                   variable RxD  : ByteType;
-     . . .                                        begin
+.. code-block:: VHDL
+
+   TxProc : process
+     variable RV   : RandomPType;
+     . . .
    begin
-     for I in 1 to 10000 loop                       for I in 1 to 10000 loop
+     for I in 1 to 10000 loop
        case RV.DistInt((. . .)) is
-          . . .                                       Get(RRec, RxD, RxErrorMode);
-        end case ;                                    Check(SB, (RxD, RxErrorMode));
-       Push(SB, (TxD, ErrorMode));                  end loop ;
-       Send(TRec, TxD, ErrorMode);                  . . .
+          . . .
+        end case ;
+       Push(SB, (TxD, ErrorMode));
+       Send(TRec, TxD, ErrorMode);
+     end loop ;
+     . . .
+
+.. code-block:: VHDL
+
+   RxProc : process
+     variable RxD  : ByteType;
+   begin
+
+     for I in 1 to 10000 loop
+
+       Get(RRec, RxD, RxErrorMode);
+       Check(SB, (RxD, RxErrorMode));
      end loop ;
      . . .
 
 See the :osvvmdoc:`ScoreboardPkg_user_guide.pdf <ScoreboardPkg_user_guide>` and
-:osvvmdoc:`Scoreboard_quickref.pdf <Scoreboard_quickref>` for more information about OSVVM's scoreboard capability.
+:osvvmdoc:`Scoreboard_quickref.pdf <ScoreboardPkg_quickref>` for more information about OSVVM's scoreboard capability.
 
 .. _FRAMEWORK/TestWriters/AddingFunctionalCoverage:
 
@@ -427,12 +443,12 @@ been used with each set of registers for input 2?
 Functional coverage in OSVVM is implemented as a data structure within a protected type.
 
 :ref:`Figure 12 <FRAMEWORK/TestWriters/Figure12>` continues with :vhdlcode:`RxProc` from the constrained random test and
-adds functional coverage. First the coverage object (:vhdlcode:`RxCov`) is declared. Next ":vhdlcode:`AddBins`
-(:vhdlcode:`RxCov`, :vhdlcode:`GenBin(N)`)" is called to construct the functional coverage model. The value "N"
-corresponds to the integer representation of the UART status bits for Break, Stop, Parity, and Data Available. The calls
-to :vhdlcode:`AddBins` all complete at time 0, before any stimulus is generated or checked. Next, after the received
-stimulus has been retrieved (using :vhdlcode:`Get`), Icover(:vhdlcode:`RxCov`, :vhdlcode:`RxErrorMode`) is called to
-record the coverage. At the end of the test, :vhdlcode:`WriteBin(RxCov)` prints the coverage results.
+adds functional coverage. First the coverage object (:vhdlcode:`RxCov`) is declared. Next
+":vhdlcode:`AddBins (RxCov, GenBin(N))`" is called to construct the functional coverage model. The value "N" corresponds
+to the integer representation of the UART status bits for Break, Stop, Parity, and Data Available. The calls to
+:vhdlcode:`AddBins` all complete at time 0, before any stimulus is generated or checked. Next, after the received
+stimulus has been retrieved (using :vhdlcode:`Get`), :vhdlcode:`Icover(RxCov, RxErrorMode)` is called to record the
+coverage. At the end of the test, :vhdlcode:`WriteBin(RxCov)` prints the coverage results.
 
 .. code-block:: VHDL
    :caption: Figure 12. UART RxProc with functional coverage added
@@ -479,7 +495,7 @@ Adding Protocol and Parameter Checkers
 OSVVM alerts are used to check for invalid conditions on an interface or library subprogram. Alerts both report and
 count errors. Alerts have the levels FAILURE, ERROR (default), and WARNING. By default, FAILURE level alerts cause a
 simulation to stop. By default, ERROR and WARNING do not cause a simulation to stop. When a test completes, all errors
-reported by Alert (and :vhdlcode:`AffirmIf`) can be reported using :vhdlcode:`ReportAlerts`.
+reported by :vhdlcode:`Alert` (and :vhdlcode:`AffirmIf`) can be reported using :vhdlcode:`ReportAlerts`.
 
 :ref:`Figure 13 <FRAMEWORK/TestWriters/Figure13>` shows a protocol checker used in a memory model to detect if a write
 enable (:vhdlcode:`iWE`) and read enable (:vhdlcode:`iOE`) occur simultaneously while the memory is addressed
@@ -512,8 +528,9 @@ usage of both of these.
    SetAlertStopCount(ERROR, 20) ;
 
 See the :osvvmdoc:`AlertLogPkg_user_guide.pdf <AlertLogPkg_user_guide>` and
-:osvvmdoc:`AlertLogPkg_quickref.pdf <AlertLogPkg_quickref>` for more information about OSVVM's Alert capability (Alert,
-:vhdlcode:`AlertIf`, :vhdlcode:`AlertIfEqual`, :vhdlcode:`SetAlertEnable`, :vhdlcode:`SetAlertStopCount`, …).
+:osvvmdoc:`AlertLogPkg_quickref.pdf <AlertLogPkg_quickref>` for more information about OSVVM's Alert capability
+(:vhdlcode:`Alert`, :vhdlcode:`AlertIf`, :vhdlcode:`AlertIfEqual`, :vhdlcode:`SetAlertEnable`,
+:vhdlcode:`SetAlertStopCount`, …).
 
 .. _FRAMEWORK/TestWriters/AddingMessageFiltering:
 
@@ -525,11 +542,13 @@ verification component. Logs have the levels ALWAYS, DEBUG, INFO, and PASSED. Lo
 always enabled. The other logs are disabled by default. :ref:`Figure 15 <FRAMEWORK/TestWriters/Figure15>` shows the
 usage of log and its output.
 
-.. code-block:: text
+.. code-block:: VHDL
    :caption: Figure 15. Log and its output
    :name: FRAMEWORK/TestWriters/Figure15
 
    Log(TbID, "Test 1 Starting") ;
+
+.. code-block:: text
 
    %% Log   ALWAYS   In Testbench, Test 1 Starting at 1770 ns
 
@@ -545,8 +564,8 @@ done in :vhdlcode:`ControlProc` at test initialization.
    SetLogEnable(RxID, INFO, TRUE) ;  -- Turn on INFO for CpuID
 
 See the :osvvmdoc:`AlertLogPkg_user_guide.pdf <AlertLogPkg_user_guide>` and
-:osvvmdoc:`AlertLogPkg_quickref.pdf <AlertLogPkg_quickref>` for more information about OSVVM's Alert capability (Log,
-:vhdlcode:`SetLogEnable`).
+:osvvmdoc:`AlertLogPkg_quickref.pdf <AlertLogPkg_quickref>` for more information about OSVVM's Alert capability
+(:vhdlcode:`Log`, :vhdlcode:`SetLogEnable`).
 
 .. _FRAMEWORK/TestWriters/TestFinalization:
 
@@ -613,6 +632,8 @@ shown in :ref:`Figure 18 <FRAMEWORK/TestWriters/Figure18>`.
 
    %% DONE  PASSED  Test_UartRx_1  Passed: 48  Affirmations Checked: 48  at 100000 ns
 
+.. code-block:: text
+
    %% DONE  FAILED  Test_UartRx_1  Total Error(s) = 10  Failures: 0  Errors: 1  Warnings: 1
    Passed: 48  Affirmations Checked: 48  at 100000 ns
 
@@ -624,6 +645,8 @@ shown in :ref:`Figure 19 <FRAMEWORK/TestWriters/Figure19>`.
    :name: FRAMEWORK/TestWriters/Figure19
 
    %% DONE  PASSED  TbUart_SendGet1  Passed: 48  Affirmations Checked: 48  at 100000 ns
+
+.. code-block:: text
 
    %% DONE  FAILED  TbUart_SendGet1  Total Error(s) = 7  Failures: 0  Errors: 7  Warnings: 0
    Passed: 41  Affirmations Checked: 48  at 100000 ns
@@ -707,10 +730,10 @@ OsvvmLibraries repository. Retrieve it using git as shown in :ref:`Figure 23 <FR
    git clone --recursive https://github.com/OSVVM/OsvvmLibraries.git
 
 The AXI4, Axi4Lite, AxiStream, and UART verification components come with OSVVM testbenches. Prior to starting the OSVVM
-scripting environment, create a directory named sim to run your simulations from. Start your simulator in the sim
-directory. :ref:`Figure 24 <FRAMEWORK/TestWriters/Figure24>` shows the steps to run Mentor QuestaSim/ModelSim or Aldec
-RivieraPRO to build the OSVVM utility and verification component libraries and then run the verification component
-regression suite.
+scripting environment, create a directory named :file:`sim` to run your simulations from. Start your simulator in the
+:file:`sim` directory. :ref:`Figure 24 <FRAMEWORK/TestWriters/Figure24>` shows the steps to run Mentor
+QuestaSim/ModelSim or Aldec RivieraPRO to build the OSVVM utility and verification component libraries and then run the
+verification component regression suite.
 
 .. code-block:: tcl
    :caption: Figure 24. Compiling and Running OSVVM
