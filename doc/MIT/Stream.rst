@@ -133,9 +133,9 @@ The best way to learn is by trying things out as you go. In this step you will d
 then run the demo. Code from the demo is shown in examples in the respective sections.
 
 OSVVM is available on GitHub at https://github.com/OSVVM as a git repository or at https://osvvm.org/downloads as a ZIP
-file. Retrieve OSVVM from GitHub using git as shown in :ref:`Figure 2 <MIT/Stream/Figure2>`. Note that the "—recursive"
-option is required since the OSVVM repositories are submodules of OsvvmLibraries. Submodules greatly simplify
-development and deployment of the libraries.
+file. Retrieve OSVVM from GitHub using git as shown in :ref:`Figure 2 <MIT/Stream/Figure2>`. Note that the
+``--recursive`` option is required since the OSVVM repositories are submodules of OsvvmLibraries. Submodules greatly
+simplify development and deployment of the libraries.
 
 .. code-block:: shell
    :caption: Figure 2. Retrieving OSVVM from GitHub
@@ -177,15 +177,15 @@ waveforms. Examples of these are :vhdlcode:`WaitForClock` and :vhdlcode:`GetAler
 An interface transaction results in interface signaling to the DUT. An interface transaction may be either blocking
 (such as :vhdlcode:`Send` or :vhdlcode:`Get`) or non-blocking (such as :vhdlcode:`SendAsync` and :vhdlcode:`TryGet`).
 
-A blocking transaction is an interface transaction that does not does not return (complete) until the interface
-operation requested by the transaction has completed.
+A blocking transaction is an interface transaction that does not return (complete) until the interface operation
+requested by the transaction has completed.
 
-An asynchronous transaction is nonblocking interface transaction that returns before the transaction has completed -
+An asynchronous transaction is a nonblocking interface transaction that returns before the transaction has completed -
 typically immediately and before the transaction has started. An asynchronous transaction has "Async" as part of its
 name.
 
-A Try transaction is nonblocking interface transaction that checks to see if transaction information is available, such
-as read data, and if it is returns it. A Try transaction has "Try" as part of its name.
+A Try transaction is a nonblocking interface transaction that checks to see if transaction information is available,
+such as read data, and if it is returns it. A Try transaction has "Try" as part of its name.
 
 .. _MIT/Stream/BasicBlockingTransactions:
 
@@ -258,7 +258,7 @@ verification component.
 Example
 =======
 
-The code below transmits of 32 words.
+The code below transmits 32 words.
 
 .. code-block:: VHDL
 
@@ -321,7 +321,7 @@ present, is an extra parameter used by the verification component. The UART veri
 Example
 =======
 
-The code below transmits of 32 words.
+The code below transmits 32 words.
 
 .. code-block:: VHDL
 
@@ -649,7 +649,7 @@ Receiver: CheckBurstIncrement
 Example
 -------
 
-The code below transmits of 16 words.
+The code below transmits 16 words.
 
 .. code-block:: VHDL
 
@@ -731,7 +731,7 @@ Receiver: CheckBurstRandom
 Example
 -------
 
-The code below transmits of 16 words.
+The code below transmits 24 words.
 
 .. code-block:: VHDL
 
@@ -741,7 +741,7 @@ The code below transmits of 16 words.
      log("SendBurstRandom 24 word burst") ;
      SendBurstRandom(StreamTxRec, X"0000_6000", 24) ;
 
-The code below checks the 16 words.
+The code below checks the 24 words.
 
 .. code-block:: VHDL
 
@@ -817,7 +817,7 @@ Receiver: CheckBurstRandom
 Example
 -------
 
-The code below transmits of 16 words.
+The code below transmits 42 words.
 
 .. code-block:: VHDL
 
@@ -828,7 +828,7 @@ The code below transmits of 16 words.
      log("SendBurstRandom 42 word burst") ;
      SendBurstRandom(StreamTxRec, CoverID, 42, 32) ;
 
-The code below checks the 16 words.
+The code below checks the 42 words.
 
 .. code-block:: VHDL
 
@@ -966,7 +966,7 @@ Fill with an Intelligent Coverage Random Pattern
 Example: Combining Patterns
 ---------------------------
 
-The code below transmits of 42 words.
+The code below transmits 42 words.
 
 .. code-block:: VHDL
 
@@ -1118,7 +1118,7 @@ Check with an Intelligent Coverage Random Pattern
 Example: Combining Patterns
 ---------------------------
 
-The code below transmits of 42 words.
+The code below transmits 42 words.
 
 .. code-block:: VHDL
 
@@ -1191,7 +1191,7 @@ PopBurstVector
 Example: PopBurstVector
 -----------------------
 
-The code below transmits of 42 words.
+The code below transmits 10 words.
 
 .. code-block:: VHDL
 
@@ -1204,7 +1204,7 @@ The code below transmits of 42 words.
        (16#D001#, 16#D003#, 16#D005#, 16#D007#, 16#D009#), 32 ) ;
    SendBurst(StreamTxRec, 5) ;
 
-The code below checks the 42 words.
+The code below checks the 10 words.
 
 .. code-block:: VHDL
 
@@ -1229,9 +1229,10 @@ Nonblocking transactions are either asynchronous transactions or try transaction
 before the transaction has been completed. Try transactions check to see if data is available and return it if it is. If
 data is available, the :vhdlcode:`Available` parameter is set to TRUE, otherwise, it is FALSE.
 
-Nonblocking transactions are useful creating different time relationships needed for split transaction interfaces, such
-as AXI4 Full where Write Address, Write Data, Write Response, Read Address, and Read Data are all independent of each
-other. Nonblocking transactions are also needed when a test sequencer dispatches transactions from a single process.
+Nonblocking transactions are useful for creating different time relationships needed for split transaction interfaces,
+such as AXI4 Full where Write Address, Write Data, Write Response, Read Address, and Read Data are all independent of
+each other. Nonblocking transactions are also needed when a test sequencer dispatches transactions from a single
+process.
 
 If you are just getting started with Stream Model Independent Transactions, this section largely parallels the blocking
 transactions, so it is recommended to skip ahead to :ref:`Directive Transactions <MIT/Stream/DirectiveTransactions>`.
@@ -1304,7 +1305,7 @@ Checking for Basic Nonblocking Transactions
 Receiver: TryCheck
 ==================
 
-:vhdlcode:`TryCheck` is a non-blocking try check transaction If Data is available, check it and return available TRUE,
+:vhdlcode:`TryCheck` is a non-blocking try check transaction. If Data is available, check it and return available TRUE,
 otherwise Return :vhdlcode:`Available` FALSE. :vhdlcode:`Param`, when present, is an extra parameter used by the
 verification component. The UART verification component uses :vhdlcode:`Param` for received error status.
 
@@ -1403,7 +1404,7 @@ Receiver: TryCheckBurst
 =======================
 
 :vhdlcode:`TryCheckBurst` is a non-blocking try check burst transaction. :vhdlcode:`Param`, when present, is an extra
-parameter used by the verification component. If BURST Data is available, check it and return available TRUE, otherwise
+parameter used by the verification component. If burst Data is available, check it and return available TRUE, otherwise
 Return :vhdlcode:`Available` FALSE. The UART verification component uses :vhdlcode:`Param` for checking error injection.
 
 .. code-block:: VHDL
@@ -1751,8 +1752,8 @@ Burst FIFOs and Burst Mode Controls
 ***********************************
 
 The burst FIFOs hold bursts of data that is to be sent to or received from the interface. The burst FIFO can be
-configured in the modes defined for :vhdlcode:`StreamFifoBurstModeType`. Currently these modes defined as a subtype of
-integer, shown below. The intention is to facilitate model specific extensions without the need to define separate
+configured in the modes defined for :vhdlcode:`StreamFifoBurstModeType`. Currently these modes are defined as a subtype
+of integer, shown below. The intention is to facilitate model specific extensions without the need to define separate
 transactions.
 
 .. code-block:: VHDL
@@ -1782,7 +1783,7 @@ transactions.
    constant STREAM_BURST_BYTE_MODE       : StreamFifoBurstModeType := 2 ;
 
 :vhdlcode:`SetBurstMode` and :vhdlcode:`GetBurstMode` are directive transactions that configure the burst mode into one
-of the modes defined in for :vhdlcode:`StreamFfifoBurstModeType`.
+of the modes defined for :vhdlcode:`StreamFifoBurstModeType`.
 
 .. code-block:: VHDL
 
@@ -1899,17 +1900,17 @@ Verification Components and Stream Model Independent Transactions
 StreamOperationType
 ===================
 
-:vhdlcode:`StreamOperationType` is an enumerated type that indicates to the verification component type of transaction
-that is being dispatched. Being an enumerated type, it allows the determination of the operation in the simulator’s
-waveform window. :ref:`Table 4 <MIT/Stream/Figure4>` shows the correlation between :vhdlcode:`StreamOperationType`
-values and the transaction name.
+:vhdlcode:`StreamOperationType` is an enumerated type that indicates to the verification component the type of
+transaction that is being dispatched. Being an enumerated type, it allows the determination of the operation in the
+simulator’s waveform window. :ref:`Figure 4 <MIT/Stream/Figure4>` shows the correlation between
+:vhdlcode:`StreamOperationType` values and the transaction name.
 
 .. list-table:: Figure 4. Correlation between StreamOperationType and the transaction name
    :header-rows: 1
    :name: MIT/Stream/Figure4
    :widths: 276 221 221
 
-   * - :vhdlcode:`AddressBusOperationType` Value
+   * - :vhdlcode:`StreamOperationType` Value
      - Transmitter Transaction Name
      - Receiver Transaction Name
    * - :vhdlcode:`WAIT_FOR_CLOCK`
@@ -2011,7 +2012,7 @@ Initializing Burst FIFOs
 ------------------------
 
 The burst FIFOs need to be initialized. A good place to do this is in the transaction dispatcher of the verification
-components. :ref:`Figure 5 <MIT/Stream/Figure5>` shows the declaration of a :vhdlcode:`BurstFifo`. The
+components. :ref:`Figure 5 <MIT/Stream/Figure5>` shows the initialization of a :vhdlcode:`BurstFifo`. The
 :vhdlcode:`BurstFifo` is accessed as a record element of :vhdlcode:`TransRec`.
 
 .. code-block:: VHDL
@@ -2033,7 +2034,7 @@ Accessing Burst FIFOs
 The Burst Fifos support basic FIFO operations. These are shown in :ref:`Figure 6 <MIT/Stream/Figure6>`.
 
 .. code-block:: VHDL
-   :caption: Figure 6. Making the BurstFifos visible in the test sequencer (TestCtrl)
+   :caption: Figure 6. Basic FIFO Operations
    :name: MIT/Stream/Figure6
 
    Push(TransRec.BurstFifo, Data) ;
