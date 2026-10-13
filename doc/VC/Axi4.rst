@@ -90,15 +90,16 @@ Writing tests is all about creating waveforms at an interface. In a basic test a
 wiggles interface waveforms. This is tedious and error prone.
 
 In OSVVM, signal wiggling is replaced by transactions. A transaction is an abstract representation of an interface
-waveform (such as Write) or a directive to the VC (such as wait for clock). A transaction is initiated using a procedure
-call. In a VC based approach, the procedure call collects the transaction information and passes it to the Axi4 VCs via
-a transaction interface (a record). The Axi4 VC then decodes this information and creates the corresponding interface
-waveforms.
+waveform (such as :vhdlcode:`Write`) or a directive to the VC (such as wait for clock). A transaction is initiated using
+a procedure call. In a VC based approach, the procedure call collects the transaction information and passes it to the
+Axi4 VCs via a transaction interface (a record). The Axi4 VC then decodes this information and creates the corresponding
+interface waveforms.
 
 Using transactions simplifies creating tests and increases their readability. :ref:`Figure 2 <VC/Axi4/Figure2>` shows
-calls to the Write, Read, and :vhdlcode:`ReadCheck` transactions for an :vhdlcode:`Axi4Manager` VC. In this test, the
-responses are provided by an :vhdlcode:`Axi4Memory` VC. Note that in the calls to Write, Read, and :vhdlcode:`ReadCheck`
-that the size of the data parameter determines the maximum size of the transactions on the interface.
+calls to the :vhdlcode:`Write`, :vhdlcode:`Read`, and :vhdlcode:`ReadCheck` transactions for an :vhdlcode:`Axi4Manager`
+VC. In this test, the responses are provided by an :vhdlcode:`Axi4Memory` VC. Note that in the calls to
+:vhdlcode:`Write`, :vhdlcode:`Read`, and :vhdlcode:`ReadCheck` that the size of the data parameter determines the
+maximum size of the transactions on the interface.
 
 .. code-block:: VHDL
    :caption: Figure 2. Calls to Axi4Manager Write, Read, and ReadCheck Transactions
@@ -131,7 +132,7 @@ implements the transaction interface as a record.
 :vhdlcode:`AddressBus` Transaction Interface, :vhdlcode:`AddressBusRecType`, is used to connect the verification
 component to :vhdlcode:`TestCtrl`. :vhdlcode:`AddressBusRecType`, shown in :ref:`Figure 3 <VC/Axi4/Figure3>`, is defined
 in the Address Bus Model Independent Transaction package, :file:`AddressBusTransactionPkg.vhd`, which is in the
-directory :vhdlcode:`OsvvmLbraries`/Common/Src.
+directory :file:`OsvvmLbraries/Common/Src`.
 
 .. code-block:: VHDL
    :caption: Figure 3. AddressBusRecType
@@ -172,10 +173,10 @@ directory :vhdlcode:`OsvvmLbraries`/Common/Src.
      Options            : integer_max ;
    end record AddressBusRecType ;
 
-Note that Address, :vhdlcode:`DataToModel`, and :vhdlcode:`DataFromModel` are unconstrained. Hence, when they are used
-in a signal declaration they must be constrained. Address needs to be sized to match the maximum
-(:vhdlcode:`AWADDR'length`, :vhdlcode:`ARADDR'length`). :vhdlcode:`DataToModel` and :vhdlcode:`DataFromModel` need to be
-sized to match the maximum(:vhdlcode:`WDATA'length`, :vhdlcode:`RDATA'length`).
+Note that :vhdlcode:`Address`, :vhdlcode:`DataToModel`, and :vhdlcode:`DataFromModel` are unconstrained. Hence, when
+they are used in a signal declaration they must be constrained. :vhdlcode:`Address` needs to be sized to match the
+maximum (:vhdlcode:`AWADDR'length`, :vhdlcode:`ARADDR'length`). :vhdlcode:`DataToModel` and :vhdlcode:`DataFromModel`
+need to be sized to match the maximum(:vhdlcode:`WDATA'length`, :vhdlcode:`RDATA'length`).
 
 :ref:`Figure 4 <VC/Axi4/Figure4>` shows the declaration :vhdlcode:`ManagerRec` (which connects the
 :vhdlcode:`Axi4Manager` to :vhdlcode:`TestCtrl`) and :vhdlcode:`SubordinateRec` (which connects the
@@ -387,12 +388,12 @@ development and deployment of the libraries.
 
    git clone --recursive https://github.com/OSVVM/OsvvmLibraries.git
 
-Prior to starting the OSVVM scripting environment, create a directory named sim in which to run your simulations. Start
-your simulator and go to the sim directory. Once there, use the steps in :ref:`Figure 9 <VC/Axi4/Figure9>` to build the
-OSVVM Libraries (utility and verification component). These directions are supported in Mentor QuestaSim/ModelSim or
-Aldec RivieraPRO. Aldec's ActiveHDL is also supported but requires a few extra steps. For these steps and additional
-details of the OSVVM scripting environment see :osvvmdoc:`Script_user_guide.pdf <Script_user_guide>` (in
-:file:`OsvvmLibraries/Documentation`).
+Prior to starting the OSVVM scripting environment, create a directory named :file:`sim` in which to run your
+simulations. Start your simulator and go to the :file:`sim` directory. Once there, use the steps in
+:ref:`Figure 9 <VC/Axi4/Figure9>` to build the OSVVM Libraries (utility and verification component). These directions
+are supported in Mentor QuestaSim/ModelSim or Aldec RivieraPRO. Aldec's ActiveHDL is also supported but requires a few
+extra steps. For these steps and additional details of the OSVVM scripting environment see
+:osvvmdoc:`Script_user_guide.pdf <Script_user_guide>` (in :file:`OsvvmLibraries/Documentation`).
 
 .. code-block:: tcl
    :caption: Figure 9. Building (Compiling) OSVVM
@@ -431,8 +432,8 @@ Demo: Running the AXI4 Testbenches
 Prior to doing this step, do the steps in section 3, Demo Preparation.
 
 Use the steps in :ref:`Figure 10 <VC/Axi4/Figure10>` to compile and run the tests for the Axi4 verification components
-in Mentor QuestaSim/ModelSim or Aldec RivieraPRO. If you have not exited the simulator, you only need to do the "build"
-step.
+in Mentor QuestaSim/ModelSim or Aldec RivieraPRO. If you have not exited the simulator, you only need to do the
+":tclcode:`build`" step.
 
 .. code-block:: tcl
    :caption: Figure 10. Compiling and Running OSVVM
@@ -566,8 +567,8 @@ Transactions are initiated by the test sequencer (:vhdlcode:`TestCtrl`) by calli
 
 For generics, it has :vhdlcode:`MODEL_ID_NAME` which optionally specifies the model :vhdlcode:`AlertLogID` name. If the
 :vhdlcode:`MODEL_ID_NAME` is not specified, the component instance label will be used (preferred method). The remaining
-generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. Tpd_Clk\_\* specifies the delay for each
-interface output. See the file :file:`Axi4Manager.vhd` for the details of the generics.
+generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. :vhdlcode:`Tpd_Clk_*` specifies the
+delay for each interface output. See the file :file:`Axi4Manager.vhd` for the details of the generics.
 
 .. code-block:: VHDL
    :caption: Figure 14. Axi4Manager
@@ -616,8 +617,8 @@ transaction interface (:vhdlcode:`TransRec`).
 
 For generics, it has :vhdlcode:`MODEL_ID_NAME` which optionally specifies the model :vhdlcode:`AlertLogID` name. If the
 :vhdlcode:`MODEL_ID_NAME` is not specified, the component instance label will be used (preferred method). The remaining
-generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. Tpd_Clk\_\* specifies the delay for each
-interface output. See the file :file:`Axi4Manager.vhd` for the details of the generics.
+generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. :vhdlcode:`Tpd_Clk_*` specifies the
+delay for each interface output. See the file :file:`Axi4Manager.vhd` for the details of the generics.
 
 .. code-block:: VHDL
    :caption: Figure 15. Axi4Subordinate
@@ -672,8 +673,8 @@ basis.
 
 For generics, it has :vhdlcode:`MODEL_ID_NAME` which optionally specifies the model :vhdlcode:`AlertLogID` name. If the
 :vhdlcode:`MODEL_ID_NAME` is not specified, the component instance label will be used (preferred method). The remaining
-generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. Tpd_Clk\_\* specifies the delay for each
-interface output. See the file :file:`Axi4Manager.vhd` for the details of the generics.
+generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. :vhdlcode:`Tpd_Clk_*` specifies the
+delay for each interface output. See the file :file:`Axi4Manager.vhd` for the details of the generics.
 
 .. code-block:: VHDL
    :caption: Figure 16. Axi4Memory
@@ -713,7 +714,7 @@ Setting the Name of the Axi4Memory Model
 ----------------------------------------
 
 The :vhdlcode:`Axi4Memory` name is the value of :vhdlcode:`MEMORY_NAME` if it is set (other than ""). If
-:vhdlcode:`MEMORY_NAME` is not set, the memory name is :vhdlcode:`Axi4Memory`':vhdlcode:`PATH_NAME`.
+:vhdlcode:`MEMORY_NAME` is not set, the memory name is :vhdlcode:`Axi4Memory'PATH_NAME`.
 
 If two memory models have the same name, they use the same instance of the memory and share the same memory space.
 
@@ -740,8 +741,8 @@ Demo: Running the AXI4 Testbenches
 Prior to doing this step, do the steps in section 3, Demo Preparation.
 
 Use the steps in :ref:`Figure 17 <VC/Axi4/Figure17>` to compile and run the tests for the Axi4 verification components
-in Mentor QuestaSim/ModelSim or Aldec RivieraPRO. If you have not exited the simulator, you only need to do the "build"
-step.
+in Mentor QuestaSim/ModelSim or Aldec RivieraPRO. If you have not exited the simulator, you only need to do the
+":tclcode:`build`" step.
 
 .. code-block:: tcl
    :caption: Figure 17. Compiling and Running OSVVM
@@ -802,8 +803,8 @@ sequencer (:vhdlcode:`TestCtrl`).
 TestCtrl Entity – Virtual Transaction Interface (External Names)
 ================================================================
 
-Tests are written as architectures of the test sequencer, :vhdlcode:`TestCtrl` (:vhdlcode:`testbenchVTI`). The entity
-for :vhdlcode:`TestCtrl`, shown in :ref:`Figure 20 <VC/Axi4/Figure20>`, consists of transaction interface connections.
+Tests are written as architectures of the test sequencer, :vhdlcode:`TestCtrl` (:file:`testbenchVTI`). The entity for
+:vhdlcode:`TestCtrl`, shown in :ref:`Figure 20 <VC/Axi4/Figure20>`, consists of transaction interface connections.
 
 .. code-block:: VHDL
    :caption: Figure 20. TestCtrl_e.vhd
@@ -857,8 +858,8 @@ external name in the test sequencer (:vhdlcode:`TestCtrl`).
 
 For generics, it has :vhdlcode:`MODEL_ID_NAME` which optionally specifies the model :vhdlcode:`AlertLogID` name. If the
 :vhdlcode:`MODEL_ID_NAME` is not specified, the component instance label will be used (preferred method). The remaining
-generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. Tpd_Clk\_\* specifies the delay for each
-interface output. See the file :file:`Axi4ManagerVti.vhd` for the details of the generics.
+generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. :vhdlcode:`Tpd_Clk_*` specifies the
+delay for each interface output. See the file :file:`Axi4ManagerVti.vhd` for the details of the generics.
 
 .. code-block:: VHDL
    :caption: Figure 21. Axi4Manager
@@ -910,8 +911,8 @@ external name in the test sequencer (:vhdlcode:`TestCtrl`).
 
 For generics, it has :vhdlcode:`MODEL_ID_NAME` which optionally specifies the model :vhdlcode:`AlertLogID` name. If the
 :vhdlcode:`MODEL_ID_NAME` is not specified, the component instance label will be used (preferred method). The remaining
-generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. Tpd_Clk\_\* specifies the delay for each
-interface output. See the file :file:`Axi4SubordinateVti.vhd` for the details of the generics.
+generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. :vhdlcode:`Tpd_Clk_*` specifies the
+delay for each interface output. See the file :file:`Axi4SubordinateVti.vhd` for the details of the generics.
 
 .. code-block:: VHDL
    :caption: Figure 22. Axi4Subordinate
@@ -975,8 +976,8 @@ basis.
 
 For generics, it has :vhdlcode:`MODEL_ID_NAME` which optionally specifies the model :vhdlcode:`AlertLogID` name. If the
 :vhdlcode:`MODEL_ID_NAME` is not specified, the component instance label will be used (preferred method). The remaining
-generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. Tpd_Clk\_\* specifies the delay for each
-interface output. See the file :file:`Axi4MemoryVti.vhd` for the details of the generics.
+generics specify timing. :vhdlcode:`Tperiod_Clk` specifies the clock frequency. :vhdlcode:`Tpd_Clk_*` specifies the
+delay for each interface output. See the file :file:`Axi4MemoryVti.vhd` for the details of the generics.
 
 .. code-block:: VHDL
    :caption: Figure 23. Axi4MemoryVti
@@ -1017,7 +1018,7 @@ Setting the Name of the Axi4Memory Model
 ----------------------------------------
 
 The :vhdlcode:`Axi4Memory` name is the value of :vhdlcode:`MEMORY_NAME` if it is set (other than ""). If
-:vhdlcode:`MEMORY_NAME` is not set, the memory name is :vhdlcode:`Axi4Memory`':vhdlcode:`PATH_NAME`.
+:vhdlcode:`MEMORY_NAME` is not set, the memory name is :vhdlcode:`Axi4Memory'PATH_NAME`.
 
 If two memory models have the same name, they use the same instance of the memory and share the same memory space.
 
@@ -1032,9 +1033,9 @@ particular aspect of the design. Hence, an entire test is visible in a single fi
 
 The :vhdlcode:`TestCtrl` architecture consists of a control process plus one process per independent interface, see
 :ref:`Figure 24 <VC/Axi4/Figure24>`. The control process is used for test initialization and finalization. Each test
-process creates interface waveform sequences by calling the transaction procedures (Write, :vhdlcode:`WriteBurst`, Read,
-:vhdlcode:`ReadBurst`, Check …). This test architecture is based on the test :file:`TbAxi4_MemoryReadWrite1.vhd` in the
-directory :file:`OsvvmLibraries/AXI4/Axi4/testbench`.
+process creates interface waveform sequences by calling the transaction procedures (:vhdlcode:`Write`,
+:vhdlcode:`WriteBurst`, :vhdlcode:`Read`, :vhdlcode:`ReadBurst`, :vhdlcode:`Check` …). This test architecture is based
+on the test :file:`TbAxi4_MemoryReadWrite1.vhd` in the directory :file:`OsvvmLibraries/AXI4/Axi4/testbench`.
 
 For more details on writing tests, see the OSVVM Test Writers User Guide. For more details on writing tests, see the
 OSVVM Test Writers User Guide. For examples of using specific Address Bus transactions, see the Address Bus Independent
@@ -1458,8 +1459,8 @@ Delays for Valid and Ready can either be a static value (a fixed delay) or can b
 
 .. rubric:: Static Delay: Valid Delay Cycles
 
-The :vhdlcode:`xVALID` \_\ :vhdlcode:`DELAY_CYCLES` value specifies the amount of time to initiate a new transaction on
-an interface. For Burst transactions, :vhdlcode:`xVALID_BURST_DELAY_CYCLES` specifies the amount of time between valid
+The :vhdlcode:`xVALID` :vhdlcode:`_DELAY_CYCLES` value specifies the amount of time to initiate a new transaction on an
+interface. For Burst transactions, :vhdlcode:`xVALID_BURST_DELAY_CYCLES` specifies the amount of time between valid
 within a burst data cycle.
 
 .. list-table::
@@ -1571,8 +1572,8 @@ The delay coverage model can be changed using :vhdlcode:`SetDelayCoverageID`.
        AddBins (ReadDataDelayCov.BurstDelayCov,   GenBin(2,5,1)) ;
        AddBins (ReadDataDelayCov.BeatDelayCov,    GenBin(0)) ;
 
-For examples of using this feature, see :vhdlcode:`TbAxi4_Axi`\ <VC>\ :file:`RandomTiming1.vhd` and
-:vhdlcode:`TbAxi4_Axi`\ <VC>\ :file:`RandomTiming2.vhd`. Here <VC> is Manager, Memory, and Subordinate.
+For examples of using this feature, see :file:`TbAxi4_Axi<VC>RandomTiming1.vhd` and
+:file:`TbAxi4_Axi<VC>RandomTiming2.vhd`. Here <VC> is Manager, Memory, and Subordinate.
 
 .. _VC/Axi4/StaticDelayReadyBeforeValid:
 
@@ -1733,8 +1734,8 @@ The delay coverage model can be changed using :vhdlcode:`SetDelayCoverageID`.
        AddCross(ReadAddressDelayCov.BurstDelayCov,   GenBin(0,1,1), GenBin(2,5,1)) ;
        AddCross(ReadAddressDelayCov.BeatDelayCov,    GenBin(0),     GenBin(0)) ;
 
-For examples of using this feature, see :vhdlcode:`TbAxi4_Axi`\ <VC>\ :file:`RandomTiming1.vhd` and
-:vhdlcode:`TbAxi4_Axi`\ <VC>\ :file:`RandomTiming2.vhd`. Here <VC> is Manager, Memory, and Subordinate.
+For examples of using this feature, see :file:`TbAxi4_Axi<VC>RandomTiming1.vhd` and
+:file:`TbAxi4_Axi<VC>RandomTiming2.vhd`. Here <VC> is Manager, Memory, and Subordinate.
 
 .. _VC/Axi4/TimeoutNoXReadyInResponseXValid:
 
@@ -1790,7 +1791,9 @@ of clocks within which the Subordinate must asssert :vhdlcode:`xValid` before a 
      - Initial Value in VC
    * - Manager
      - :vhdlcode:`WRITE_RESPONSE_VALID_TIME_OUT`
-     - 8192 (AXI Full) 25 (AXI Lite)
+     - 8192 (AXI Full)
+
+       25 (AXI Lite)
    * - Manager
      - :vhdlcode:`READ_DATA_VALID_TIME_OUT`
      - 25
@@ -1830,8 +1833,8 @@ Write Address Default Values
 
    * - Signal
      - Driver
-     - Configurable AXI
-     -
+     - Configurable
+     - AXI
      - Description
    * - AWADDR
      - Manager
@@ -1844,25 +1847,28 @@ Write Address Default Values
      - All
      - Set when address channels has valid values
    * - AWREADY
-     - Subordinate No
-     -
+     - Subordinate
+     - No
      - All
      - Set when Subordinate ready to accept values
    * - AWPROT
      - Manager
      - Yes
      - All
-     - Initial value = 0 Privilege level. Frequency of usage?
+     - | Initial value = 0
+       | Privilege level. Frequency of usage?
    * - AWID
      - Manager
      - Yes
      - Full
-     - Write Address ID. Initial value = 0. Used in reordering operations.
+     - | Write Address ID. Initial value = 0.
+       | Used in reordering operations.
    * - AWLEN
      - Manager
      - No
      - Full
-     - Number of transfers in a burst. F(#Bytes, Word Width, Starting Address)
+     - | Number of transfers in a burst.
+       | F(#Bytes, Word Width, Starting Address)
    * - AWSIZE
      - Manager
      - Yes
@@ -1872,12 +1878,13 @@ Write Address Default Values
      - Manager
      - Yes
      - Full
-     - Initial value = INCR Options: Fixed, Incr, Wrap.
+     - | Initial value = INCR
+       | Options: Fixed, Incr, Wrap.
    * - AWLOCK
      - Manager
      - Yes
-     - AXI3 Initial value = 0.
-     -
+     - AXI3
+     - Initial value = 0.
    * - AWCACHE
      - Manager
      - Yes
@@ -1888,11 +1895,12 @@ Write Address Default Values
      - Yes
      - Full
      - Initial value = 0. Quality of Service.
-   * - AWREGION Manager
-     -
+   * - AWREGION
+     - Manager
      - Yes
      - Full
-     - Initial value = 0. Partitions Subordinates into separate areas.
+     - | Initial value = 0.
+       | Partitions Subordinates into separate areas.
    * - AWUSER
      - Manager
      - Yes
@@ -1910,8 +1918,8 @@ Write Data Default Values
 
    * - Signal
      - Driver
-     - Configurable AXI
-     -
+     - Configurable
+     - AXI
      - Description
    * - WDATA
      - Manager
@@ -1922,27 +1930,33 @@ Write Data Default Values
      - Manager
      - No
      - All
-     - Currently only supports contiguous bursts. F(#Bytes, Starting Address) Upgrade to support Metavalue = 0
+     - | Currently only supports contiguous bursts.
+       | F(#Bytes, Starting Address)
+
+       Upgrade to support Metavalue = 0
    * - WVALID
      - Manager
      - No
      - All
      - Set when channel has valid values
    * - WREADY
-     - Subordinate No
-     -
+     - Subordinate
+     - No
      - All
      - Set when Subordinate ready to accept values
    * - WLAST
      - Manager
      - No
      - Full
-     - Asserted on last data value of transaction. Single word – always asserted Burst – last word
+     - | Asserted on last data value of transaction.
+       | Single word – always asserted
+       | Burst – last word
    * - WID
      - Manager
      - Yes
-     - AXI3 Write Data ID. Initial value = 0.
-     - Used in reordering operations.
+     - AXI3
+     - | Write Data ID. Initial value = 0.
+       | Used in reordering operations.
    * - WUSER
      - Manager
      - Yes
@@ -1960,22 +1974,21 @@ Write Response Default Values
 
    * - Signal
      - Driver
-     - Configurable AXI
-     -
+     - Configurable
+     - AXI
      - Description
    * - BRESP
-     - Subordinate Yes
-     -
+     - Subordinate
+     - Yes
      - All
-     - Values: :vhdlcode:`AXI4_RESP_OKAY` (Initial) :vhdlcode:`AXI4_RESP_EXOKAY`
-   * -
-     -
-     -
-     -
-     - :vhdlcode:`AXI4_RESP_SLVERR` :vhdlcode:`AXI4_RESP_DECERR`
+     - | Values:
+       |    :vhdlcode:`AXI4_RESP_OKAY` (Initial)
+       |    :vhdlcode:`AXI4_RESP_EXOKAY`
+       |    :vhdlcode:`AXI4_RESP_SLVERR`
+       |    :vhdlcode:`AXI4_RESP_DECERR`
    * - BVALID
-     - Subordinate No
-     -
+     - Subordinate
+     - No
      - All
      - Set when Subordinate has valid values
    * - BREADY
@@ -1984,15 +1997,19 @@ Write Response Default Values
      - All
      - Set when Manager ready to accept values
    * - BID
-     - Subordinate No
-     -
+     - Subordinate
+     - No
      - Full
-     - :vhdlcode:`Axi4Memory`: Matches Address Write :vhdlcode:`Axi4Subordinate`: Set by configuration = 0
+     - :vhdlcode:`Axi4Memory`: Matches Address Write
+
+       :vhdlcode:`Axi4Subordinate`: Set by configuration = 0
    * - BUSER
-     - Subordinate No
-     -
+     - Subordinate
+     - No
      - Full
-     - :vhdlcode:`Axi4Memory`: Matches Address Write :vhdlcode:`Axi4Subordinate`: Set by configuration = 0
+     - :vhdlcode:`Axi4Memory`: Matches Address Write
+
+       :vhdlcode:`Axi4Subordinate`: Set by configuration = 0
 
 .. _VC/Axi4/ReadAddressDefaultValues:
 
@@ -2005,8 +2022,8 @@ Read Address Default Values
 
    * - Signal
      - Driver
-     - Configurable AXI
-     -
+     - Configurable
+     - AXI
      - Description
    * - ARADDR
      - Manager
@@ -2019,25 +2036,29 @@ Read Address Default Values
      - All
      - Set when address channels has valid values
    * - ARREADY
-     - Subordinate No
-     -
+     - Subordinate
+     - No
      - All
      - Set when Subordinate ready to accept values
    * - ARPROT
      - Manager
      - Yes
      - All
-     - Initial value = 0 Privilege level. Frequency of usage?
+     - Initial value = 0
+
+       Privilege level. Frequency of usage?
    * - ARID
      - Manager
      - Yes
      - Full
-     - Read Address ID. Initial value = 0. Used in reordering operations.
+     - | Read Address ID. Initial value = 0.
+       | Used in reordering operations.
    * - ARLEN
      - Manager
      - No
      - Full
-     - Number of transfers in a burst. F(#Bytes, Word Width, Starting Address)
+     - | Number of transfers in a burst.
+       | F(#Bytes, Word Width, Starting Address)
    * - ARSIZE
      - Manager
      - Yes
@@ -2047,12 +2068,13 @@ Read Address Default Values
      - Manager
      - Yes
      - Full
-     - Initial value = INCR Options: Fixed, Incr, Wrap.
+     - | Initial value = INCR
+       | Options: Fixed, Incr, Wrap.
    * - ARLOCK
      - Manager
      - Yes
-     - AXI3 Initial value = 0.
-     -
+     - AXI3
+     - Initial value = 0.
    * - ARCACHE
      - Manager
      - Yes
@@ -2067,7 +2089,8 @@ Read Address Default Values
      - Manager
      - Yes
      - Full
-     - Initial value = 0. Partitions Subordinates into separate areas.
+     - | Initial value = 0.
+       | Partitions Subordinates into separate areas.
    * - ARUSER
      - Manager
      - Yes
@@ -2085,22 +2108,22 @@ Read Data Default Values
 
    * - Signal
      - Driver
-     - Configurable AXI
-     -
+     - Configurable
+     - AXI
      - Description
    * - RDATA
-     - Subordinate No
-     -
+     - Subordinate
+     - No
      - All
      - Write Address
    * - RRESP
-     - Subordinate Yes
-     -
+     - Subordinate
+     - Yes
      - All
      - Initial = OKAY
    * - RVALID
-     - Subordinate No
-     -
+     - Subordinate
+     - No
      - All
      - Set when channel has valid values
    * - RREADY
@@ -2109,20 +2132,26 @@ Read Data Default Values
      - All
      - Set when Subordinate ready to accept values
    * - RID
-     - Subordinate Yes
-     -
-     - AXI3 :vhdlcode:`Axi4Memory`: Matches Address Read
-     - :vhdlcode:`Axi4Subordinate`: Set by configuration = 0
+     - Subordinate
+     - Yes
+     - AXI3
+     - :vhdlcode:`Axi4Memory`: Matches Address Read
+
+       :vhdlcode:`Axi4Subordinate`: Set by configuration = 0
    * - RUSER
-     - Subordinate Yes
-     -
+     - Subordinate
+     - Yes
      - Full
-     - :vhdlcode:`Axi4Memory`: Matches Address Read :vhdlcode:`Axi4Subordinate`: Set by configuration = 0
+     - :vhdlcode:`Axi4Memory`: Matches Address Read
+
+       :vhdlcode:`Axi4Subordinate`: Set by configuration = 0
    * - RLAST
-     - Subordinate No
-     -
+     - Subordinate
+     - No
      - Full
-     - Asserted on last data value of transaction. Single word – always asserted Burst – last word
+     - | Asserted on last data value of transaction.
+       | Single word – always asserted
+       | Burst – last word
 
 .. _VC/Axi4/SettingInterfaceDefaultValues:
 
