@@ -40,7 +40,7 @@ Package Instance
      use ieee.std_logic_1164.all ;
      use ieee.numeric_std.all ;
 
-   package ScoreBoardPkg_slv is new
+   package ScoreboardPkg_slv is new
    work.ScoreboardGenericPkg
      generic map (
        ExpectedType => std_logic_vector,
@@ -74,14 +74,14 @@ A Scoreboard ID is a handle to the scoreboard object that is created internal to
 
 .. code-block:: VHDL
 
-   signal SB : ScoreBoardIDType ;
+   signal SB : ScoreboardIDType ;
 
 If using more than one scoreboard package instance, disambiguate the type using a fully selected name.
 
 .. code-block:: VHDL
 
    signal SB_int :
-    work.ScoreBoardPkg_int.ScoreBoardIDType;
+    work.ScoreboardPkg_int.ScoreboardIDType;
 
 .. _UTILITY/ScoreboardPkgQuickRef/ConstructTheScoreboard:
 
@@ -176,8 +176,8 @@ Check if the Scoreboard is empty.
 
 .. _UTILITY/ScoreboardPkgQuickRef/GetttingErrorCounts:
 
-Gettting Error Counts
-=====================
+Getting Error Counts
+====================
 
 Errors are recorded in the :vhdlcode:`AlertLog` data structure. Retrieve the error count using the
 :vhdlcode:`AlertLogID`:
@@ -294,7 +294,7 @@ For :vhdlcode:`Check` (and :vhdlcode:`Pop`), the item checked (or returned) is t
 
 .. code-block:: VHDL
 
-   ItemNum := Find(SB, "ReadOp", RxVal);
+   ItemNum := Find(SB, "ReadOp", ReceiveVal);
    Flush(SB, "ReadOp", ItemNum) ;
 
 For :vhdlcode:`Flush`, only items matching the tag are removed. In some systems, it may be appropriate to do the
@@ -386,9 +386,9 @@ The following demonstrates the creation of 2D arrays of scoreboards. Note in :vh
 .. code-block:: VHDL
 
    signal SB1 :
-     ScoreboardIDArrayType(1 to 3, 1 to 5);
+     ScoreboardIdMatrixType(1 to 3, 1 to 5);
    signal SB2 :
-     ScoreboardIDArrayType(1 to 3, 5 to 7);. . .
+     ScoreboardIdMatrixType(1 to 3, 5 to 7);. . .
 
    SB1 <= NewID("SB1", 3, 5 );
    SB2 <= NewID("SB", (1, 3), (5,7) );
