@@ -10,11 +10,11 @@ Overview
 
 OSVVM's structured testbench framework is simple enough to use on small blocks. So simple in fact that a "Lite" or
 "Easy" approach is not needed. It is powerful enough to use on large, complex ASICs. This allows the same testbench
-architecture to be used for RTL, CORE, and System tests – this in turn facilitates reuse/pre‐use of both verification
+architecture to be used for RTL, CORE, and System tests – this in turn facilitates reuse/pre-use of both verification
 components and test sequences.
 
 SynthWorks has been using this framework for 25+ years in our training classes and consulting work. During that time, we
-have innovated new capabilities and evolved our approach to increase re‐use and reduce effort and time spent.
+have innovated new capabilities and evolved our approach to increase re-use and reduce effort and time spent.
 
 In this document we examine OSVVM’s framework in detail and see that it has many similar elements to SystemVerilog +
 UVM. However, one thing not present is OO language constructs. Instead OSVVM uses ordinary VHDL constructs, such as
@@ -88,11 +88,11 @@ Transactions define both the transaction interfaces and transaction call API for
 The test harness is coded using structural code – just like connectivity in RTL design.
 :ref:`Figure 3 <FRAMEWORK/StructuredTestbench/Figure3>` shows a sketch of the code for :vhdlcode:`TbDpRam`. OSVVM
 verification components put component declarations in packages and reference the packages in the context declaration
-(:vhdlcode:`DPRamContext`). This allows the use of component instances without having a component declaration. The
+(:vhdlcode:`DpRamContext`). This allows the use of component instances without having a component declaration. The
 complete code is in :file:`TbDpRam.vhd` in the directory :file:`OsvvmLibraries/DpRam/testbench`.
 
 .. code-block:: VHDL
-   :caption: Figure 3. TestCtrl Architecture
+   :caption: Figure 3. TbDpRam Test Harness
    :name: FRAMEWORK/StructuredTestbench/Figure3
    :force:
 
@@ -114,9 +114,9 @@ complete code is in :file:`TbDpRam.vhd` in the directory :file:`OsvvmLibraries/D
      signal DataInA     : std_logic_vector(DATA_WIDTH-1 downto 0) ;
      . . .
      signal Manager1Rec, Manager2Rec  : AddressBusRecType (
-             Address      (AXI_ADDR_WIDTH-1 downto 0),
-             DataToModel  (AXI_DATA_WIDTH-1 downto 0),
-             DataFromModel(AXI_DATA_WIDTH-1 downto 0)
+             Address      (ADDR_WIDTH-1 downto 0),
+             DataToModel  (DATA_WIDTH-1 downto 0),
+             DataFromModel(DATA_WIDTH-1 downto 0)
            ) ;
 
      component TestCtrl is
@@ -133,9 +133,9 @@ complete code is in :file:`TbDpRam.vhd` in the directory :file:`OsvvmLibraries/D
        generic map (ADDR_WIDTH, DATA_WIDTH, FALSE, FALSE, "DpRam_1")
        port map (Clk, AddrA, WriteA, DataInA, DataOutA, AddrB, …) ;
 
-     Manager_1 : DpRamManager port map (…, AddrA, WriteA, …, Manager1Rec);
+     Manager_1 : DpRamController port map (…, AddrA, WriteA, …, Manager1Rec);
 
-     Manager_2 : DpRamManager port map (…, AddrB, WriteB, …, Manager2Rec);
+     Manager_2 : DpRamController port map (…, AddrB, WriteB, …, Manager2Rec);
 
      TestCtrl_1 :  TestCtrl port map   (nReset, Manager1Rec, Manager2Rec) ;
    end TestHarness ;
@@ -318,7 +318,7 @@ For simple VC, there is a transaction handler process that waits until the VC re
 (:vhdlcode:`WaitForTransaction`) and then decodes the transaction and does appropriate interface signaling (here
 represented by procedure calls to :vhdlcode:`DpRamWrite`, :vhdlcode:`DpRamRead`, and :vhdlcode:`DpRamWriteAndRead`).
 Often it is better practice to write code here rather than calling a subprogram – one more layer of abstraction
-introduced by the subprograms can lead to obfusciation.
+introduced by the subprograms can lead to obfuscation.
 
 Details of writing VC are in the :ref:`OSVVM Verification Component Developers Guide <FRAMEWORK/VCDevelopers>`.
 
@@ -330,8 +330,8 @@ Record Based Transaction Interface
 The transaction interface is a record that is used to communicate information between the test sequencer
 (:vhdlcode:`TestCtrl`) and the verification component (VC). As such, it is an ":vhdlcode:`InOut`" of both
 :vhdlcode:`TestCtrl` and the VC. To properly handle drivers, the record elements are a resolved type from the OSVVM
-package :vhdlcode:`ResolutionPkg`. We call such a record an OSVVM interface. An example an OSVVM interface is shown in
-:ref:`Figure 9 <FRAMEWORK/StructuredTestbench/Figure9>`.
+package :vhdlcode:`ResolutionPkg`. We call such a record an OSVVM interface. An example of an OSVVM interface is shown
+in :ref:`Figure 9 <FRAMEWORK/StructuredTestbench/Figure9>`.
 
 .. code-block:: VHDL
    :caption: Figure 9. An OSVVM Interface
@@ -349,9 +349,8 @@ package :vhdlcode:`ResolutionPkg`. We call such a record an OSVVM interface. An 
 
 Types in :vhdlcode:`ResolutionPkg` use "maximum" as a resolution function and add the suffix ":vhdlcode:`_max`" or
 ":vhdlcode:`_max_c`" to the type names. Maximum resolution picks the largest value driven on each element of signal
-object that has multiple drivers. The largest value is the right most value of a type (‘‐‘ for
-:vhdlcode:`std_ulogic`). This works in conjunction with the left most value being the smallest and the default value for
-an object of that type.
+object that has multiple drivers. The largest value is the right most value of a type ('-' for :vhdlcode:`std_ulogic`).
+This works in conjunction with the left most value being the smallest and the default value for an object of that type.
 
 :vhdlcode:`ResolutionPkg` provides the following (as subtypes): :vhdlcode:`std_logic_max`,
 :vhdlcode:`std_logic_vector_max`, :vhdlcode:`unsigned_max`, :vhdlcode:`signed_max`, :vhdlcode:`bit_max`,
@@ -376,7 +375,7 @@ are nothing more than an abstraction layer that puts the transaction information
 is ready (:vhdlcode:`RequestTransaction`), and gathers results when the transaction completes.
 
 .. code-block:: VHDL
-   :caption: Figure 10. An OSVVM Interface
+   :caption: Figure 10. An OSVVM Transaction Procedure
    :name: FRAMEWORK/StructuredTestbench/Figure10
 
    procedure Read (
@@ -394,7 +393,7 @@ is ready (:vhdlcode:`RequestTransaction`), and gathers results when the transact
      oData  := SafeResize(TransactionRec.DataFromModel, oData'length) ;
    end procedure Read ;
 
-Historically we wrote transaction procedures for each verificaiton component. After doing this for long enough, we
+Historically we wrote transaction procedures for each verification component. After doing this for long enough, we
 realized that from a transaction perspective, many interfaces do the same thing and could be handled by a common set of
 transaction procedures.
 
@@ -449,7 +448,7 @@ Summary
 This document starts your journey into OSVVM's Structured Testbench Framework.
 
 For creating the test harness, what you have here and in the example code (:file:`TbDpRam.vhd`) which is in the
-directory (:file:`OsvvmLibraries/DpRam/testbench`) should be sufficient. The code is a basically a structural netlist
+directory (:file:`OsvvmLibraries/DpRam/testbench`) should be sufficient. The code is basically a structural netlist
 which is created in a 'Lego' like fashion – just like RTL code.
 
 In OSVVM, creating test cases is nothing more than calling transactions in the test sequencer (:vhdlcode:`TestCtrl`).
@@ -465,7 +464,7 @@ approach is that it is similar enough to RTL that an engineer can easily do both
 Connections between the test sequencer and the verification component are handled by OSVVM's Model Independent
 Transactions. These define the interface records and abstract transaction API that can be used by verification
 components. For more details see the :ref:`Address Bus Model Independent Transactions Users’ Guide <MIT/AddressBus>` and
-the :ref:`Stream Model Independent Transactions Users’s Guide <MIT/Stream>`. This approach benefits verification
+the :ref:`Stream Model Independent Transactions Users’ Guide <MIT/Stream>`. This approach benefits verification
 component developers by removing the need to create transaction records and the transaction API for each verification
 component. This approach benefits test case developers since there are only two transaction APIs to learn rather than
 one per verification component. It also promotes reuse of test sequences between similar verification components.
