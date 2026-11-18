@@ -66,7 +66,7 @@ namespace eval ::osvvm {
 
   variable ToolArgs ""
   variable NoGui "true"
-  variable ToolSupportsGenericPackages "true"
+  variable ToolSupportsGenericPackages   "true"
   variable ToolSupportsDeferredConstants "true"
 
   #

@@ -290,6 +290,7 @@ proc CreateTestCaseCommonPkg { {PackageName "TestCaseCommonPkg"} {ValidatedResul
     puts $FileHandle "context osvvm.OsvvmContext ;"
     puts $FileHandle "package ${PackageName} is"
 #!! Questa does not normalize FILE_PATH.  Instead is relative to sim directory using ".."
+#   Letting Script generate the path s.t. all tools produce the same path (for OsvvmTestbench/AlertLogPkg/ tests 7 and 14)
 #    if {$::osvvm::Supports2019FilePath && $::osvvm::VhdlVersion >= 2019} {
 #      puts $FileHandle "  constant PATH_TO_TEST_SRC            : string  := RemoveEndingSeparator(ChangeSeparator(FILE_PATH))  & \"/\";  -- only valid with VHDL-2019"
 #    } else {
